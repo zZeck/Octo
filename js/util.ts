@@ -1,5 +1,6 @@
 import { Emulator } from "./emulator";
 import { setStatusMessage } from "./htmlcode";
+import { Editor } from "codemirror";
 
 /**
 * Misc. utility functions
@@ -33,16 +34,16 @@ export function ajax(method, url, payload, then) {
   x.send(payload ? JSON.stringify(payload) : null)
 }
 
-export function readBytes(source, size?) {
+export function readBytes(source: Editor, size?: number) {
   const tokens = source.getValue().trim().split(/\s+/)
   return zip(range(size || tokens.length), tokens, (_,x) => {
     return ((x||'').slice(0,2)=='0b' ? parseInt(x.slice(2),2) : +x)||0
   })
 }
-export function writeBytes(target, size, bytes) {
+export function writeBytes(target: Editor, size: number, bytes: Array<number>) {
   target.setValue(zip(range(size || bytes.length), bytes, (_,x) => hexFormat(x & 0xFF)).join(' '))
 }
-export function getBit(bytes, n) {
+export function getBit(bytes: Array<number>, n: number) {
   return (bytes[Math.floor(n / 8)] >> (7-Math.floor(n % 8))) & 1
 }
 export function setBit(bytes, n, v) {

@@ -70,6 +70,8 @@ function generateFrequency(frequency, cutoff) {
 	return r
 }
 
+let temp: CodeMirror.Editor;
+
 /**
 * Pattern panel
 **/

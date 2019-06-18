@@ -8,12 +8,12 @@ import { hexFormat } from "./util";
 //
 ////////////////////////////////////
 
-function parse(token) {
+function parse(token: string) {
 	var num = parseNumber(token);
 	return isNaN(num) ? token : num;
 }
 
-function parseNumber(token) {
+function parseNumber(token: string) {
 
 	// Check if this token is a valid binary number
 	if (/^[+\-]?0b[01]+$/.test(token)) {
@@ -47,7 +47,7 @@ function parseNumber(token) {
 	return NaN;
 }
 
-function tokenize(text) {
+function tokenize(text: string) {
 	var ret   = [];
 	var index = 0;
 	var token = "";
@@ -89,28 +89,32 @@ function tokenize(text) {
 //
 ////////////////////////////////////
 
-function DebugInfo(source) {
+class DebugInfo {
+	lines: string[];
+	_locs: { [address: number]: number};
+	
+	constructor(source: string) {
 	this.lines = source.split('\n');
 	this._locs = {}; // map<addr, line>
 }
 
-DebugInfo.prototype.mapAddr = function(addr, pos) {
+ mapAddr (addr: number, pos: number) {
 	this._locs[addr] = pos;
 }
 
-DebugInfo.prototype.getLine = function(addr) {
+ getLine (addr: number) {
 	var i = this._locs[addr];
 	return i != undefined? this.posToLine(i): undefined
 }
 
-DebugInfo.prototype.getAddr = function(line) {
+ getAddr (line: number) {
 	for (var addr in this._locs) {
 		if (this.posToLine(this._locs[addr]) == line) return addr
 	}
 	return undefined
-}
+	}
 
-DebugInfo.prototype.posToLine = function(pos) {
+	posToLine (pos: number) {
 	var i;
 	for (i = 0; i < this.lines.length; i++) {
 		pos -= this.lines[i].length + 1;
@@ -119,46 +123,70 @@ DebugInfo.prototype.posToLine = function(pos) {
 	}
 	return i;
 }
+}
 
 var unaryFunc = {
-	'-'    : function(x) { return -x; },
-	'~'    : function(x) { return ~x; },
-	'!'    : function(x) { return +!x; },
-	'sin'  : function(x) { return Math.sin(x);   },
-	'cos'  : function(x) { return Math.cos(x);   },
-	'tan'  : function(x) { return Math.tan(x);   },
-	'exp'  : function(x) { return Math.exp(x);   },
-	'log'  : function(x) { return Math.log(x);   },
-	'abs'  : function(x) { return Math.abs(x);   },
-	'sqrt' : function(x) { return Math.sqrt(x);  },
-	'sign' : function(x) { return Math.sign(x);  },
-	'ceil' : function(x) { return Math.ceil(x);  },
-	'floor': function(x) { return Math.floor(x); },
-	'@'    : function(x,m) { return m[(0|x)-0x200]||0; },
+	'-'    : function(x: number) { return -x; },
+	'~'    : function(x: number) { return ~x; },
+	'!'    : function(x: number) { return +!x; },
+	'sin'  : function(x: number) { return Math.sin(x);   },
+	'cos'  : function(x: number) { return Math.cos(x);   },
+	'tan'  : function(x: number) { return Math.tan(x);   },
+	'exp'  : function(x: number) { return Math.exp(x);   },
+	'log'  : function(x: number) { return Math.log(x);   },
+	'abs'  : function(x: number) { return Math.abs(x);   },
+	'sqrt' : function(x: number) { return Math.sqrt(x);  },
+	'sign' : function(x: number) { return Math.sign(x);  },
+	'ceil' : function(x: number) { return Math.ceil(x);  },
+	'floor': function(x: number) { return Math.floor(x); },
+	'@'    : function(x: number, m: number[]) { return m[(0|x)-0x200]||0; },
 };
 var binaryFunc = {
-	'-'    : function(x,y) { return x-y; },
-	'+'    : function(x,y) { return x+y; },
-	'*'    : function(x,y) { return x*y; },
-	'/'    : function(x,y) { return x/y; },
-	'%'    : function(x,y) { return x%y; },
-	'&'    : function(x,y) { return x&y; },
-	'|'    : function(x,y) { return x|y; },
-	'^'    : function(x,y) { return x^y; },
-	'<<'   : function(x,y) { return x<<y; },
-	'>>'   : function(x,y) { return x>>y; },
-	'pow'  : function(x,y) { return Math.pow(x, y); },
-	'min'  : function(x,y) { return Math.min(x, y); },
-	'max'  : function(x,y) { return Math.max(x, y); },
-	'<'    : function(x,y) { return +(x<y); },
-	'>'    : function(x,y) { return +(x>y); },
-	'<='   : function(x,y) { return +(x<=y); },
-	'>='   : function(x,y) { return +(x>=y); },
-	'=='   : function(x,y) { return +(x==y); },
-	'!='   : function(x,y) { return +(x!=y); },
+	'-'    : function(x: number, y: number) { return x-y; },
+	'+'    : function(x: number, y: number) { return x+y; },
+	'*'    : function(x: number, y: number) { return x*y; },
+	'/'    : function(x: number, y: number) { return x/y; },
+	'%'    : function(x: number, y: number) { return x%y; },
+	'&'    : function(x: number, y: number) { return x&y; },
+	'|'    : function(x: number, y: number) { return x|y; },
+	'^'    : function(x: number, y: number) { return x^y; },
+	'<<'   : function(x: number, y: number) { return x<<y; },
+	'>>'   : function(x: number, y: number) { return x>>y; },
+	'pow'  : function(x: number, y: number) { return Math.pow(x, y); },
+	'min'  : function(x: number, y: number) { return Math.min(x, y); },
+	'max'  : function(x: number, y: number) { return Math.max(x, y); },
+	'<'    : function(x: number, y: number) { return +(x<y); },
+	'>'    : function(x: number, y: number) { return +(x>y); },
+	'<='   : function(x: number, y: number) { return +(x<=y); },
+	'>='   : function(x: number, y: number) { return +(x>=y); },
+	'=='   : function(x: number, y: number) { return +(x==y); },
+	'!='   : function(x: number, y: number) { return +(x!=y); },
 };
 
-export function Compiler(source) {
+type stringOrNumber = string | number
+
+export class Compiler{
+	rom: number[];
+	dbginfo: DebugInfo;
+	loops: Array<[number, string]>;// stack<[addr, marker]>
+	branches: Array<[number, string, string]>;// stack<[addr, marker, type]>
+	whiles: number[];// stack<int>
+	dict: {[name: string]: number};// map<name, addr>
+	protos: {[name: string]: number[]};// map<name, list<addr>>
+	longproto: {[name: string]: boolean};// set<name, true>
+	aliases: {[name: string]: number};// map<name, registernum>
+	constants: {[keyString: string]: number };// map<name, token>
+	macros: {[name: string]: {args: string[], body: string}};// map<name, {args, body}>
+	hasmain: boolean;
+	schip: boolean;
+	xo: boolean;
+	breakpoints: {[address: number]: stringOrNumber};// map<address, name>
+	hereaddr: number;
+	pos: stringOrNumber[] | null;
+	currentToken: number;
+	tokens: (string | number)[][];
+
+	constructor(source: string) {
 	this.rom       = []; // list<int>
 	this.dbginfo   = new DebugInfo(source);
 	this.loops     = []; // stack<[addr, marker]>
@@ -198,36 +226,36 @@ export function Compiler(source) {
 	this.tokens = tokenize(source);
 }
 
-Compiler.prototype.data = function(a) {
+data (a: number) {
 	if (typeof this.rom[this.hereaddr-0x200] != "undefined") {
 		throw "Data overlap. Address "+hexFormat(this.hereaddr)+" has already been defined.";
 	}
 	this.rom[this.hereaddr-0x200] = (a & 0xFF);
-	if (this.pos) this.dbginfo.mapAddr(this.hereaddr, this.pos[1]);
+	if (this.pos) this.dbginfo.mapAddr(this.hereaddr, Number(this.pos[1]));
 	this.hereaddr++;
 }
 
-Compiler.prototype.end = function()     { return this.currentToken >= this.tokens.length }
-Compiler.prototype.next = function()    { this.pos = this.tokens[this.currentToken++]; return this.pos[0]; }
-Compiler.prototype.raw  = function()    { this.pos = this.tokens[this.currentToken++]; return this.pos; }
-Compiler.prototype.peek = function()    { return this.tokens[this.currentToken][0]; }
-Compiler.prototype.here = function()    { return this.hereaddr; }
-Compiler.prototype.inst = function(a,b) { this.data(a); this.data(b); }
+end ()     { return this.currentToken >= this.tokens.length }
+next ()    { this.pos = this.tokens[this.currentToken++]; return this.pos[0]; }
+raw  ()    { this.pos = this.tokens[this.currentToken++]; return this.pos; }
+peek ()    { return this.tokens[this.currentToken][0]; }
+here ()    { return this.hereaddr; }
+inst (a: number, b: number) { this.data(a); this.data(b); }
 
-Compiler.prototype.immediate = function(op, nnn) {
+immediate (op: number, nnn: number) {
 	this.inst(op | ((nnn >> 8) & 0xF), (nnn & 0xFF));
 }
 
-Compiler.prototype.fourop = function(op, x, y, n) {
+fourop (op: number, x: number, y: number, n: number) {
 	this.inst((op << 4) | x, (y << 4) | (n & 0xF));
 
 }
-Compiler.prototype.jump = function(addr, dest) {
+jump (addr: number, dest: number) {
 	this.rom[addr - 0x200] = (0x10 | ((dest >> 8) & 0xF));
 	this.rom[addr - 0x1FF] = (dest & 0xFF);
 }
 
-Compiler.prototype.isRegister = function(name) {
+isRegister (name?: string | number) {
 	if (!name && (name != 0)) { name = this.peek(); }
 	if (typeof name != "string") { return false; }
 	if (name in this.aliases) { return true; }
@@ -237,7 +265,7 @@ Compiler.prototype.isRegister = function(name) {
 	return "0123456789ABCDEF".indexOf(name[1]) >= 0;
 }
 
-Compiler.prototype.register = function(name) {
+register (name?: stringOrNumber) {
 	if (!name) { name = this.next(); }
 	if (!this.isRegister(name)) {
 		throw "Expected register, got '" + name + "'";
@@ -245,16 +273,16 @@ Compiler.prototype.register = function(name) {
 	if (name in this.aliases) {
 		return this.aliases[name];
 	}
-	name = name.toUpperCase();
+	name = (name as string).toUpperCase();
 	return "0123456789ABCDEF".indexOf(name[1]);
 }
 
-Compiler.prototype.expect = function(token) {
+expect(token: string) {
 	var thing = this.next();
 	if (thing != token) { throw "Expected '" + token + "', got '" + thing + "'!"; }
 }
 
-Compiler.prototype.constantValue = function() {
+constantValue () {
 	var number = this.next();
 	if (typeof number != "number") {
 		if (number in this.protos) {
@@ -271,7 +299,7 @@ Compiler.prototype.constantValue = function() {
 	return number;
 }
 
-Compiler.prototype.reservedNames = {
+   reservedNames = {
 	":=":true, "|=":true, "&=":true, "^=":true, "-=":true, "=-":true, "+=":true,
 	">>=":true, "<<=":true, "==":true, "!=":true, "<":true, ">":true,
 	"<=":true, ">=":true, "key":true, "-key":true, "hex":true, "bighex":true,
@@ -287,14 +315,14 @@ Compiler.prototype.reservedNames = {
 	":call":true,
 };
 
-Compiler.prototype.checkName = function(name, kind) {
+checkName (name: string, kind: string) {
 	if (name in this.reservedNames || name.indexOf('OCTO_') == 0) {
 		throw "The name '"+name+"' is reserved and cannot be used for a "+kind+".";
 	}
 	return name;
 }
 
-Compiler.prototype.veryWideValue = function() {
+veryWideValue () {
 	// i := long NNNN
 	var nnnn = this.next();
 	if (typeof nnnn != "number") {
@@ -321,7 +349,7 @@ Compiler.prototype.veryWideValue = function() {
 	return (nnnn & 0xFFFF);
 }
 
-Compiler.prototype.wideValue = function(nnn: number) {
+wideValue (nnn?: number | string) {
 	// can be forward references.
 	// call, jump, jump0, i:=
 	//TODO is & to && correct here?
@@ -348,7 +376,7 @@ Compiler.prototype.wideValue = function(nnn: number) {
 	return (nnn & 0xFFF);
 }
 
-Compiler.prototype.shortValue = function(nn) {
+shortValue (nn?: number | string) {
 	// vx:=, vx+=, vx==, v!=, random
 	if (!nn && (nn != 0)) { nn = this.next(); }
 	if (typeof nn != "number") {
@@ -363,7 +391,7 @@ Compiler.prototype.shortValue = function(nn) {
 	return (nn & 0xFF);
 }
 
-Compiler.prototype.tinyValue = function() {
+tinyValue () {
 	// sprite length, unpack high nybble
 	var n = this.next();
 	if (typeof n != "number") {
@@ -376,7 +404,7 @@ Compiler.prototype.tinyValue = function() {
 	return (n & 0xF);
 }
 
-Compiler.prototype.conditional = function(negated) {
+conditional (negated: boolean) {
 	var reg   = this.register();
 	var token = this.next();
 	var compTemp = this.aliases["compare-temp"];
@@ -433,7 +461,7 @@ Compiler.prototype.conditional = function(negated) {
 	}
 }
 
-Compiler.prototype.controlToken = function() {
+controlToken () {
 	// ignore a condition
 	var op = this.tokens[this.currentToken + 1][0];
 	var index = 3;
@@ -442,7 +470,7 @@ Compiler.prototype.controlToken = function() {
 	return this.tokens[index + this.currentToken];
 }
 
-Compiler.prototype.iassign = function(token) {
+iassign (token: string) {
 	if (token == ":=") {
 		var o = this.next();
 		if (o == "hex") { this.inst(0xF0 | this.register(), 0x29); }
@@ -466,7 +494,7 @@ Compiler.prototype.iassign = function(token) {
 	}
 }
 
-Compiler.prototype.vassign = function(reg, token) {
+vassign (reg: number, token: string) {
 	if (token == ":=") {
 		var o = this.next();
 		if (this.isRegister(o)) { this.fourop(0x8, reg, this.register(o), 0x0); }
@@ -491,9 +519,9 @@ Compiler.prototype.vassign = function(reg, token) {
 	}
 }
 
-Compiler.prototype.resolveLabel = function(offset) {
+resolveLabel (offset: number) {
 	var target = (this.here() + offset);
-	var label = this.checkName(this.next(), "label");
+	var label = this.checkName(this.next() as string, "label");
 	if ((target == 0x202) && (label == "main")) {
 		this.hasmain = false;
 		this.rom = [];
@@ -529,7 +557,7 @@ Compiler.prototype.resolveLabel = function(offset) {
 	}
 }
 
-Compiler.prototype.parseTerminal = function(name) {
+parseTerminal (name: string) {
 	// NUMBER | CONSTANT | LABEL | '(' expression ')'
 	var x = this.peek();
 	if (x == 'PI'  ) { this.next(); return Math.PI; }
@@ -547,7 +575,7 @@ Compiler.prototype.parseTerminal = function(name) {
 	return value;
 }
 
-Compiler.prototype.parseCalc = function(name) {
+parseCalc (name: string) {
 	// UNARY expression | terminal BINARY expression | terminal
 	if (this.peek() in unaryFunc) {
 		return unaryFunc[this.next()](this.parseCalc(name), this.rom);
@@ -561,14 +589,14 @@ Compiler.prototype.parseCalc = function(name) {
 	}
 }
 
-Compiler.prototype.parseCalculated = function(name) {
+parseCalculated (name: string) {
 	if (this.next() != '{') { throw "Expected '{' for calculated constant '"+name+"'."; }
 	var value = this.parseCalc(name);
 	if (this.next() != '}') { throw "Expected '}' for calculated constant '"+name+"'."; }
 	return value;
 }
 
-Compiler.prototype.instruction = function(token) {
+instruction(token: stringOrNumber) {
 	if (token == ":") { this.resolveLabel(0); }
 	else if (token == ":next") { this.resolveLabel(1); }
 	else if (token == ":unpack") {
@@ -579,17 +607,17 @@ Compiler.prototype.instruction = function(token) {
 	}
 	else if (token == ":breakpoint") { this.breakpoints[this.here()] = this.next(); }
 	else if (token == ":proto")  { this.next(); } // deprecated.
-	else if (token == ":alias")  { this.aliases[this.checkName(this.next(), "alias")] = this.register(); }
+	else if (token == ":alias")  { this.aliases[this.checkName(this.next() as string, "alias")] = this.register(); }
 	else if (token == ":const")  {
-		var name = this.checkName(this.next(), "constant");
+		var name = this.checkName(this.next() as string, "constant");
 		if (name in this.constants) { throw "The name '"+name+"' has already been defined."; }
 		this.constants[name] = this.constantValue();
 	}
 	else if (token == ":macro")  {
-		var name = this.checkName(this.next(), "macro");
+		var name = this.checkName(this.next() as string, "macro");
 		var args = [];
 		while(this.peek() != '{' && !this.end()) {
-			args.push(this.checkName(this.next(), "macro argument"));
+			args.push(this.checkName(this.next() as string, "macro argument"));
 		}
 		if (this.next() != '{') { throw "Expected '{' for definition of macro '"+name+"'."; }
 		var body = [];
@@ -605,7 +633,7 @@ Compiler.prototype.instruction = function(token) {
 	}
 	else if (token in this.macros) {
 		var macro = this.macros[token];
-		var bindings = {};
+		var bindings: {[binding: string]: stringOrNumber[]} = {};
 		for (var x = 0; x < macro.args.length; x++) {
 			if (this.end()) {
 				throw "Not enough arguments for expansion of macro '"+token+"'";
@@ -760,7 +788,7 @@ Compiler.prototype.instruction = function(token) {
 	}
 }
 
-Compiler.prototype.go = function() {
+go () {
 	this.aliases["compare-temp"] = 0xE;
 	this.aliases["unpack-hi"]    = 0x0;
 	this.aliases["unpack-lo"]    = 0x1;
@@ -798,6 +826,7 @@ Compiler.prototype.go = function() {
 	for(var index = 0; index < this.rom.length; index++) {
 		if (typeof this.rom[index] == "undefined") { this.rom[index] = 0x00; }
 	}
+}
 }
 
 this.Compiler = Compiler;
