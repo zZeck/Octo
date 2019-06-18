@@ -2,3 +2,5 @@
 tools/Doct/doct.o
 tools/Doct/doct
 tools/Doct/rom.h
+
+node_modules/

@@ -8,6 +8,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/file-saver": "^2.0.1",
+    "codemirror": "^5.47.0",
+    "npm": "^6.9.0",
     "typescript": "^3.4.4"
+  },
+  "dependencies": {
+    "@types/codemirror": "0.0.74",
+    "file-saver": "^2.0.2"
   }
 }
