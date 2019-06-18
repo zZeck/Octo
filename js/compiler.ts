@@ -158,7 +158,7 @@ var binaryFunc = {
 	'!='   : function(x,y) { return +(x!=y); },
 };
 
-function Compiler(source) {
+export function Compiler(source) {
 	this.rom       = []; // list<int>
 	this.dbginfo   = new DebugInfo(source);
 	this.loops     = []; // stack<[addr, marker]>

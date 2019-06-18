@@ -1,7 +1,12 @@
-import { setVisible, textBox, emulator } from "./util";
-import { share } from "./sharing";
+import { setVisible, textBox, emulator, menuChooser, writeBytes, range } from "./util";
+import { share, parseCartridge, runPayload, openPayload, saveLocalProgram, saveLocalOptions } from "./sharing";
+import { clearBreakpoint, haltBreakpoint, haltProfiler } from "./debugger";
+import { keymapInverse, keymap } from "./emulator";
+import { renderDisplay, playPattern, audioSetup, setRenderTarget, stopAudio } from "./shared";
+import { Compiler } from "./compiler";
+import { recordFrame } from "./recording";
 
-const editor = CodeMirror(document.getElementById('editor'), {
+export const editor = CodeMirror(document.getElementById('editor'), {
     mode:           'octo',
     theme:          'monokai',
     lineNumbers:    true,
@@ -12,10 +17,10 @@ const editor = CodeMirror(document.getElementById('editor'), {
     value:          'loading...',
     gutters:        ['breakpoints', 'CodeMirror-linenumbers'],
     extraKeys: {
-      'Shift-Enter': _ => document.getElementById('main-run').click(),
+      'Shift-Enter': () => document.getElementById('main-run').click(),
     },
   })
-  editor.on('change', _ => saveLocalProgram())
+  editor.on('change', () => saveLocalProgram())
   editor.on('gutterClick', function(cm, n) {
     function makeMarker() {
       const marker = document.createElement('div')
@@ -53,7 +58,7 @@ const editor = CodeMirror(document.getElementById('editor'), {
   document.getElementById('output-header').onclick = toggleOutput
   document.getElementById('status'       ).onclick = toggleOutput
   
-  export function setStatusMessage(message, ok) {
+  export function setStatusMessage(message, ok?) {
     statusBar.style.backgroundColor = ok ? 'black' : 'darkred'
     statusText.innerHTML = message
   }
@@ -74,9 +79,9 @@ const editor = CodeMirror(document.getElementById('editor'), {
       }
       tools[panel]()
     }
-    document.querySelectorAll('.tool-header').forEach(x => x.onclick = _ => open(x.dataset.panel))
+    document.querySelectorAll('.tool-header').forEach(x => x.onclick = () => open(x.dataset.panel))
     open(initial)
-    return { setValue: open, update: _ => open(current) }
+    return { setValue: open, update: () => open(current) }
   }
   const toolboxAccordion = accordion('sprite')
   
@@ -85,19 +90,19 @@ const editor = CodeMirror(document.getElementById('editor'), {
   const toolbox     = document.getElementById('toolbox')
   const showToolbox = document.getElementById('show-toolbox')
   const showManual  = document.getElementById('show-manual')
-  const speedMenu   = menuChooser(document.getElementById('main-speed'), emulator.tickrate, x => {
+  export const speedMenu   = menuChooser(document.getElementById('main-speed'), emulator.tickrate, x => {
     emulator.tickrate = +x
     saveLocalOptions()
   })
   
-  document.getElementById('main-run').onclick = _ => runRom(compile())
-  document.getElementById('main-open').onclick = _ => mainInput.click()
-  document.getElementById('main-save').onclick = _ => share()
+  document.getElementById('main-run').onclick = () => runRom(compile())
+  document.getElementById('main-open').onclick = () => mainInput.click()
+  document.getElementById('main-save').onclick = () => share()
   
   const dragon = document.getElementById('dragon')
-  document.body.ondragover = _ => setVisible(dragon, true, 'flex')
-  dragon.ondragleave       = _ => setVisible(dragon, false)
-  dragon.ondragover        = _ => event.preventDefault()
+  document.body.ondragover = () => setVisible(dragon, true, 'flex')
+  dragon.ondragleave       = () => setVisible(dragon, false)
+  dragon.ondragover        = () => event.preventDefault()
   dragon.ondrop = event => {
     setVisible(dragon, false)
     event.preventDefault()
@@ -109,7 +114,7 @@ const editor = CodeMirror(document.getElementById('editor'), {
   function openFile(file, runCart) {
     const reader = new FileReader()
     if (file.type == 'image/gif') {
-      reader.onload = _ => {
+      reader.onload = () => {
         try {
           const payload = parseCartridge(new Uint8Array(reader.result))
           if (runCart) runPayload (payload.options, payload.program)
@@ -123,18 +128,18 @@ const editor = CodeMirror(document.getElementById('editor'), {
       reader.readAsArrayBuffer(file)
     }
     else {
-      reader.onload = _ => editor.setValue(reader.result)
+      reader.onload = () => editor.setValue(reader.result)
       reader.readAsText(file)
     }
   }
   
-  mainInput.onchange = _ => openFile(mainInput.files[0], false)
-  showToolbox.onclick = _ => {
+  mainInput.onchange = () => openFile(mainInput.files[0], false)
+  showToolbox.onclick = () => {
     showToolbox.classList.toggle('selected')
     setVisible(toolbox, showToolbox.classList.contains('selected'), 'flex')
     toolboxAccordion.update()
   }
-  showManual.onclick = _ => {
+  showManual.onclick = () => {
     showManual.classList.toggle('selected')
     setVisible(manual, showManual.classList.contains('selected'), 'flex')
   }
@@ -143,9 +148,9 @@ const editor = CodeMirror(document.getElementById('editor'), {
   * Run mode:
   **/
   
-  document.getElementById('run-close'   ).onclick = _ => stopRom()
-  document.getElementById('run-continue').onclick = _ => clearBreakpoint()
-  document.getElementById('run-keypad'  ).onclick = _ => {
+  document.getElementById('run-close'   ).onclick = () => stopRom()
+  document.getElementById('run-continue').onclick = () => clearBreakpoint()
+  document.getElementById('run-keypad'  ).onclick = () => {
     document.getElementById('run-keys').classList.toggle('invisible')
   }
   
@@ -195,8 +200,8 @@ const editor = CodeMirror(document.getElementById('editor'), {
   range(16).forEach(k => {
     const m    = keymap[k]
     const fake = { keyCode: m, preventDefault:_=>{} }
-    const dn   = _ => window.onkeydown(fake)
-    const up   = _ => { if (m in emulator.keys) window.onkeyup(fake) }
+    const dn   = () => window.onkeydown(fake)
+    const up   = () => { if (m in emulator.keys) window.onkeyup(fake) }
     const b    = getVirtualKey(k)
     b.onmousedown  = dn
     b.onmouseup    = up
@@ -210,7 +215,7 @@ const editor = CodeMirror(document.getElementById('editor'), {
   * Central Dogma:
   **/
   
-  function compile() {
+  export function compile() {
     const c = new Compiler(editor.getValue())
     try {
       output.setValue('no output')
@@ -257,7 +262,7 @@ const editor = CodeMirror(document.getElementById('editor'), {
   const runCover = document.getElementById('run-cover')
   var intervalHandle = null
   
-  function runRom(rom) {
+  export function runRom(rom) {
     if (rom === null) return
     if (intervalHandle != null) stopRom()
     emulator.exitVector = stopRom
@@ -270,7 +275,7 @@ const editor = CodeMirror(document.getElementById('editor'), {
     setVisible(runCover, true, 'flex')
     runCover.style.backgroundColor = emulator.quietColor
     setRenderTarget(5, 'target')
-    intervalHandle = setInterval(_ => {
+    intervalHandle = setInterval(() => {
       for(var z = 0; (z < emulator.tickrate) && (!emulator.waiting); z++) {
         if (!emulator.breakpoint) {
           if (emulator.vBlankQuirks && ((emulator.m[emulator.pc] & 0xF0) == 0xD0)) { z = emulator.tickrate }

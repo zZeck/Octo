@@ -1,3 +1,6 @@
+import { radioBar, checkBox, emulator } from "./util";
+import { saveLocalOptions } from "./sharing";
+
 /**
 * Options
 **/
@@ -23,20 +26,22 @@ const compatibilityFlags = {
 
 function setCompatibilityProfile(x) {
   const p = compatibilityProfiles[x]
-  for (key in compatibilityFlags) emulator[key] = p[key]
+  for (const key in compatibilityFlags) emulator[key] = p[key]
   saveLocalOptions()
   updateOptions()
 }
+//TODO edited loops to be const key. correct?
 function setOptions() {
-  for (key in compatibilityFlags) emulator[key] = compatibilityFlags[key].getValue()
+  for (const key in compatibilityFlags) emulator[key] = compatibilityFlags[key].getValue()
   saveLocalOptions()
   updateOptions()
 }
+//TODO edited loops to be const key. correct?
 function updateOptions() {
-  for (key in compatibilityFlags) compatibilityFlags[key].setValue(emulator[key])
+  for (const key in compatibilityFlags) compatibilityFlags[key].setValue(emulator[key])
   screenRotation.setValue(emulator.screenRotation)
   compatProfile.setValue('none')
-  for (key in compatibilityProfiles) {
+  for (const key in compatibilityProfiles) {
     const p = compatibilityProfiles[key]
     const same = Object.keys(p).every(x => emulator[x] == p[x])
     if (same) compatProfile.setValue(key)

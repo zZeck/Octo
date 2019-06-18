@@ -1,3 +1,7 @@
+import { emulator, zip, range } from "./util";
+import { saveAs } from "../lib/filesaver";
+import { arrayEqual, renderTarget } from "./shared";
+
 /**
 * Recording animated GIFs
 *
@@ -5,7 +9,7 @@
 * or windowing, but does squash together identical sequential frames.
 **/
 
-function gifBuilder(width, height, colors) {
+export function gifBuilder(width, height, colors) {
 	const buffer = []
 	const b = x => buffer.push(x & 0xFF)
 	const s = x => { b(x); b(x >> 8) }
@@ -75,7 +79,7 @@ var currentRecording = null
 var heldFrame = null
 var heldTicks = 1
 
-function recordFrame() {
+export function recordFrame() {
 	if (currentRecording == null) return
 	const last = document.getElementById(renderTarget).last
 	if (last != undefined && arrayEqual(last.p[0], emulator.p[0]) && arrayEqual(last.p[1], emulator.p[1])) {
@@ -96,7 +100,7 @@ function recordFrame() {
 	}
 }
 
-runRecord.onclick = _ => {
+runRecord.onclick = () => {
 	if (currentRecording == null) {
 		runRecord.src = 'images/recording.png'
 		const pal = [emulator.backgroundColor, emulator.fillColor, emulator.fillColor2, emulator.blendColor]

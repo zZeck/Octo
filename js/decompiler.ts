@@ -9,7 +9,7 @@
 
 "use strict";
 
-import { numericFormat, maskFormat } from "./util";
+import { numericFormat, maskFormat, hexFormat } from "./util";
 
 var LOAD_STORE_QUIRKS = false; // ignore i increment with loads
 var SHIFT_QUIRKS      = false; // shift vx in place, ignore vy
@@ -35,7 +35,7 @@ var lnames      = {}; // map<address, name>
 var snames      = {}; // map<address, name>
 var nnames      = {}; // map<address, name>
 
-function formatInstruction(a, nn) {
+export function formatInstruction(a, nn) {
 	// convert a pair of bytes representing an instruction
 	// into a string of the equivalent octo statement.
 	var op  = (a <<  8) | nn;
@@ -409,7 +409,7 @@ function apply(address) {
 		}
 		return destinations;
 	}
-	function markRead(size, offset) {
+	function markRead(size, offset?) {
 		if (!offset) { offset = 0; }
 		for(var w in ret['i']) {
 			var addr = parseInt(w) + offset;
@@ -418,7 +418,7 @@ function apply(address) {
 			}
 		}
 	}
-	function markWrite(size, offset) {
+	function markWrite(size, offset?) {
 		// todo: distinguish read-only/read-write data?
 		markRead(size, offset);
 	}
@@ -571,7 +571,7 @@ function successors(address, prevret) {
 	return [address + 2];
 }
 
-function analyzeInit(rom, quirks) {
+export function analyzeInit(rom, quirks) {
 	program     = [];
 	reaching    = {};
 	type        = {};
@@ -583,7 +583,7 @@ function analyzeInit(rom, quirks) {
 	nnames      = {};
 	romsize     = rom.length;
 
-	SHIFT_QUIRKS      = quirks['shiftQuirks']     | false;
+	SHIFT_QUIRKS      = quirks['shiftQuirks']     | false; //TODO is this | correct?
 	LOAD_STORE_QUIRKS = quirks['loadStoreQuirks'] | false;
 	VF_ORDER_QUIRKS   = quirks['vfOrderQuirks']   | false;
 	
@@ -599,7 +599,7 @@ function analyzeInit(rom, quirks) {
 	for(var x = 0; x < rom.length; x++) { program[x+0x200] = rom[x]; }
 }
 
-function analyzeWork() {
+export function analyzeWork() {
 	function reachingMerge(a, b) {
 		// take the union of two reaching sets.
 		// if we altered b, it was a subset of a.
@@ -656,7 +656,7 @@ function analyzeWork() {
 	return false;
 }
 
-function analyzeFinish() {
+export function analyzeFinish() {
 	// name all labels and subroutines by order of appearance:
 	var lsize = 0;
 	var ssize = 0;
@@ -678,7 +678,7 @@ function analyze(rom, quirks) {
 	analyzeFinish();
 }
 
-function formatProgram(programSize) {
+export function formatProgram(programSize) {
 	var ret = "";
 	if (SHIFT_QUIRKS) {
 		ret += "# analyzed with shifts that modify vx in place and ignore vy.\n";
@@ -721,7 +721,7 @@ function formatProgram(programSize) {
 
 		// process native code, if applicable:
 		if (a in natives && a != 0x200) {
-			var nat = formatNative(a, "\t");
+			var nat = formatNative(a, "\t") as number[];//TODO cast safe?
 			ret += nat[1];
 			if (nat[0] > 0) {
 				x += nat[0] - 1;

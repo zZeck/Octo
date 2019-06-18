@@ -1,5 +1,7 @@
 "use strict";
 
+import { emulator } from "./util";
+
 ////////////////////////////////////
 //
 //   Emulator Execution
@@ -7,7 +9,7 @@
 ////////////////////////////////////
 
 var scaleFactor = 5;
-var renderTarget = "target";
+export var renderTarget = "target";
 
 const optionFlags = [
 	"tickrate",
@@ -26,7 +28,7 @@ const optionFlags = [
 	"screenRotation",
 	"maxSize",
 ]
-function unpackOptions(emulator, options) {
+export function unpackOptions(emulator, options) {
 	optionFlags.forEach(x => { if (x in options) emulator[x] = options[x] })
 	if (options["enableXO"]) emulator.maxSize = 65024 // legacy option
 }
@@ -36,7 +38,7 @@ export function packOptions(emulator) {
 	return r
 }
 
-function setRenderTarget(scale, canvas) {
+export function setRenderTarget(scale, canvas) {
 	scaleFactor = scale;
 	renderTarget = canvas;
 	var c: HTMLCanvasElement = document.getElementById(canvas);
@@ -82,7 +84,7 @@ function getTransform(emulator, g) {
 }
 
 
-function arrayEqual(a, b) {
+export function arrayEqual(a, b) {
 	var length = a.length;
 	if (length !== b.length) { return false; }
 	for (var i = 0; i < length; i++) {
@@ -91,7 +93,7 @@ function arrayEqual(a, b) {
 	return true;
 }
 
-function getColor(id) {
+export function getColor(id) {
 	switch(id) {
 		case 0: return emulator.backgroundColor;
 		case 1: return emulator.fillColor;
@@ -101,8 +103,8 @@ function getColor(id) {
 	throw "invalid color: " + id;
 }
 
-function renderDisplay(emulator) {
-	var c = document.getElementById(renderTarget);
+export function renderDisplay(emulator) {
+	var c: HTMLCanvasElement = document.getElementById(renderTarget);
 
 	// Canvas rendering can be expensive. Exit out early if nothing has changed.
 	var colors = [emulator.backgroundColor, emulator.fillColor, emulator.fillColor2, emulator.blendColor];
@@ -153,8 +155,9 @@ var audioNode;
 var audioSource;
 var audioData;
 
-var AudioBuffer = function(buffer, duration) {
+var AudioBuffer = function(buffer, duration): void {
 	if (!(this instanceof AudioBuffer)) {
+		//TODO how does this interact with void
 		return new AudioBuffer(buffer, duration);
 	}
 
@@ -188,7 +191,7 @@ var TIMER_FREQ = 60;
 var SAMPLES = 16;
 var BUFFER_SIZE = SAMPLES * 8
 
-function audioSetup() {
+export function audioSetup() {
 	if (!audio) {
 		if (typeof AudioContext !== 'undefined') {
 			audio = new AudioContext();
@@ -235,7 +238,7 @@ function audioSetup() {
 	return false;
 }
 
-function stopAudio() {
+export function stopAudio() {
 	if (!audio) { return; }
 	if (audioNode) {
 		audioNode.disconnect();
@@ -246,7 +249,7 @@ function stopAudio() {
 
 var VOLUME = 0.25;
 
-function playPattern(soundLength, buffer, remainingTicks) {
+export function playPattern(soundLength, buffer, remainingTicks?) {
 	if (!audio) { return; }
 
 	var samples = Math.floor(BUFFER_SIZE * audio.sampleRate / FREQ);

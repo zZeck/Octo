@@ -1,5 +1,8 @@
 "use strict";
 
+import { compile } from "./htmlcode";
+import { saveAs } from "../lib/filesaver";
+
 ////////////////////////////////////
 //
 //   .ch8 file export:

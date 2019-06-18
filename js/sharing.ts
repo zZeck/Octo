@@ -1,5 +1,7 @@
-import { emulator } from "./util";
-import { packOptions } from "./shared";
+import { emulator, ajax } from "./util";
+import { packOptions, unpackOptions } from "./shared";
+import { editor, speedMenu, setStatusMessage } from "./htmlcode";
+import { gifBuilder } from "./recording";
 
 /**
 * Sharing/Loading externally-hosted programs
@@ -55,21 +57,21 @@ export function share() {
 	})
 }
 
-function preparePayload() {
+export function preparePayload() {
 	return {
 		key:     lastLoadedKey,
 		program: editor.getValue(),
 		options: packOptions(emulator),
 	}
 }
-function openPayload(options, program) {
+export function openPayload(options, program) {
 	editor.setValue(program)
 	speedMenu.setValue(options.tickrate)
 	unpackOptions(emulator, options)
 	saveLocalOptions()
 	saveLocalProgram()
 }
-function runPayload(options, program) {
+export function runPayload(options, program) {
 	editor.setValue(program)
 	speedMenu.setValue(options.tickrate)
 	unpackOptions(emulator, options)
@@ -88,9 +90,9 @@ function runGist(id) {
 }
 
 export function saveLocalOptions() { localStorage.setItem('octoOptions', JSON.stringify(packOptions(emulator))) }
-function saveLocalProgram() { localStorage.setItem('octoProgram', JSON.stringify(editor.getValue())) }
+export function saveLocalProgram() { localStorage.setItem('octoProgram', JSON.stringify(editor.getValue())) }
 
-window.onload = _ => {
+window.onload = () => {
 	// load examples
 	ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, result => {
 		const target = document.querySelector('#main-examples ul')
@@ -98,7 +100,7 @@ window.onload = _ => {
 		result.forEach(x => {
 			var r = document.createElement('li')
 			r.innerHTML = x.name
-			r.onclick = _ => ajax('GET', x.url, null, result => {
+			r.onclick = () => ajax('GET', x.url, null, result => {
 				editor.setValue(window.atob(result.content.replace(/(?:\r\n|\r|\n)/g, '')))
 				setStatusMessage('loaded example program <tt>'+x.name+'</tt>', true)
 			})
@@ -320,7 +322,7 @@ function printLabel(dest, pen, text) {
 	})
 }
 
-function buildCartridge(label, data) {
+export function buildCartridge(label, data) {
 	const base = gifDecode(BASE_IMAGE)
 	const bytes = JSON.stringify(data).split('').map(x => x.charCodeAt(0))
 	const payload = [
@@ -352,7 +354,7 @@ function buildCartridge(label, data) {
 	return g.finish()
 }
 
-function parseCartridge(image) {
+export function parseCartridge(image) {
 	const parts = gifDecode(image)
 	const nybble = x     => ((x>>13)&8) | ((x>>7)&6) | (x&1)
 	const byte   = (f,i) => (nybble(parts.frames[f].palette[parts.frames[f].pixels[i  ]])<<4) |

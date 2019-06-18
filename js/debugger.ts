@@ -1,5 +1,5 @@
 import { escapeHtml } from "./shared";
-import { hexFormat, emulator, numericFormat, setVisible } from "./util";
+import { hexFormat, emulator, numericFormat, setVisible, range } from "./util";
 
 /**
 * Debugger and Profiler
@@ -106,20 +106,20 @@ function dumpProfile() {
 	)
 }
 
-function clearBreakpoint() {
+export function clearBreakpoint() {
 	setVisible(runContinue, false)
 	setVisible(debugPanel,  false)
 	emulator.breakpoint = false
 }
 
-function haltBreakpoint(name?) {
+export function haltBreakpoint(name?) {
 	setVisible(runContinue, true, 'inline')
 	setVisible(debugPanel,  true)
 	emulator.breakpoint = true
 	debugPanel.innerHTML = dumpRegisters(true, name) + dumpStack() + dumpContext()
 }
 
-function haltProfiler(name) {
+export function haltProfiler(name) {
 	setVisible(runContinue, true, 'inline')
 	setVisible(debugPanel,  true)
 	emulator.breakpoint = true

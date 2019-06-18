@@ -1,6 +1,8 @@
 "use strict";
 
-var keymap = [
+import { haltBreakpoint } from "./debugger";
+
+export var keymap = [
 	// chip8    // keyboard
 	/* 0 */ 88, // x
 	/* 1 */ 49, // 1
@@ -20,7 +22,7 @@ var keymap = [
 	/* F */ 86  // v
 ];
 
-var keymapInverse = [];
+export var keymapInverse = [];
 for (var i = 0, len = keymap.length; i < len; i++) {
 	keymapInverse[keymap[i]] = i;
 }

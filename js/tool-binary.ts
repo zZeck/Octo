@@ -1,3 +1,9 @@
+import { saveAs } from "../lib/filesaver";
+import { compile, runRom, editor } from "./htmlcode";
+import { readBytes, writeBytes, setVisible, hexFormat, emulator, textBox, radioBar } from "./util";
+import { formatInstruction, analyzeInit, analyzeWork, analyzeFinish, formatProgram } from "./decompiler";
+import { buildCartridge, preparePayload } from "./sharing";
+
 /**
 * Binary tools:
 **/
@@ -27,7 +33,7 @@ function decompileStatic(rom) {
 		vfOrderQuirks:   emulator.vfOrderQuirks,
 		jumpQuirks:      emulator.jumpQuirks,
 	})
-	const process = _ => {
+	const process = () => {
 		var finished = false;
 		for(var z = 0; z < 100 && !finished; z++) { finished |= analyzeWork() }
 		if (!finished) {
@@ -45,31 +51,31 @@ function decompileStatic(rom) {
 * UI Glue
 **/
 
-binaryInput.onchange = _ => {
+binaryInput.onchange = () => {
 	const reader = new FileReader()
-	reader.onload = _ => writeBytes(binaryEditor, null, new Uint8Array(reader.result))
+	reader.onload = () => writeBytes(binaryEditor, null, new Uint8Array(reader.result))
 	reader.readAsArrayBuffer(binaryInput.files[0])
 }
-document.getElementById('binary-decompile').onclick = _ => {
+document.getElementById('binary-decompile').onclick = () => {
 	(decompilerMode.getValue() == 'static' ? decompileStatic : decompileRaw)(readBytes(binaryEditor))
 }
-document.getElementById('binary-run').onclick = _ => {
+document.getElementById('binary-run').onclick = () => {
 	runRom({ rom:readBytes(binaryEditor), breakpoints:{}, aliases:{}, labels:{} })
 }
-document.getElementById('binary-open').onclick = _ => {
+document.getElementById('binary-open').onclick = () => {
 	binaryInput.click()
 }
-document.getElementById('binary-save-ch8').onclick = _ => {
+document.getElementById('binary-save-ch8').onclick = () => {
 	var prog = compile()
 	if (prog == null) { return }
 	const name = document.getElementById('binary-filename').value
 	saveAs(new Blob([new Uint8Array(prog.rom)], {type: 'application/octet-stream'}), name+'.ch8')
 }
-document.getElementById('binary-save-8o').onclick = _ => {
+document.getElementById('binary-save-8o').onclick = () => {
 	const name = document.getElementById('binary-filename').value
 	saveAs(new Blob([editor.getValue()], {type: 'text/plain;charset=utf-8'}), name+'.8o')
 }
-document.getElementById('binary-save-cart').onclick = _ => {
+document.getElementById('binary-save-cart').onclick = () => {
 	const name  = document.getElementById('binary-filename').value
 	const label = name + '\n' + (new Date().toISOString().replace('T','\n'))
 	const cart  = buildCartridge(label, preparePayload())

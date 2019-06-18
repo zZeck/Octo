@@ -1,16 +1,19 @@
+import { writeBytes, readBytes, range, radioBar, textBox, toggleButton, mod } from "./util";
+import { getColor } from "./shared";
+
 /**
 * Sprite editor:
 **/
 
 const SPRITE_SCALE  = 20
-const spriteDraw    = document.getElementById('sprite-draw')
+const spriteDraw    = document.getElementById('sprite-draw') as HTMLCanvasElement; //correct cast?
 const sprite16      = toggleButton(document.getElementById('sprite-16'), 0, changeSpriteSize)
 const spriteColor   = toggleButton(document.getElementById('sprite-color'), 0, updateSpriteEditor)
 const spriteClear   = document.getElementById('sprite-clear')
 const spritePalette = radioBar(document.getElementById('sprite-palette'), 1, x => {})
 const spriteEditor  = textBox(document.getElementById('sprite-editor'), false, '')
 
-spriteClear.onclick = _ => { spritePixels = []; updateSpriteEditor() }
+spriteClear.onclick = () => { spritePixels = []; updateSpriteEditor() }
 function spriteLength() { return (sprite16.getValue() ? 32 : 15) * (spriteColor.getValue() ? 2 : 1) }
 function spriteDim(big) { return big ? { rows:16, cols:16 } : { rows:15, cols:8 } }
 
@@ -89,7 +92,7 @@ function showHex() {
   writeBytes(spriteEditor, spriteLength(), spritePixels)
 }
 
-spriteEditor.on('change', _ => {
+spriteEditor.on('change', () => {
   if (spriteHandlingRefresh) return
   spriteHandlingRefresh = true
   spritePixels = readBytes(spriteEditor, spriteLength())
@@ -119,10 +122,10 @@ function showSprite() {
 * Main:
 **/
 
-document.getElementById('sprite-left' ).onclick = _ => scrollSprite(-1, 0)
-document.getElementById('sprite-right').onclick = _ => scrollSprite( 1, 0)
-document.getElementById('sprite-up'   ).onclick = _ => scrollSprite( 0,-1)
-document.getElementById('sprite-down' ).onclick = _ => scrollSprite( 0, 1)
+document.getElementById('sprite-left' ).onclick = () => scrollSprite(-1, 0)
+document.getElementById('sprite-right').onclick = () => scrollSprite( 1, 0)
+document.getElementById('sprite-up'   ).onclick = () => scrollSprite( 0,-1)
+document.getElementById('sprite-down' ).onclick = () => scrollSprite( 0, 1)
 
 drawOnCanvas(spriteDraw, (x, y, draw) => {
   setSpritePixel(
