@@ -3,10 +3,11 @@ import { share, parseCartridge, runPayload, openPayload, saveLocalProgram, saveL
 import { clearBreakpoint, haltBreakpoint, haltProfiler } from "./debugger";
 import { keymapInverse, keymap } from "./emulator";
 import { renderDisplay, playPattern, audioSetup, setRenderTarget, stopAudio } from "./shared";
-import { Compiler } from "./compiler";
+import { Compiler, DebugInfo } from "./compiler";
 import { recordFrame } from "./recording";
+import CodeMirror from "codemirror";
 
-export const editor = CodeMirror(document.getElementById('editor'), {
+export const editor = CodeMirror(document.getElementById('editor')!, {
     mode:           'octo',
     theme:          'monokai',
     lineNumbers:    true,
@@ -17,7 +18,7 @@ export const editor = CodeMirror(document.getElementById('editor'), {
     value:          'loading...',
     gutters:        ['breakpoints', 'CodeMirror-linenumbers'],
     extraKeys: {
-      'Shift-Enter': () => document.getElementById('main-run').click(),
+      'Shift-Enter': () => document.getElementById('main-run')!.click(),
     },
   })
   editor.on('change', () => saveLocalProgram())
@@ -25,7 +26,7 @@ export const editor = CodeMirror(document.getElementById('editor'), {
     function makeMarker() {
       const marker = document.createElement('div')
       marker.classList.add('breakpoint')
-      marker.dataset.line = n
+      marker.dataset.line = String(n)
       marker.innerHTML = '●'
       return marker
     }
@@ -33,21 +34,21 @@ export const editor = CodeMirror(document.getElementById('editor'), {
     cm.setGutterMarker(n, 'breakpoints', info.gutterMarkers ? null : makeMarker())
   })
   
-  function getVisualBreakpoints(debuginfo) {
-    const r = {}
-    document.querySelectorAll('#editor .breakpoint').forEach(x => {
-      const line = +(x.dataset.line)
+  function getVisualBreakpoints(debuginfo: DebugInfo) {
+    const r: {[address: string]: string} = {}
+    document.querySelectorAll<HTMLElement>('#editor .breakpoint').forEach((x) => {
+      const line = +(x.dataset.line!)
       const addr = debuginfo.getAddr(line)
       if (addr) { r[addr] = 'source line ' + (line+1) }
     })
     return r
   }
   
-  const expandOut   = document.getElementById('expand-out')
-  const outputPanel = document.getElementById('output')
+  const expandOut   = document.getElementById('expand-out')!
+  const outputPanel = document.getElementById('output')!
   const output      = textBox(document.getElementById('output'), true, 'no output')
-  const statusBar   = document.getElementById('status')
-  const statusText  = document.getElementById('status-text')
+  const statusBar   = document.getElementById('status')!
+  const statusText  = document.getElementById('status-text')!
   
   function toggleOutput() {
     const v = outputPanel.style.display == 'block'
@@ -55,19 +56,19 @@ export const editor = CodeMirror(document.getElementById('editor'), {
     setVisible(expandOut, v)
     output.refresh()
   }
-  document.getElementById('output-header').onclick = toggleOutput
-  document.getElementById('status'       ).onclick = toggleOutput
+  document.getElementById('output-header')!.onclick = toggleOutput
+  document.getElementById('status'       )!.onclick = toggleOutput
   
-  export function setStatusMessage(message, ok?) {
+  export function setStatusMessage(message: string, ok?: string) {
     statusBar.style.backgroundColor = ok ? 'black' : 'darkred'
     statusText.innerHTML = message
   }
   
-  function accordion(initial) {
-    var current = null
-    function open(panel) {
+  function accordion(initial: string) {
+    var current: string | null = null
+    function open(panel: string) {
       current = panel
-      document.querySelectorAll('.tool-body').forEach(x => {
+      document.querySelectorAll<HTMLElement>('.tool-body').forEach(x => {
         x.classList.toggle('selected', x.dataset.panel == panel)
       })
       const tools = {
@@ -81,7 +82,7 @@ export const editor = CodeMirror(document.getElementById('editor'), {
     }
     document.querySelectorAll('.tool-header').forEach(x => x.onclick = () => open(x.dataset.panel))
     open(initial)
-    return { setValue: open, update: () => open(current) }
+    return { setValue: open, update: () => open(current!) }
   }
   const toolboxAccordion = accordion('sprite')
   

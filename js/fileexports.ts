@@ -32,7 +32,7 @@ function saveBinaryFile() {
 ////////////////////////////////////
 
 function saveSourceFile() {
-	var input  = document.getElementById("input");
+	var input  = document.getElementById("input") as HTMLInputElement;
 	var blob = new Blob([input.value], {type: "text/plain;charset=utf-8"})
 	saveAs(blob, "source.8o")
 }

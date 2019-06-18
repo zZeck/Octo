@@ -89,7 +89,7 @@ function tokenize(text: string) {
 //
 ////////////////////////////////////
 
-class DebugInfo {
+export class DebugInfo {
 	lines: string[];
 	_locs: { [address: number]: number};
 	

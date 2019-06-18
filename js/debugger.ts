@@ -8,14 +8,14 @@ import { hexFormat, emulator, numericFormat, setVisible, range } from "./util";
 const runContinue = document.getElementById('run-continue')
 const debugPanel  = document.getElementById('debugger')
 
-const regNumFormat = {}
-function cycleNumFormat(r) {
+const regNumFormat: {[register: string]: string} = {}
+function cycleNumFormat(r:string) {
 	const f = ['hex','bin','dec','hex']
 	regNumFormat[r] = f[f.indexOf(regNumFormat[r] || 'hex')+1]
 	haltBreakpoint()
 }
 
-function getLabel(addr,reg?,raw?) {
+function getLabel(addr: number ,reg?: number, raw?: boolean) {
 	var n = 'hex-font', x = 0
 	for (var k in emulator.metadata.labels) {
 		var v = emulator.metadata.labels[k]
@@ -25,10 +25,11 @@ function getLabel(addr,reg?,raw?) {
 	return '('+n+(x == addr ? '' : ' + '+(addr-x))+')'
 }
 
-function dumpRegisters(showV, name) {
-	const line = (text, click?) => '<span' + (click ? ' onClick="'+click+'"' : '')+'>' + text + '</span><br>'
-	const register = (n, v, f) => line(n + ' := ' + numericFormat(v, regNumFormat[n || 'hex']) + ' ' + f(v,n), 'cycleNumFormat(\''+n+'\')')
-	const aliases = (addr,reg) => {
+function dumpRegisters(showV: boolean, name: string) {
+	//TODO if click function name passed in then set to onCLick?
+	const line = (text: string, click?: string) => '<span' + (click ? ' onClick="'+click+'"' : '')+'>' + text + '</span><br>'
+	const register = (n: string, v: number, f: (addr: any, reg?: any, raw?: any) => string) => line(n + ' := ' + numericFormat(v, regNumFormat[n || 'hex']) + ' ' + f(v,n), 'cycleNumFormat(\''+n+'\')')
+	const aliases = (addr: number, reg: number[]) => {
 		var a = emulator.metadata.aliases
 		var r = +('0x'+reg.slice(1))
 		var n = Object.keys(a).filter(k => a[k] == r).join(', ')
@@ -48,25 +49,25 @@ function dumpStack() {
 }
 function dumpContext() {
 	const dbg = emulator.metadata.dbginfo
-	const pcline = dbg.getLine(emulator.pc)
+	const pcline = dbg!.getLine(emulator.pc)!
 	var memlo = emulator.pc, memhi = emulator.pc
-	while (dbg.getLine(memlo - 1) > pcline - 8) memlo--
-	while (dbg.getLine(memhi + 1) < pcline + 8) memhi++
+	while (dbg!.getLine(memlo - 1)! > pcline - 8) memlo--
+	while (dbg!.getLine(memhi + 1)! < pcline + 8) memhi++
 	var ind = memlo
 	const lines = []
-	for (var x = dbg.getLine(memlo); x <= dbg.getLine(memhi); x++) lines.push(x)
-	const row = (c,a,d,s) => '<tr'+(c?' class=\'current\'':'')+'><td>'+a+'</td><td>'+d+'</td><td><pre>'+escapeHtml(s)+'</pre></td></tr>'
-	const linebytes = x => { var r = ''; while(dbg.getLine(ind) == x) r += hexFormat(emulator.m[ind++]).slice(2) + ' '; return r }
+	for (var x = dbg!.getLine(memlo)!; x <= dbg!.getLine(memhi)!; x++) lines.push(x)
+	const row = (c: boolean, a: string, d: string, s: string) => '<tr'+(c?' class=\'current\'':'')+'><td>'+a+'</td><td>'+d+'</td><td><pre>'+escapeHtml(s)+'</pre></td></tr>'
+	const linebytes = (x: number) => { var r = ''; while(dbg!.getLine(ind) == x) r += hexFormat(emulator.m[ind++]).slice(2) + ' '; return r }
 	return (
 		'context:<br><table class=\'debug-context\'>' +
 			row(false, 'addr', 'data', 'source') +
-			lines.filter(x => !dbg.lines[x].match(/^\s*$/)).map(x => {
-				const here = dbg.getLine(ind)
+			lines.filter(x => !dbg!.lines[x].match(/^\s*$/)).map(x => {
+				const here = dbg!.getLine(ind)
 				return row(
 					here == pcline,
 					here != x ? '' : hexFormat(ind).slice(2),
 					here != x ? '' : linebytes(x),
-					dbg.lines[x]
+					dbg!.lines[x]
 				)
 			}).join('') +
 		'</table>'
@@ -112,16 +113,16 @@ export function clearBreakpoint() {
 	emulator.breakpoint = false
 }
 
-export function haltBreakpoint(name?) {
+export function haltBreakpoint(name?: string) {
 	setVisible(runContinue, true, 'inline')
 	setVisible(debugPanel,  true)
 	emulator.breakpoint = true
-	debugPanel.innerHTML = dumpRegisters(true, name) + dumpStack() + dumpContext()
+	debugPanel!.innerHTML = dumpRegisters(true, name!) + dumpStack() + dumpContext()
 }
 
-export function haltProfiler(name) {
+export function haltProfiler(name: string) {
 	setVisible(runContinue, true, 'inline')
 	setVisible(debugPanel,  true)
 	emulator.breakpoint = true
-	debugPanel.innerHTML = dumpRegisters(false, name) + dumpProfile()
+	debugPanel!.innerHTML = dumpRegisters(false, name) + dumpProfile()
 }

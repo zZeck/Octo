@@ -21,21 +21,21 @@ var regNames = [
 ];
 
 // global state:
-var program  = []; // chip8 memory
-var reaching = {}; // map<address, map<register, set<int>>>
-var fringe   = []; // addresses left to explore
+var program: number[]  = []; // chip8 memory
+var reaching: {[address: number]: {[register: string]: {[reg: string]: boolean}}} = {}; // map<address, map<register, set<int>>>
+var fringe: number[]   = []; // addresses left to explore
 var romsize  = 0;  // size of rom in bytes
 
 // analysis:
-var type        = {}; // map<address, {code | data | smc}>
-var labels      = {}; // map<address, list<reference addrs>>
-var subroutines = {}; // map<address, list<caller addrs>>
-var natives     = {}; // map<address, list<native caller addrs>>
-var lnames      = {}; // map<address, name>
-var snames      = {}; // map<address, name>
-var nnames      = {}; // map<address, name>
+var type: {[address: number]: string}        = {}; // map<address, {code | data | smc}>
+var labels: {[address: number]: number[]}      = {}; // map<address, list<reference addrs>>
+var subroutines: {[address: number]: number[]} = {}; // map<address, list<caller addrs>>
+var natives: {[address: number]: number[]}     = {}; // map<address, list<native caller addrs>>
+var lnames: {[address: number]: string}      = {}; // map<address, name>
+var snames: {[address: number]: string}      = {}; // map<address, name>
+var nnames: {[address: number]: string}     = {}; // map<address, name>
 
-export function formatInstruction(a, nn) {
+export function formatInstruction(a: number, nn: number) {
 	// convert a pair of bytes representing an instruction
 	// into a string of the equivalent octo statement.
 	var op  = (a <<  8) | nn;
@@ -48,7 +48,7 @@ export function formatInstruction(a, nn) {
 	var vx = "v" + (x.toString(16).toUpperCase());
 	var vy = "v" + (y.toString(16).toUpperCase());
 
-	function name(map, nnn) { return nnn in map ? map[nnn] : hexFormat(nnn); }
+	function name(map: {[address: number]: string}, nnn: number) { return nnn in map ? map[nnn] : hexFormat(nnn); }
 
 	if (a  == 0x00 && y == 0xC) { return "scroll-down " + numericFormat(n); } // schip
 	if (a  == 0x00 && y == 0xD) { return "scroll-up " + numericFormat(n); } // xo-chip
@@ -107,7 +107,7 @@ export function formatInstruction(a, nn) {
 	return hexFormat(a) + " " + hexFormat(nn) + " # bad opcode?";
 }
 
-function formatNative(addr, prefix) {
+function formatNative(addr: number, prefix: string) {
 	var r = "";
 	var start = addr;
 
@@ -222,10 +222,10 @@ function formatNative(addr, prefix) {
 	return [(addr - start), r + "\n"];
 }
 
-function copyReachingSet(source) {
-	var ret = {};
+function copyReachingSet(source: {[register: string]: {[reg: string]: boolean}}) {
+	var ret: {[registerName: string]: {[key: string]: boolean}} = {};
 	for(var z = 0; z < regNames.length; z++) {
-		var register = regNames[z];
+		var register = regNames[z] as string;
 		ret[register] = {};
 		var values = Object.keys(source[register]);
 		for(var vindex = 0; vindex < values.length; vindex++) {
@@ -235,7 +235,7 @@ function copyReachingSet(source) {
 	return ret;
 }
 
-function singleResult(address) {
+function singleResult(address: number) {
 	// is this an arithmetic instruction which
 	// yields a single calculated result?
 	var op = program[address] & 0xF0;
@@ -255,12 +255,12 @@ function singleResult(address) {
 	return " # result is always "+numericFormat(parseInt(vals[0]));
 }
 
-function apply(address) {
+function apply(address: number) {
 	// apply this instruction to the reaching set
 	// producing a successor reaching set.
 
 	// flag this address as executable
-	function setType(address, desired) {
+	function setType(address: number, desired: string) {
 		var t = type[address];
 		if (desired == "code" && t == "smc" ) { return; }
 		if (desired == "data" && t == "smc" ) { return; }
@@ -307,30 +307,30 @@ function apply(address) {
 	}
 
 	// helper routines:
-	function iota(max) {
-		var i = {};
+	function iota(max: number) {
+		var i: {[key: number]: boolean} = {};
 		for(var z = 0; z <= max; z++) { i[z] = true; }
 		return i;
 	}
 	function maskedrand() {
-		var i = {};
+		var i: {[key: number]: boolean} = {};
 		for(var z = 0; z <= 0xFF; z++) { i[z & nn] = true; }
 		return i;
 	}
-	function single(value) {
-		var s = {};
+	function single(value: number) {
+		var s: {[key: number]: boolean} = {};
 		s[value] = true;
 		return s;
 	}
-	function unary(unop) {
-		var r = {};
+	function unary(unop: (x: number) => number) {
+		var r: {[key: number]: boolean} = {};
 		for(var a in ret[x]) {
 			r[unop(parseInt(a)) & 0xFF] = true
 		}
 		return r;
 	}
-	function binary(binop) {
-		var r = {};
+	function binary(binop: (x: number, y: number) => number) {
+		var r: {[key: number]: boolean} = {};
 		if (x == y) {
 			for(var a in ret[x]) {
 				var tmp = parseInt(a);
@@ -346,24 +346,24 @@ function apply(address) {
 		}
 		ret[x] = r;
 	}
-	function capi(i) {
+	function capi(i: number) {
 		return Math.min(i, romsize+1+0x200);
 	}
-	function ioffset(delta) {
+	function ioffset(delta: number) {
 		if (LOAD_STORE_QUIRKS) { return; }
-		var s = {};
+		var s: {[key: number]: boolean} = {};
 		for(var a in ret['i']) {
 			s[capi(parseInt(a) + delta)] = true;
 		}
 		ret['i'] = s;
 	}
-	function isingle(value) {
+	function isingle(value: number) {
 		value = capi(value);
-		var s = {}; s[value] = true;
+		var s: {[key: number]: boolean} = {}; s[value] = true;
 		return s;
 	}
 	function ioffsets() {
-		var s = {};
+		var s: {[key: number]: boolean} = {};
 		for(var a in ret['i']) {
 			for(var b in ret[x]) {
 				s[capi(parseInt(a) + parseInt(b))] = true;
@@ -371,9 +371,9 @@ function apply(address) {
 		}
 		return s;
 	}
-	function bincarry(binop) {
-		var r = {};
-		var c = {};
+	function bincarry(binop: (x: number, y: number) => number[]) {
+		var r: {[key: number]: boolean} = {};
+		var c: {[key: number]: boolean} = {};
 		if (x == y) {
 			for(var a in ret[x]) {
 				var tmp = parseInt(a);
@@ -401,7 +401,7 @@ function apply(address) {
 		}
 	}
 	function chaseReturns() {
-		var destinations = {};
+		var destinations: {[key: string]: boolean} = {};
 		for(var rsource in ret['rets']) {
 			for(var rdest in reaching[parseInt(rsource)-2]['rets']) {
 				destinations[rdest] = true;
@@ -409,7 +409,7 @@ function apply(address) {
 		}
 		return destinations;
 	}
-	function markRead(size, offset?) {
+	function markRead(size: number, offset?: number) {
 		if (!offset) { offset = 0; }
 		for(var w in ret['i']) {
 			var addr = parseInt(w) + offset;
@@ -418,7 +418,7 @@ function apply(address) {
 			}
 		}
 	}
-	function markWrite(size, offset?) {
+	function markWrite(size: number, offset?: number) {
 		// todo: distinguish read-only/read-write data?
 		markRead(size, offset);
 	}
@@ -496,7 +496,7 @@ function apply(address) {
 	return ret;
 }
 
-function successors(address, prevret) {
+function successors(address: number, prevret: number[]) {
 	// produce a list of all possible successor addresses
 	// of this one, honoring branches and dispatchers.
 
@@ -508,7 +508,7 @@ function successors(address, prevret) {
 	var y   = (nn >> 4) & 0xF;
 	var nnn = op & 0xFFF;
 
-	function preciseSkip(address, predicate) {
+	function preciseSkip(address: number, predicate: (x: number, y: number, z: number) => boolean) {
 		// decide which skip paths are possible based
 		// on the reaching set to an address.
 		var pass = false;
@@ -571,7 +571,7 @@ function successors(address, prevret) {
 	return [address + 2];
 }
 
-export function analyzeInit(rom, quirks) {
+export function analyzeInit(rom: number[], quirks: {[quirk: string]: boolean}) {
 	program     = [];
 	reaching    = {};
 	type        = {};
@@ -583,9 +583,9 @@ export function analyzeInit(rom, quirks) {
 	nnames      = {};
 	romsize     = rom.length;
 
-	SHIFT_QUIRKS      = quirks['shiftQuirks']     | false; //TODO is this | correct?
-	LOAD_STORE_QUIRKS = quirks['loadStoreQuirks'] | false;
-	VF_ORDER_QUIRKS   = quirks['vfOrderQuirks']   | false;
+	SHIFT_QUIRKS      = quirks['shiftQuirks']     || false; //TODO was | originally. Seems like this ist rying to set default if undefined?
+	LOAD_STORE_QUIRKS = quirks['loadStoreQuirks'] || false;
+	VF_ORDER_QUIRKS   = quirks['vfOrderQuirks']   || false;
 	
 	reaching[0x200] = {};
 	for(var z = 0; z < regNames.length; z++) {
@@ -828,6 +828,7 @@ export function formatProgram(programSize) {
 	return ret;
 }
 
+//TODO no longer needed because of imports?
 this.analyze       = analyze;
 this.analyzeInit   = analyzeInit;
 this.analyzeWork   = analyzeWork;

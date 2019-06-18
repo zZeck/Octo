@@ -1,6 +1,7 @@
 "use strict";
 
 import { haltBreakpoint } from "./debugger";
+import { DebugInfo } from "./compiler";
 
 export var keymap = [
 	// chip8    // keyboard
@@ -116,7 +117,9 @@ export class Emulator {
 	public waitReg = -1;    // destination register of an awaited key
 	public halted = true;
 	public breakpoint = false;
-	public metadata = {};
+	public metadata: {labels: {[key: string]: number},
+					  aliases: {[key: string]: number},
+					  dbginfo?: DebugInfo} = { labels: {}, aliases: {}};
 	public tickCounter = 0;
 	stack_breakpoint!: number;
 
