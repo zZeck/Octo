@@ -22,7 +22,7 @@ export var keymap = [
 	/* F */ 86  // v
 ];
 
-export var keymapInverse = [];
+export var keymapInverse: number[] = [];
 for (var i = 0, len = keymap.length; i < len; i++) {
 	keymapInverse[keymap[i]] = i;
 }
@@ -96,19 +96,19 @@ export class Emulator {
 	public numericFormatStr   = "default";
 
 	// interpreter state
-	public p  = [[],[]];  // pixels
+	public p: number[][]  = [[],[]];  // pixels
 	public m: Uint8Array  = new Uint8Array(0);       // memory (bytes)
-	public r  = [];       // return stack
-	public v  = [];       // registers
+	public r: number[]  = [];       // return stack
+	public v: number[]  = [];       // registers
 	public pc = 0;        // program counter
 	public i  = 0;        // index register
 	public dt = 0;        // delay timer
 	public st = 0;        // sound timer
 	public hires = false; // are we in SuperChip high res mode?
-	public flags = [];    // semi-persistent hp48 flag vars
-	public pattern = [];  // audio pattern buffer
+	public flags: number[] = [];    // semi-persistent hp48 flag vars
+	public pattern: number[] = [];  // audio pattern buffer
 	public plane = 1;     // graphics plane
-	public profile_data = {};
+	public profile_data: {[data: number]: number} = {};
 
 	// control/debug state
 	public keys = {};       // track keys which are pressed
@@ -118,15 +118,16 @@ export class Emulator {
 	public breakpoint = false;
 	public metadata = {};
 	public tickCounter = 0;
-	stack_breakpoint: number;
+	stack_breakpoint!: number;
 
 	// external interface stubs
+	//these are assigned in htmlcode
 	public exitVector  () {}                                   // fired by 'exit'
 	public importFlags () { return [0, 0, 0, 0, 0, 0, 0, 0]; } // load persistent flags
-	public exportFlags (flags) {}                              // save persistent flags
-	public buzzTrigger (ticks, remainingTicks) {}                              // fired when buzzer played
+	public exportFlags (flags: number[]) {}                              // save persistent flags
+	public buzzTrigger (ticks: number, remainingTicks: number) {}                              // fired when buzzer played
 
-	public init (rom) {
+	public init (rom: {rom: number[]}) {
 		// initialise memory with a new array to ensure that it is of the right size and is initiliased to 0
 		this.m = this.enableXO ? new Uint8Array(0x10000) : new Uint8Array(0x1000);
 
@@ -165,7 +166,7 @@ export class Emulator {
 		this.profile_data = {};
 	}
 
-	public writeCarry (dest, value, flag) {
+	public writeCarry (dest: number, value: number, flag: number) {
 		this.v[dest] = (value & 0xFF);
 		this.v[0xF] = flag ? 1 : 0;
 		if (this.vfOrderQuirks) {
@@ -173,7 +174,7 @@ export class Emulator {
 		}
 	}
 
-	public math (x, y, op) {
+	public math (x: number, y: number, op: number) {
 		// basic arithmetic opcodes
 		switch(op) {
 			case 0x0: this.v[x]  = this.v[y]; break;
@@ -182,15 +183,15 @@ export class Emulator {
 			case 0x3: this.v[x] ^= this.v[y]; break;
 			case 0x4:
 				let t = this.v[x]+this.v[y];
-				this.writeCarry(x, t, (t > 0xFF));
+				this.writeCarry(x, t, Number((t > 0xFF)));
 				break;
 			case 0x5:
 				t = this.v[x]-this.v[y];
-				this.writeCarry(x, t, (this.v[x] >= this.v[y]));
+				this.writeCarry(x, t, Number((this.v[x] >= this.v[y])));
 				break;
 			case 0x7:
 				t = this.v[y]-this.v[x];
-				this.writeCarry(x, t, (this.v[y] >= this.v[x]));
+				this.writeCarry(x, t, Number((this.v[y] >= this.v[x])));
 				break;
 			case 0x6:
 				if (this.shiftQuirks) { y = x; }
@@ -207,7 +208,7 @@ export class Emulator {
 		}
 	}
 
-	public misc (x, rest) {
+	public misc (x: number, rest: number) {
 		// miscellaneous opcodes
 		switch(rest) {
 			case 0x01:
@@ -254,7 +255,7 @@ export class Emulator {
 		}
 	}
 
-	public sprite(x, y, len) {
+	public sprite(x: number, y: number, len: number) {
 		this.v[0xF] = 0x0;
 		var rowSize = this.hires ? 128 : 64;
 		var colSize = this.hires ?  64 : 32;
@@ -296,7 +297,7 @@ export class Emulator {
 		}
 	}
 
-	public call(nnn) {
+	public call(nnn: number) {
 		if (this.r.length >= 12) {
 			haltBreakpoint("call stack overflow.");
 		}
@@ -304,12 +305,12 @@ export class Emulator {
 		this.pc = nnn
 	}
 
-	public jump0 (nnn) {
+	public jump0 (nnn: number) {
 		if (this.jumpQuirks) { this.pc = nnn + this.v[(nnn >> 8)&0xF];  }
 		else                 { this.pc = nnn + this.v[0]; }
 	}
 
-	public machine (nnn) {
+	public machine (nnn: number) {
 		if (nnn == 0x000) { this.halted = true; return; }
 		haltBreakpoint("machine code is not supported.");
 	}
@@ -346,7 +347,7 @@ export class Emulator {
 		}
 		if (op == 0x00EE) {
 			// return
-			this.pc = this.r.pop();
+			this.pc = this.r.pop() as number;
 			return;
 		}
 		if ((op & 0xF0FF) == 0xE09E) {

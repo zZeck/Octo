@@ -8,17 +8,17 @@ import { Editor } from "codemirror";
 
 export const emulator = new Emulator()
 
-export function range(x) { return Array.apply(undefined, Array(x)).map((_, i) => i) }
+export function range(x: number) { return Array.apply(undefined, Array(x)).map((_, i) => i) }
 export function zip(a, b, dyad) { return a.map((x,i) => dyad(x, b[i])) }
-export function mod(x, y) { x %= y; if (x < 0) x += y; return x }
+export function mod(x: number, y: number) { x %= y; if (x < 0) x += y; return x }
 
 const FORMATS = { dec:decimalFormat, hex:hexFormat, bin:binaryFormat, default:hexFormat }
-function zeroPad(str, n) { const d = str.length % n; return (d == 0 ? '' : '00000000'.substr(0, n - d)) + str }
-function decimalFormat(n)         { return n.toString(10) }
-export function hexFormat    (n)         { return '0x' + zeroPad(n.toString(16).toUpperCase(), 2) }
-function binaryFormat (n)         { return '0b' + zeroPad(n.toString(2), 8) }
-export function maskFormat   (n)         { return emulator.maskFormatOverride ? binaryFormat(n) : numericFormat(n) }
-export function numericFormat(n, format?) { return (FORMATS[format||emulator.numericFormatStr])(n) }
+function zeroPad(str: string, n: number) { const d = str.length % n; return (d == 0 ? '' : '00000000'.substr(0, n - d)) + str }
+function decimalFormat(n: number)         { return n.toString(10) }
+export function hexFormat    (n: number)         { return '0x' + zeroPad(n.toString(16).toUpperCase(), 2) }
+function binaryFormat (n: number)         { return '0b' + zeroPad(n.toString(2), 8) }
+export function maskFormat   (n: number)         { return emulator.maskFormatOverride ? binaryFormat(n) : numericFormat(n) }
+export function numericFormat(n: number, format?) { return (FORMATS[format||emulator.numericFormatStr])(n) }
 
 export function ajax(method, url, payload, then) {
   const x = new XMLHttpRequest()
