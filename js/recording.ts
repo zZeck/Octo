@@ -1,5 +1,4 @@
 import { emulator, zip, range } from "./util";
-import { saveAs } from "../lib/filesaver";
 import { arrayEqual, renderTarget } from "./shared";
 
 /**

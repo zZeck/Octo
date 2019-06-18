@@ -1,4 +1,3 @@
-import { saveAs } from "../lib/filesaver";
 import { compile, runRom, editor } from "./htmlcode";
 import { readBytes, writeBytes, setVisible, hexFormat, emulator, textBox, radioBar } from "./util";
 import { formatInstruction, analyzeInit, analyzeWork, analyzeFinish, formatProgram } from "./decompiler";

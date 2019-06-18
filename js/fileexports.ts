@@ -1,7 +1,6 @@
 "use strict";
 
 import { compile } from "./htmlcode";
-import { saveAs } from "../lib/filesaver";
 
 ////////////////////////////////////
 //
