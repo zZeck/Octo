@@ -1,4 +1,4 @@
-import { writeBytes, readBytes, range, radioBar, textBox, toggleButton, mod } from "./util";
+import { writeBytes, readBytes, range, radioBar, textBox, toggleButton, mod, drawOnCanvas } from "./util";
 import { getColor } from "./shared";
 
 /**
@@ -9,24 +9,24 @@ const SPRITE_SCALE  = 20
 const spriteDraw    = document.getElementById('sprite-draw') as HTMLCanvasElement; //correct cast?
 const sprite16      = toggleButton(document.getElementById('sprite-16'), 0, changeSpriteSize)
 const spriteColor   = toggleButton(document.getElementById('sprite-color'), 0, updateSpriteEditor)
-const spriteClear   = document.getElementById('sprite-clear')
-const spritePalette = radioBar(document.getElementById('sprite-palette'), 1, x => {})
+const spriteClear   = document.getElementById('sprite-clear')!
+const spritePalette = radioBar(document.getElementById('sprite-palette'), 1, () => {})
 const spriteEditor  = textBox(document.getElementById('sprite-editor'), false, '')
 
 spriteClear.onclick = () => { spritePixels = []; updateSpriteEditor() }
 function spriteLength() { return (sprite16.getValue() ? 32 : 15) * (spriteColor.getValue() ? 2 : 1) }
-function spriteDim(big) { return big ? { rows:16, cols:16 } : { rows:15, cols:8 } }
+function spriteDim(big: boolean) { return big ? { rows:16, cols:16 } : { rows:15, cols:8 } }
 
 /**
 * Model:
 **/
 
-var spritePixels = []
+var spritePixels: number[] = []
 
 function clampSpriteData() {
   for (var z = spriteLength()+1; z < 64; z++) { spritePixels[z] = 0 }
 }
-function spritePixel(x,y,wide) {
+function spritePixel(x: number, y: number, wide: boolean) {
   const index = wide ? (y*2)+(x > 7 ? 1:0) : y
   return {
     mask:   128 >> (x % 8),
@@ -34,13 +34,13 @@ function spritePixel(x,y,wide) {
     layer2: index + (wide ? 32 : 15),
   }
 }
-function getSpritePixel(x,y,wide,color) {
+function getSpritePixel(x: number, y: number, wide: boolean, color: number) {
   var t = spritePixel(x,y,wide)
   const c1     = !!(t.mask & spritePixels[t.layer1])
   const c2     = !!(t.mask & spritePixels[t.layer2])
-  return c1 + (2 * (c2 & color))
+  return Number(c1) + (2 * (Number(c2) & color))//TODO casts?
 }
-function setSpritePixel(x,y,wide,color,p) {
+function setSpritePixel(x: number, y: number, wide: boolean, color: number, p: number) {
   if (x >= (wide ? 16 :  8)) return
   if (y >= (wide ? 16 : 15)) return
   var t = spritePixel(x,y,wide)
@@ -52,7 +52,7 @@ function setSpritePixel(x,y,wide,color,p) {
 * Shifting and Clipping:
 **/
 
-function getSpritePixels(dim, dx, dy) {
+function getSpritePixels(dim: {cols: number, rows: number}, dx: number, dy: number) {
   const c = spriteColor.getValue()
   return range(dim.rows).map(row => {
     return range(dim.cols).map(col => {
@@ -60,7 +60,7 @@ function getSpritePixels(dim, dx, dy) {
     })
   })
 }
-function setSpritePixels(dim, pix) {
+function setSpritePixels(dim: {rows: number, cols: number }, pix: number[][]) {
   const c = spriteColor.getValue()
   range(dim.rows).forEach(row => {
     range(dim.cols).forEach(col => {
@@ -68,11 +68,11 @@ function setSpritePixels(dim, pix) {
     })
   })
 }
-function changeSpriteSize(toBig) {
+function changeSpriteSize(toBig: boolean) {
   setSpritePixels(spriteDim(toBig), getSpritePixels(spriteDim(!toBig), 0, 0))
   updateSpriteEditor()
 }
-function scrollSprite(dx, dy) {
+function scrollSprite(dx: number, dy: number) {
   const dim = spriteDim(sprite16.getValue())
   setSpritePixels(dim, getSpritePixels(dim, dx, dy))
   updateSpriteEditor()
@@ -107,7 +107,7 @@ spriteEditor.on('change', () => {
 function showSprite() {
   const c = spriteColor.getValue()
   const d = spriteDim(sprite16.getValue())
-  const g = spriteDraw.getContext('2d')
+  const g = spriteDraw.getContext('2d')!
   g.fillStyle = getColor(0)
   g.fillRect(0, 0, spriteDraw.width, spriteDraw.height)
   range(d.rows).forEach(row => {
@@ -122,12 +122,12 @@ function showSprite() {
 * Main:
 **/
 
-document.getElementById('sprite-left' ).onclick = () => scrollSprite(-1, 0)
-document.getElementById('sprite-right').onclick = () => scrollSprite( 1, 0)
-document.getElementById('sprite-up'   ).onclick = () => scrollSprite( 0,-1)
-document.getElementById('sprite-down' ).onclick = () => scrollSprite( 0, 1)
+document.getElementById('sprite-left' )!.onclick = () => scrollSprite(-1, 0)
+document.getElementById('sprite-right')!.onclick = () => scrollSprite( 1, 0)
+document.getElementById('sprite-up'   )!.onclick = () => scrollSprite( 0,-1)
+document.getElementById('sprite-down' )!.onclick = () => scrollSprite( 0, 1)
 
-drawOnCanvas(spriteDraw, (x, y, draw) => {
+drawOnCanvas(spriteDraw, (x: number, y: number, draw: boolean) => {
   setSpritePixel(
     Math.floor(x / SPRITE_SCALE),
     Math.floor(y / SPRITE_SCALE),
@@ -139,7 +139,7 @@ drawOnCanvas(spriteDraw, (x, y, draw) => {
 })
 
 export function updateSpriteEditor() {
-  document.querySelectorAll('#sprite-palette>span').forEach((x,i) => {
+  document.querySelectorAll<HTMLElement>('#sprite-palette>span').forEach((x,i) => {
     x.style.backgroundColor = getColor(i)
   })
   if (sprite16.getValue()) {

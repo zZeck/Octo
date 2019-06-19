@@ -107,6 +107,7 @@ export interface EmulatorOptions {
 }
 
 export class Emulator implements EmulatorOptions {
+	//TODO remove this and try to switch clients to property string enum types
 	[key: string]: any
 
 	

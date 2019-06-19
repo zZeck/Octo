@@ -40,7 +40,7 @@ export function readBytes(source: Editor, size?: number) {
     return ((x||'').slice(0,2)=='0b' ? parseInt(x.slice(2),2) : +x)||0
   })
 }
-export function writeBytes(target: Editor, size: number | null, bytes: Array<number>) {
+export function writeBytes(target: Editor, size: number | null, bytes: ArrayBuffer | number[]) {//TODO is ArrayBuffer | number[] correct?
   target.setValue(zip(range(size || bytes.length), bytes, (_: never, x: number) => hexFormat(x & 0xFF)).join(' '))
 }
 export function getBit(bytes: Array<number>, n: number) {
@@ -50,7 +50,7 @@ export function setBit(bytes, n, v) {
   const mask = 128 >> Math.floor(n % 8)
   bytes[Math.floor(n / 8)] = (bytes[Math.floor(n / 8)] & ~mask) | (mask * v)
 }
-function drawOnCanvas(target, body) {
+export function drawOnCanvas(target, body: (x: number, y: number, draw: boolean) => void) {
   var mode = 0
   function drag(event) {
     if (mode == 0) { return }

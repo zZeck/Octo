@@ -2,6 +2,7 @@ import { emulator, ajax } from "./util";
 import { packOptions, unpackOptions } from "./shared";
 import { editor, speedMenu, setStatusMessage } from "./htmlcode";
 import { gifBuilder } from "./recording";
+import { EmulatorOptions } from "./emulator";
 
 /**
 * Sharing/Loading externally-hosted programs
@@ -46,7 +47,7 @@ const placeholderProgram = `# Chip8 is a virtual machine designed in 1977 for pr
 * Implementation
 **/
 
-var lastLoadedKey = null
+var lastLoadedKey: string | null = null
 const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/'
 
 export function share() {
@@ -64,27 +65,29 @@ export function preparePayload() {
 		options: packOptions(emulator),
 	}
 }
-export function openPayload(options, program) {
+
+export function openPayload(options: EmulatorOptions, program: string) {
 	editor.setValue(program)
 	speedMenu.setValue(options.tickrate)
 	unpackOptions(emulator, options)
 	saveLocalOptions()
 	saveLocalProgram()
 }
-export function runPayload(options, program) {
+
+export function runPayload(options: EmulatorOptions, program: string) {
 	editor.setValue(program)
 	speedMenu.setValue(options.tickrate)
 	unpackOptions(emulator, options)
-	document.getElementById('main-run').click()
+	document.getElementById('main-run')!.click()
 }
-function runShared(key) {
-	ajax('GET', sharingBaseUrl + key, null, (result, s) => {
+function runShared(key: string) {
+	ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions, program: string }, s: never) => {
 		lastLoadedKey = key
 		runPayload(result.options, result.program)
 	})
 }
-function runGist(id) {
-	ajax('GET', 'https://api.github.com/gists/' + id, null, (result, s) => {
+function runGist(id: number) {//TODO type result better
+	ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, s: never) => {
 		runPayload(JSON.parse(result.files['options.json'].content), result.files['prog.ch8'].content)
 	})
 }
@@ -94,7 +97,7 @@ export function saveLocalProgram() { localStorage.setItem('octoProgram', JSON.st
 
 window.onload = () => {
 	// load examples
-	ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, result => {
+	ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, (result) => {
 		const target = document.querySelector('#main-examples ul')
 		target.innerHTML = ''
 		result.forEach(x => {

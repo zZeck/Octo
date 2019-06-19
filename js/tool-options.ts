@@ -6,15 +6,48 @@ import { saveLocalOptions } from "./sharing";
 **/
 
 const compatProfile  = radioBar(document.getElementById('compatibility-profile'), 'octo', setCompatibilityProfile)
-const screenRotation = radioBar(document.getElementById('screen-rotation'), 0, x => emulator.screenRotation = +x)
+const screenRotation = radioBar(document.getElementById('screen-rotation'), 0, (x: number) => emulator.screenRotation = +x)
 
-const compatibilityProfiles = {
+interface CompatibilityProfiles {
+  [key: string]: CompatibilityProfile & hack<number>;
+}
+
+type CompatibilityProfile = {
+  [key in CampatibilityFlags]: number
+}
+
+//this kinda makes CompatibilityProfile type pointless
+interface hack<T> {
+  [key: string]: T
+}
+
+const compatibilityProfiles: CompatibilityProfiles = {
   chip8: { shiftQuirks:0, loadStoreQuirks:0, vfOrderQuirks:0, clipQuirks:1, jumpQuirks:0, vBlankQuirks:1, maxSize:3215  },
   schip: { shiftQuirks:1, loadStoreQuirks:1, vfOrderQuirks:0, clipQuirks:1, jumpQuirks:1, vBlankQuirks:0, maxSize:3583  },
   octo:  { shiftQuirks:0, loadStoreQuirks:0, vfOrderQuirks:0, clipQuirks:0, jumpQuirks:0, vBlankQuirks:0, maxSize:3584  },
   xo:    { shiftQuirks:0, loadStoreQuirks:0, vfOrderQuirks:0, clipQuirks:0, jumpQuirks:0, vBlankQuirks:0, maxSize:65024 },
 }
-const compatibilityFlags = {
+
+enum CampatibilityFlags {
+  shiftQuirks        = 'shiftQuirks',
+  loadStoreQuirks = 'loadStoreQuirks',
+  vfOrderQuirks   = 'vfOrderQuirks',
+  clipQuirks      = 'clipQuirks',
+  jumpQuirks      = 'jumpQuirks',
+  vBlankQuirks    = 'vBlankQuirks',
+  maxSize            = 'maxSize',
+}
+
+type flagFunctions = {
+  [key in CampatibilityFlags]: getSetValue
+}
+
+interface getSetValue {
+  getValue: () => boolean;
+  setValue: (x: any) => any;
+}
+//TODO put these property strings into enum, use to create this type and the CompatibilityProfile type
+const compatibilityFlags: flagFunctions & hack<getSetValue> = {
   shiftQuirks:     checkBox(document.getElementById('compat-shift' ), false, setOptions),
   loadStoreQuirks: checkBox(document.getElementById('compat-load'  ), false, setOptions),
   vfOrderQuirks:   checkBox(document.getElementById('compat-vf'    ), false, setOptions),
@@ -24,7 +57,7 @@ const compatibilityFlags = {
   maxSize:         radioBar(document.getElementById('max-size'), 3584, setOptions),
 }
 
-function setCompatibilityProfile(x) {
+function setCompatibilityProfile(x: string) {
   const p = compatibilityProfiles[x]
   for (const key in compatibilityFlags) emulator[key] = p[key]
   saveLocalOptions()
