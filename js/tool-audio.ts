@@ -182,7 +182,7 @@ document.getElementById('audio-topat').onclick = () => {
 * Main
 **/
 
-function updateAudio() {
+export function updateAudio() {
 	audioPatternEditor.refresh()
 	audioBlendEditor.refresh()
 	audioToneEditor.refresh()

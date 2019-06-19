@@ -1,6 +1,7 @@
 "use strict";
 
 import { emulator } from "./util";
+import { Emulator, EmulatorOptions } from "./emulator";
 
 ////////////////////////////////////
 //
@@ -28,20 +29,20 @@ const optionFlags = [
 	"screenRotation",
 	"maxSize",
 ]
-export function unpackOptions(emulator, options) {
+export function unpackOptions(emulator: Emulator, options: EmulatorOptions) {
 	optionFlags.forEach(x => { if (x in options) emulator[x] = options[x] })
 	if (options["enableXO"]) emulator.maxSize = 65024 // legacy option
 }
-export function packOptions(emulator) {
-	const r = {}
+export function packOptions(emulator: Emulator) {
+	const r: EmulatorOptions = {} as EmulatorOptions
 	optionFlags.forEach(x => r[x] = emulator[x])
 	return r
 }
 
-export function setRenderTarget(scale, canvas) {
+export function setRenderTarget(scale: number, canvas: string) {
 	scaleFactor = scale;
 	renderTarget = canvas;
-	var c: HTMLCanvasElement = document.getElementById(canvas);
+	var c: HTMLCanvasElement = document.getElementById(canvas) as HTMLCanvasElement;
 
 	// Remove any existing previous delta frame so first frame is always drawn:
 	c.last = undefined;
@@ -61,7 +62,7 @@ export function setRenderTarget(scale, canvas) {
 	}
 }
 
-function getTransform(emulator, g) {
+function getTransform(emulator: Emulator, g: CanvasRenderingContext2D) {
 	g.setTransform(1, 0, 0, 1, 0, 0);
 	var x = scaleFactor * 128;
 	var y = scaleFactor *  64;
@@ -84,7 +85,7 @@ function getTransform(emulator, g) {
 }
 
 
-export function arrayEqual(a, b) {
+export function arrayEqual<T>(a: T[], b: T[]) {
 	var length = a.length;
 	if (length !== b.length) { return false; }
 	for (var i = 0; i < length; i++) {
@@ -93,7 +94,7 @@ export function arrayEqual(a, b) {
 	return true;
 }
 
-export function getColor(id) {
+export function getColor(id: number) {
 	switch(id) {
 		case 0: return emulator.backgroundColor;
 		case 1: return emulator.fillColor;
@@ -103,8 +104,8 @@ export function getColor(id) {
 	throw "invalid color: " + id;
 }
 
-export function renderDisplay(emulator) {
-	var c: HTMLCanvasElement = document.getElementById(renderTarget);
+export function renderDisplay(emulator: Emulator) {
+	var c: HTMLCanvasElement = document.getElementById(renderTarget) as HTMLCanvasElement;
 
 	// Canvas rendering can be expensive. Exit out early if nothing has changed.
 	var colors = [emulator.backgroundColor, emulator.fillColor, emulator.fillColor2, emulator.blendColor];
@@ -116,7 +117,7 @@ export function renderDisplay(emulator) {
 		if (c.last.hires !== emulator.hires)
 			c.last = undefined;  // full redraw when switching resolution
 	}
-	var g = c.getContext("2d");
+	var g = c.getContext("2d")!;
 	getTransform(emulator, g);
 	var w      = emulator.hires ? 128         : 64;
 	var h      = emulator.hires ? 64          : 32;
@@ -150,23 +151,29 @@ export function renderDisplay(emulator) {
 //
 ////////////////////////////////////
 
-var audio;
-var audioNode;
-var audioSource;
-var audioData;
+var audio: AudioContext;
+var audioNode: ScriptProcessorNode | null;
+var audioSource; //TODO unused?
+var audioData:  AudioBuffer[];
 
-var AudioBuffer = function(buffer, duration): void {
-	if (!(this instanceof AudioBuffer)) {
+class AudioBuffer {
+	pointer: number;
+	buffer: number[];
+	duration: number;
+
+	//TODO this constructor may be wrong
+	constructor(buffer: number[], duration: number){
+	/*if (!(this instanceof AudioBuffer)) {
 		//TODO how does this interact with void
 		return new AudioBuffer(buffer, duration);
-	}
+	}*/
 
 	this.pointer = 0;
 	this.buffer = buffer;
 	this.duration = duration;
 }
 
-AudioBuffer.prototype.write = function(buffer, index, size) {
+ write (buffer: number[], index: number, size: number) {
 	size = Math.max(0, Math.min(size, this.duration))
 	if (!size) { return size; }
 
@@ -182,10 +189,10 @@ AudioBuffer.prototype.write = function(buffer, index, size) {
 	return size;
 }
 
-AudioBuffer.prototype.dequeue = function(duration) {
+ dequeue (duration: number) {
 	this.duration -= duration;
 }
-
+}
 var FREQ = 4000;
 var TIMER_FREQ = 60;
 var SAMPLES = 16;
@@ -196,11 +203,13 @@ export function audioSetup() {
 		if (typeof AudioContext !== 'undefined') {
 			audio = new AudioContext();
 		}
-		else if (typeof webkitAudioContext !== 'undefined') {
+		//TODO not needed now?
+		/*else if (typeof webkitAudioContext !== 'undefined') {
 			audio = new webkitAudioContext();
-		}
+		}*/
 	}
 	if (audio && !audioNode) {
+		//TODO createScriptProcessor is deprecated
 		audioNode = audio.createScriptProcessor(4096, 1, 1);
 		audioNode.onaudioprocess = function(audioProcessingEvent) {
 			var outputBuffer = audioProcessingEvent.outputBuffer;
@@ -210,7 +219,8 @@ export function audioSetup() {
 			var index = 0;
 			while(audioData.length && index < samples_n) {
 				var size = samples_n - index;
-				var written = audioData[0].write(outputData, index, size);
+				//TODO fix this cast
+				var written = audioData[0].write(outputData as unknown as number[], index, size);
 				index += written;
 				if (written < size) {
 					audioData.shift();
@@ -223,10 +233,10 @@ export function audioSetup() {
 			//the last one can be long sound with high value of buzzer, so always keep it
 			if (audioData.length > 1) {
 				var audioDataSize = 0;
-				var audioBufferSize = audioNode.bufferSize;
+				var audioBufferSize = audioNode!.bufferSize;
 				audioData.forEach(function(buffer) { audioDataSize += buffer.duration; })
 				while(audioDataSize > audioBufferSize && audioData.length > 1) {
-					audioDataSize -= audioData.shift().duration;
+					audioDataSize -= audioData.shift()!.duration;
 				}
 			}
 		}
@@ -237,6 +247,7 @@ export function audioSetup() {
 	if (audio && audioNode) { return true; }
 	return false;
 }
+
 
 export function stopAudio() {
 	if (!audio) { return; }
@@ -249,7 +260,7 @@ export function stopAudio() {
 
 var VOLUME = 0.25;
 
-export function playPattern(soundLength, buffer, remainingTicks?) {
+export function playPattern(soundLength: number, buffer: number[], remainingTicks?: number) {
 	if (!audio) { return; }
 
 	var samples = Math.floor(BUFFER_SIZE * audio.sampleRate / FREQ);
@@ -267,7 +278,7 @@ export function playPattern(soundLength, buffer, remainingTicks?) {
 	audioData.push(new AudioBuffer(audioBuffer, Math.floor(soundLength * audio.sampleRate / TIMER_FREQ)));
 }
 
-export function escapeHtml(str) {
+export function escapeHtml(str: string) {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;

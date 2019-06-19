@@ -1,6 +1,7 @@
 "use strict";
 
 import { hexFormat } from "./util";
+import { breakPoints as BreakPoints } from "./emulator";
 
 ////////////////////////////////////
 //
@@ -47,8 +48,8 @@ function parseNumber(token: string) {
 	return NaN;
 }
 
-function tokenize(text: string) {
-	var ret   = [];
+function tokenize(text: string): Array<[stringOrNumber, number, number]> {
+	var ret: Array<[stringOrNumber, number, number]>   = [];
 	var index = 0;
 	var token = "";
 	var tokenStart = -1;
@@ -108,8 +109,8 @@ export class DebugInfo {
 }
 
  getAddr (line: number) {
-	for (var addr in this._locs) {
-		if (this.posToLine(this._locs[addr]) == line) return addr
+	for (const addr in this._locs) {
+		if (this.posToLine(this._locs[addr]) == line) return addr as unknown as number //TODO fix
 	}
 	return undefined
 	}
@@ -125,7 +126,7 @@ export class DebugInfo {
 }
 }
 
-var unaryFunc = {
+var unaryFunc: {[func: string]: (x: number, m: number[]) => number} = {
 	'-'    : function(x: number) { return -x; },
 	'~'    : function(x: number) { return ~x; },
 	'!'    : function(x: number) { return +!x; },
@@ -141,7 +142,7 @@ var unaryFunc = {
 	'floor': function(x: number) { return Math.floor(x); },
 	'@'    : function(x: number, m: number[]) { return m[(0|x)-0x200]||0; },
 };
-var binaryFunc = {
+var binaryFunc: {[func: string]: (x: number, y: number) => number} = {
 	'-'    : function(x: number, y: number) { return x-y; },
 	'+'    : function(x: number, y: number) { return x+y; },
 	'*'    : function(x: number, y: number) { return x*y; },
@@ -163,28 +164,29 @@ var binaryFunc = {
 	'!='   : function(x: number, y: number) { return +(x!=y); },
 };
 
-type stringOrNumber = string | number
+type stringOrNumber = string | number;
+type marker = [stringOrNumber, number, number];
 
 export class Compiler{
 	rom: number[];
 	dbginfo: DebugInfo;
-	loops: Array<[number, string]>;// stack<[addr, marker]>
-	branches: Array<[number, string, string]>;// stack<[addr, marker, type]>
-	whiles: number[];// stack<int>
+	loops: Array<[number, marker]>;// stack<[addr, marker]>
+	branches: Array<[number, marker, string]>;// stack<[addr, marker, type]>
+	whiles: (number | null)[];// stack<int>
 	dict: {[name: string]: number};// map<name, addr>
 	protos: {[name: string]: number[]};// map<name, list<addr>>
 	longproto: {[name: string]: boolean};// set<name, true>
 	aliases: {[name: string]: number};// map<name, registernum>
 	constants: {[keyString: string]: number };// map<name, token>
-	macros: {[name: string]: {args: string[], body: string}};// map<name, {args, body}>
+	macros: {[name: string]: {args: string[], body: Array<[stringOrNumber, number, number]>}};// map<name, {args, body}>
 	hasmain: boolean;
 	schip: boolean;
 	xo: boolean;
-	breakpoints: {[address: number]: stringOrNumber};// map<address, name>
+	breakpoints: BreakPoints;// map<address, name>
 	hereaddr: number;
 	pos: stringOrNumber[] | null;
 	currentToken: number;
-	tokens: (string | number)[][];
+	tokens: Array<[stringOrNumber, number, number]>;
 
 	constructor(source: string) {
 	this.rom       = []; // list<int>
@@ -557,7 +559,7 @@ resolveLabel (offset: number) {
 	}
 }
 
-parseTerminal (name: string) {
+parseTerminal (name: string): number {
 	// NUMBER | CONSTANT | LABEL | '(' expression ')'
 	var x = this.peek();
 	if (x == 'PI'  ) { this.next(); return Math.PI; }
@@ -575,7 +577,7 @@ parseTerminal (name: string) {
 	return value;
 }
 
-parseCalc (name: string) {
+parseCalc (name: string): number {
 	// UNARY expression | terminal BINARY expression | terminal
 	if (this.peek() in unaryFunc) {
 		return unaryFunc[this.next()](this.parseCalc(name), this.rom);
@@ -589,7 +591,7 @@ parseCalc (name: string) {
 	}
 }
 
-parseCalculated (name: string) {
+parseCalculated (name: string): number {
 	if (this.next() != '{') { throw "Expected '{' for calculated constant '"+name+"'."; }
 	var value = this.parseCalc(name);
 	if (this.next() != '}') { throw "Expected '}' for calculated constant '"+name+"'."; }
@@ -605,7 +607,7 @@ instruction(token: stringOrNumber) {
 		this.inst(0x60 | this.aliases["unpack-hi"], (v << 4) | (a >> 8));
 		this.inst(0x60 | this.aliases["unpack-lo"], a);
 	}
-	else if (token == ":breakpoint") { this.breakpoints[this.here()] = this.next(); }
+	else if (token == ":breakpoint") { this.breakpoints[this.here()] = this.next() as string; }
 	else if (token == ":proto")  { this.next(); } // deprecated.
 	else if (token == ":alias")  { this.aliases[this.checkName(this.next() as string, "alias")] = this.register(); }
 	else if (token == ":const")  {
@@ -629,7 +631,7 @@ instruction(token: stringOrNumber) {
 			body.push(this.raw());
 		}
 		if (this.next() != '}') { throw "Expected '}' for definition of macro '"+name+"'."; }
-		this.macros[name] = { args: args, body: body };
+		this.macros[name] = { args: args, body: body as any };
 	}
 	else if (token in this.macros) {
 		var macro = this.macros[token];
@@ -643,11 +645,11 @@ instruction(token: stringOrNumber) {
 		for (var x = 0; x < macro.body.length; x++) {
 			var chunk = macro.body[x];
 			var value = (chunk[0] in bindings) ? bindings[chunk[0]] : chunk;
-			this.tokens.splice(x + this.currentToken, 0, value);
+			this.tokens.splice(x + this.currentToken, 0, value as [string | number, number, number]);
 		}
 	}
 	else if (token == ':calc') {
-		var name = this.checkName(this.next(), "calculated constant");
+		var name = this.checkName(this.next() as string, "calculated constant");
 		this.constants[name] = this.parseCalculated(name);
 	}
 	else if (token == ":byte")   {
@@ -691,7 +693,7 @@ instruction(token: stringOrNumber) {
 		else if (control[0] == "begin") {
 			this.conditional(true);
 			this.expect("begin");
-			this.branches.push([this.here(), this.pos, "begin"]);
+			this.branches.push([this.here(), this.pos as any, "begin"]);
 			this.inst(0x00, 0x00);
 		}
 		else {
@@ -703,15 +705,15 @@ instruction(token: stringOrNumber) {
 		if (this.branches.length < 1) {
 			throw "This 'else' does not have a matching 'begin'.";
 		}
-		this.jump(this.branches.pop()[0], this.here()+2);
-		this.branches.push([this.here(), this.pos, "else"]);
+		this.jump(this.branches.pop()![0], this.here()+2);
+		this.branches.push([this.here(), this.pos as any, "else"]);
 		this.inst(0x00, 0x00);
 	}
 	else if (token == "end") {
 		if (this.branches.length < 1) {
 			throw "This 'end' does not have a matching 'begin'.";
 		}
-		this.jump(this.branches.pop()[0], this.here());
+		this.jump(this.branches.pop()![0], this.here());
 	}
 	else if (token == "jump0")   { this.immediate(0xB0, this.wideValue()); }
 	else if (token == "jump")    { this.immediate(0x10, this.wideValue()); }
@@ -724,7 +726,7 @@ instruction(token: stringOrNumber) {
 		this.inst(0xD0 | r1, (r2 << 4) | size);
 	}
 	else if (token == "loop") {
-		this.loops.push([this.here(), this.pos]);
+		this.loops.push([this.here(), this.pos as [string | number, number, number]]);
 		this.whiles.push(null);
 	}
 	else if (token == "while") {
@@ -739,9 +741,9 @@ instruction(token: stringOrNumber) {
 		if (this.loops.length < 1) {
 			throw "This 'again' does not have a matching 'loop'.";
 		}
-		this.immediate(0x10, this.loops.pop()[0]);
+		this.immediate(0x10, this.loops.pop()![0]);
 		while (this.whiles[this.whiles.length - 1] != null) {
-			this.jump(this.whiles.pop(), this.here());
+			this.jump(this.whiles.pop()!, this.here());
 		}
 		this.whiles.pop();
 	}
@@ -775,10 +777,10 @@ instruction(token: stringOrNumber) {
 		this.inst(0xF0 | flags, 0x85);
 	}
 	else if (token == "i") {
-		this.iassign(this.next());
+		this.iassign(this.next() as string);
 	}
 	else if (this.isRegister(token)) {
-		this.vassign(this.register(token), this.next());
+		this.vassign(this.register(token), this.next() as string);
 	}
 	else if (token == ":call") {
 		this.immediate(0x20, this.wideValue(this.next()));
@@ -800,7 +802,7 @@ go () {
 			if (nn < -128 || nn > 255) {
 				throw "Literal value '"+nn+"' does not fit in a byte- must be in range [-128, 255].";
 			}
-			this.data(nn);
+			this.data(nn as number);
 		}
 		else {
 			this.instruction(this.next());
@@ -829,4 +831,4 @@ go () {
 }
 }
 
-this.Compiler = Compiler;
+this.Compiler = Compiler as any;

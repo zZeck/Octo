@@ -72,7 +72,42 @@ var bigfont = [
 //
 ////////////////////////////////////
 
-export class Emulator {
+export interface breakPoints {
+	[key: number]: string //TODO string or number?
+}
+
+export interface RomData {
+    labels: {[key: string]: number},
+	aliases: {[key: string]: number},
+	breakpoints: {[key: number]: string},
+	rom: number[],
+	dbginfo?: DebugInfo
+}
+
+export interface EmulatorOptions {
+	tickrate: number;
+	fillColor          :string
+	fillColor2         :string
+	blendColor         :string
+	backgroundColor    :string
+	buzzColor          :string
+	quietColor         :string
+	shiftQuirks        :boolean
+	loadStoreQuirks    :boolean
+	vfOrderQuirks      :boolean
+	clipQuirks         :boolean
+	jumpQuirks         :boolean
+	vBlankQuirks       :boolean
+	enableXO           :boolean
+	screenRotation     :number
+	maxSize            :number
+	maskFormatOverride :boolean
+	numericFormatStr   :string
+	[key: string]: any //TODO hacky
+}
+
+export class Emulator implements EmulatorOptions {
+	[key: string]: any
 
 	
 
@@ -112,14 +147,12 @@ export class Emulator {
 	public profile_data: {[data: number]: number} = {};
 
 	// control/debug state
-	public keys = {};       // track keys which are pressed
+	public keys: {[key: number]: boolean} = {};       // track keys which are pressed
 	public waiting = false; // are we waiting for a keypress?
 	public waitReg = -1;    // destination register of an awaited key
 	public halted = true;
 	public breakpoint = false;
-	public metadata: {labels: {[key: string]: number},
-					  aliases: {[key: string]: number},
-					  dbginfo?: DebugInfo} = { labels: {}, aliases: {}};
+	public metadata: RomData = { labels: {}, breakpoints: {}, aliases: {}, rom: []};
 	public tickCounter = 0;
 	stack_breakpoint!: number;
 
@@ -130,7 +163,8 @@ export class Emulator {
 	public exportFlags (flags: number[]) {}                              // save persistent flags
 	public buzzTrigger (ticks: number, remainingTicks: number) {}                              // fired when buzzer played
 
-	public init (rom: {rom: number[]}) {
+	
+	public init (rom: RomData) {
 		// initialise memory with a new array to ensure that it is of the right size and is initiliased to 0
 		this.m = this.enableXO ? new Uint8Array(0x10000) : new Uint8Array(0x1000);
 

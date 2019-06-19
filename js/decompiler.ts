@@ -434,10 +434,10 @@ function apply(address: number) {
 	if (o == 0x8 && n == 0x1)   { binary  (function(a, b) { return a | b; });    } // vx |= vy
 	if (o == 0x8 && n == 0x2)   { binary  (function(a, b) { return a & b; });    } // vx &= vy
 	if (o == 0x8 && n == 0x3)   { binary  (function(a, b) { return a ^ b; });    } // vx ^= vy
-	if (o == 0x8 && n == 0x4)   { bincarry(function(a, b) { return [a +  b, a + b > 0xFF]; }); }
-	if (o == 0x8 && n == 0x5)   { bincarry(function(a, b) { return [a -  b, a >= b];       }); }
+	if (o == 0x8 && n == 0x4)   { bincarry(function(a, b) { return [a +  b, Number(a + b > 0xFF)]; }); } //TODO is this a bug?
+	if (o == 0x8 && n == 0x5)   { bincarry(function(a, b) { return [a -  b, Number(a >= b)];       }); }
 	if (o == 0x8 && n == 0x6)   { bincarry(function(a, b) { return [b >> 1, b & 1];        }); }
-	if (o == 0x8 && n == 0x7)   { bincarry(function(a, b) { return [b -  a, b >= a];       }); }
+	if (o == 0x8 && n == 0x7)   { bincarry(function(a, b) { return [b -  a, Number(b >= a)];       }); }
 	if (o == 0x8 && n == 0xE)   { bincarry(function(a, b) { return [b << 1, b & 128];      }); }
 	if (o == 0xA)               { ret['i'] = isingle(nnn);       } // i := nnn
 	if (o == 0xC)               { ret[x]   = maskedrand();       } // vx := random nn
@@ -496,7 +496,7 @@ function apply(address: number) {
 	return ret;
 }
 
-function successors(address: number, prevret: number[]) {
+function successors(address: number, prevret: {[key: number]: boolean}) {
 	// produce a list of all possible successor addresses
 	// of this one, honoring branches and dispatchers.
 
@@ -600,7 +600,7 @@ export function analyzeInit(rom: number[], quirks: {[quirk: string]: boolean}) {
 }
 
 export function analyzeWork() {
-	function reachingMerge(a, b) {
+	function reachingMerge(a:{[key : string]: {[key: string]: boolean}}, b:{[key : string]: {[key: string]: boolean}}) {
 		// take the union of two reaching sets.
 		// if we altered b, it was a subset of a.
 		var changed = false;
@@ -620,7 +620,7 @@ export function analyzeWork() {
 
 	if (fringe.length < 1) { return true; }
 
-	var here = fringe.pop();
+	var here = fringe.pop()!;
 
 	// compute successor reaching set
 	var prevret = reaching[here]['rets']; // apply blows this away (!)
@@ -672,13 +672,13 @@ export function analyzeFinish() {
 	}
 }
 
-function analyze(rom, quirks) {
+function analyze(rom: number[], quirks: {[quirk: string]: boolean}) {
 	analyzeInit(rom, quirks);
 	while(!analyzeWork()) {}
 	analyzeFinish();
 }
 
-export function formatProgram(programSize) {
+export function formatProgram(programSize: number) {
 	var ret = "";
 	if (SHIFT_QUIRKS) {
 		ret += "# analyzed with shifts that modify vx in place and ignore vy.\n";
@@ -695,7 +695,7 @@ export function formatProgram(programSize) {
 	// are converted into constants to avoid
 	// introducing additional padding bytes
 	// or lost label declarations.
-	function findOutside(source, dest, names) {
+	function findOutside(source: {[key: number]: number[]}, dest: {[key: number]: boolean}, names: {[key: number]: string}) {
 		for(var a in source) {
 			var addr = parseInt(a);
 			if (addr < 0x200 || addr >= 0x200 + programSize) {
@@ -710,7 +710,7 @@ export function formatProgram(programSize) {
 	findOutside(natives,     outside, nnames);
 
 	// emit code/data
-	function tabs(n) {
+	function tabs(n: number) {
 		var r = "";
 		while(n --> 0) { r += "\t"; }
 		return r;

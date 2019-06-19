@@ -1,13 +1,18 @@
 import { setVisible, textBox, emulator, menuChooser, writeBytes, range } from "./util";
 import { share, parseCartridge, runPayload, openPayload, saveLocalProgram, saveLocalOptions } from "./sharing";
 import { clearBreakpoint, haltBreakpoint, haltProfiler } from "./debugger";
-import { keymapInverse, keymap } from "./emulator";
+import { keymapInverse, keymap, RomData } from "./emulator";
 import { renderDisplay, playPattern, audioSetup, setRenderTarget, stopAudio } from "./shared";
 import { Compiler, DebugInfo } from "./compiler";
 import { recordFrame } from "./recording";
-import CodeMirror from "codemirror";
+import CodeMirror, { Editor, Doc } from "codemirror";
+import { updateSpriteEditor } from "./tool-sprite";
+import { updateAudio } from "./tool-audio";
+import { updateBinary } from "./tool-binary";
+import { updateColor } from "./tool-color";
+import { updateOptions } from "./tool-options";
 
-export const editor = CodeMirror(document.getElementById('editor')!, {
+export const editor: Editor & Doc = CodeMirror(document.getElementById('editor')!, {
     mode:           'octo',
     theme:          'monokai',
     lineNumbers:    true,
@@ -20,7 +25,7 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
     extraKeys: {
       'Shift-Enter': () => document.getElementById('main-run')!.click(),
     },
-  })
+  }) as Editor & Doc; //TODO is this correct?
   editor.on('change', () => saveLocalProgram())
   editor.on('gutterClick', function(cm, n) {
     function makeMarker() {
@@ -35,7 +40,7 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
   })
   
   function getVisualBreakpoints(debuginfo: DebugInfo) {
-    const r: {[address: string]: string} = {}
+    const r: {[address: number]: string} = {}
     document.querySelectorAll<HTMLElement>('#editor .breakpoint').forEach((x) => {
       const line = +(x.dataset.line!)
       const addr = debuginfo.getAddr(line)
@@ -59,19 +64,27 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
   document.getElementById('output-header')!.onclick = toggleOutput
   document.getElementById('status'       )!.onclick = toggleOutput
   
-  export function setStatusMessage(message: string, ok?: string) {
+  export function setStatusMessage(message: string, ok?: boolean) {
     statusBar.style.backgroundColor = ok ? 'black' : 'darkred'
     statusText.innerHTML = message
   }
   
+  enum panelTypes {
+    sprite = 'sprite',
+    audio = 'audio',
+    binary = 'binary',
+    color = 'color',
+    options = 'options'
+  }
+
   function accordion(initial: string) {
     var current: string | null = null
     function open(panel: string) {
-      current = panel
+      current = panel as panelTypes
       document.querySelectorAll<HTMLElement>('.tool-body').forEach(x => {
         x.classList.toggle('selected', x.dataset.panel == panel)
       })
-      const tools = {
+      const tools: {[key: string]: () => void} = {
         sprite:  updateSpriteEditor,
         audio:   updateAudio,
         binary:  updateBinary,
@@ -80,44 +93,44 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
       }
       tools[panel]()
     }
-    document.querySelectorAll('.tool-header').forEach(x => x.onclick = () => open(x.dataset.panel))
+    document.querySelectorAll<HTMLElement>('.tool-header').forEach(x => x.onclick = () => open(x.dataset.panel!))
     open(initial)
     return { setValue: open, update: () => open(current!) }
   }
   const toolboxAccordion = accordion('sprite')
   
-  const mainInput   = document.getElementById('maininput')
-  const manual      = document.getElementById('manual')
-  const toolbox     = document.getElementById('toolbox')
-  const showToolbox = document.getElementById('show-toolbox')
-  const showManual  = document.getElementById('show-manual')
-  export const speedMenu   = menuChooser(document.getElementById('main-speed'), emulator.tickrate, x => {
+  const mainInput   = document.getElementById('maininput') as HTMLInputElement
+  const manual      = document.getElementById('manual')!
+  const toolbox     = document.getElementById('toolbox')!
+  const showToolbox = document.getElementById('show-toolbox')!
+  const showManual  = document.getElementById('show-manual')!
+  export const speedMenu   = menuChooser(document.getElementById('main-speed'), emulator.tickrate, (x: number) => {
     emulator.tickrate = +x
     saveLocalOptions()
   })
   
-  document.getElementById('main-run').onclick = () => runRom(compile())
-  document.getElementById('main-open').onclick = () => mainInput.click()
-  document.getElementById('main-save').onclick = () => share()
+  document.getElementById('main-run')!.onclick = () => runRom(compile()!)
+  document.getElementById('main-open')!.onclick = () => mainInput.click()
+  document.getElementById('main-save')!.onclick = () => share()
   
-  const dragon = document.getElementById('dragon')
+  const dragon = document.getElementById('dragon')!
   document.body.ondragover = () => setVisible(dragon, true, 'flex')
   dragon.ondragleave       = () => setVisible(dragon, false)
-  dragon.ondragover        = () => event.preventDefault()
+  dragon.ondragover        = () => event!.preventDefault()
   dragon.ondrop = event => {
     setVisible(dragon, false)
     event.preventDefault()
-    if (event.dataTransfer.items && event.dataTransfer.items[0].kind === 'file') {
-      openFile(event.dataTransfer.items[0].getAsFile(), true)
+    if (event.dataTransfer!.items && event.dataTransfer!.items[0].kind === 'file') {
+      openFile(event.dataTransfer!.items[0].getAsFile()!, true)
     }
   }
   
-  function openFile(file, runCart) {
+  function openFile(file: File, runCart: boolean) {
     const reader = new FileReader()
     if (file.type == 'image/gif') {
       reader.onload = () => {
         try {
-          const payload = parseCartridge(new Uint8Array(reader.result))
+          const payload = parseCartridge(new Uint8Array(reader.result as ArrayBuffer))
           if (runCart) runPayload (payload.options, payload.program)
           else         openPayload(payload.options, payload.program)
         }
@@ -129,12 +142,12 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
       reader.readAsArrayBuffer(file)
     }
     else {
-      reader.onload = () => editor.setValue(reader.result)
+      reader.onload = () => editor.setValue(reader.result as string)
       reader.readAsText(file)
     }
   }
   
-  mainInput.onchange = () => openFile(mainInput.files[0], false)
+  mainInput.onchange = () => openFile(mainInput.files![0], false)
   showToolbox.onclick = () => {
     showToolbox.classList.toggle('selected')
     setVisible(toolbox, showToolbox.classList.contains('selected'), 'flex')
@@ -149,20 +162,20 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
   * Run mode:
   **/
   
-  document.getElementById('run-close'   ).onclick = () => stopRom()
-  document.getElementById('run-continue').onclick = () => clearBreakpoint()
-  document.getElementById('run-keypad'  ).onclick = () => {
-    document.getElementById('run-keys').classList.toggle('invisible')
+  document.getElementById('run-close'   )!.onclick = () => stopRom()
+  document.getElementById('run-continue')!.onclick = () => clearBreakpoint()
+  document.getElementById('run-keypad'  )!.onclick = () => {
+    document.getElementById('run-keys')!.classList.toggle('invisible')
   }
   
   if (window.innerWidth < window.innerHeight) {
     // make a guess that portrait-mode windows are mobile devices.
     // in this situation, the virtual keypad should be visible by default:
-    document.getElementById('run-keys').classList.remove('invisible')
+    document.getElementById('run-keys')!.classList.remove('invisible')
   }
   
-  function getVirtualKey(k) { return document.getElementById('0x' + k.toString(16).toUpperCase()) }
-  function setVirtualKey(k, v) { if (k) getVirtualKey(k).classList.toggle('active', v) }
+  function getVirtualKey(k: number) { return document.getElementById('0x' + k.toString(16).toUpperCase())! }
+  function setVirtualKey(k: number, v: boolean) { if (k) getVirtualKey(k).classList.toggle('active', v) }
   
   window.onkeydown = event => {
     if (emulator.halted) return
@@ -200,23 +213,23 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
   
   range(16).forEach(k => {
     const m    = keymap[k]
-    const fake = { keyCode: m, preventDefault:_=>{} }
-    const dn   = () => window.onkeydown(fake)
-    const up   = () => { if (m in emulator.keys) window.onkeyup(fake) }
+    const fake = { keyCode: m, preventDefault: () =>{} }
+    const dn   = () => window.onkeydown!(fake as KeyboardEvent)
+    const up   = () => { if (m in emulator.keys) window.onkeyup!(fake as KeyboardEvent) }
     const b    = getVirtualKey(k)
     b.onmousedown  = dn
     b.onmouseup    = up
     b.onmouseout   = up
     b.ontouchstart = dn
-    b.ontouchenter = up
-    b.ontouchleave = up
+    //b.ontouchenter = up //TODO these were removed by W3C https://stackoverflow.com/questions/23111671/touchenter-and-touchleave-events-support
+    //b.ontouchleave = up
   })
   
   /**
   * Central Dogma:
   **/
   
-  export function compile() {
+  export function compile(): RomData | null {
     const c = new Compiler(editor.getValue())
     try {
       output.setValue('no output')
@@ -236,14 +249,14 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
     catch (error) {
       if (c.pos != null) {
         var line = 1, ch = 0, text = editor.getValue()
-        for(var x = 0; x < c.pos[1]-1; x++) {
+        for(var x = 0; x < (c.pos[1] as number) -1; x++) {
           if (text[x] == '\n') { line++; ch = 0 }
           else { ch++ }
         }
         error = 'line '+line+': '+error
         editor.setSelection(
           {line:line-1, ch:ch},
-          {line:line-1, ch:ch + (c.pos[2]-1-x)},
+          {line:line-1, ch:ch + ((c.pos[2] as number)-1-x)},
         )
       }
       setStatusMessage(error, false)
@@ -260,14 +273,16 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
     }
   }
   
-  const runCover = document.getElementById('run-cover')
-  var intervalHandle = null
+  const runCover = document.getElementById('run-cover')!
+  var intervalHandle: number | null = null
   
-  export function runRom(rom) {
+  
+
+  export function runRom(rom: RomData) {
     if (rom === null) return
     if (intervalHandle != null) stopRom()
     emulator.exitVector = stopRom
-    emulator.importFlags = () => JSON.parse(localStorage.getItem('octoFlagRegisters'))
+    emulator.importFlags = () => JSON.parse(localStorage.getItem('octoFlagRegisters')!)
     emulator.exportFlags = f => localStorage.setItem('octoFlagRegisters', JSON.stringify(f))
     emulator.buzzTrigger = (ticks, remainingTicks) => playPattern(ticks, emulator.pattern, remainingTicks)
     emulator.init(rom)
@@ -299,7 +314,7 @@ export const editor = CodeMirror(document.getElementById('editor')!, {
   function stopRom() {
     emulator.halted = true
     setVisible(runCover, false)
-    window.clearInterval(intervalHandle)
+    window.clearInterval(intervalHandle!)
     intervalHandle = null
     clearBreakpoint()
     stopAudio()

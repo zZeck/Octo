@@ -37,7 +37,7 @@ function setOptions() {
   updateOptions()
 }
 //TODO edited loops to be const key. correct?
-function updateOptions() {
+export function updateOptions() {
   for (const key in compatibilityFlags) compatibilityFlags[key].setValue(emulator[key])
   screenRotation.setValue(emulator.screenRotation)
   compatProfile.setValue('none')

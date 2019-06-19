@@ -8,11 +8,18 @@ import { arrayEqual, renderTarget } from "./shared";
 * or windowing, but does squash together identical sequential frames.
 **/
 
-export function gifBuilder(width, height, colors) {
-	const buffer = []
-	const b = x => buffer.push(x & 0xFF)
-	const s = x => { b(x); b(x >> 8) }
-	const t = x => x.split('').forEach(x => b(x.charCodeAt(0)))
+interface GifBuilder {
+    comment: (text: string) => void;
+    loop: (count?: number) => void;
+    frame: (pixels: number[], delay?: number | undefined) => void;
+    finish: () => number[];
+}
+
+export function gifBuilder(width: number, height: number, colors: number[]): GifBuilder {
+	const buffer: number[] = []
+	const b = (x?: number) => buffer.push(x as any & 0xFF) //TODO fix delay?
+	const s = (x?: number) => { b(x); b(x as any >> 8) } //TODO fix delay?
+	const t = (x: string) => x.split('').forEach(x => b(x.charCodeAt(0)))
 	const z = Math.ceil(Math.log(colors.length)/Math.log(2))
 
 	t('GIF89a') // header
@@ -24,13 +31,13 @@ export function gifBuilder(width, height, colors) {
 	for (let x=0; x<1<<z; x++) { const c=colors[x]|0; b(c>>16); b(c>>8); b(c) }
 
 	return {
-		comment: text => {
+		comment: (text: string) => {
 			s(0xFE21)      // comment extension block
 			b(text.length) // payload size
 			t(text)        // payload
 			b(0)           // terminator
 		},
-		loop: count => {
+		loop: (count?: number) => {
 			s(0xFF21)      // application extension block
 			b(11)          // name/version size
 			t('NETSCAPE2.0')
@@ -39,11 +46,11 @@ export function gifBuilder(width, height, colors) {
 			s(count)       // repeat count (0 is forever)
 			b(0)           // terminator
 		},
-		frame: (pixels,delay?) => {
+		frame: (pixels: number[], delay?: number) => { //TODO delay undefined?
 			s(0xF921)      // graphic control extension
 			b(4)           // payload size
 			b(4)           // do not dispose frame
-			s(delay)       // n/100 seconds
+			s(delay!)       // n/100 seconds
 			b(0)           // no transparent color
 			b(0)           // terminator
 
@@ -65,29 +72,29 @@ export function gifBuilder(width, height, colors) {
 	}
 }
 
-function paletteToRGB(pal) {
+function paletteToRGB(pal: string[]) {
 	// convert CSS colors into packed RGB colors
-	const g = document.createElement('canvas').getContext('2d')
+	const g = document.createElement('canvas').getContext('2d')!
 	pal.forEach((x,i) => { g.fillStyle = x; g.fillRect(i, 0, 1, 1) })
 	const d = g.getImageData(0, 0, pal.length, 1)
 	return pal.map((_,i) => (d.data[i*4]<<16) | (d.data[i*4+1]<<8) | (d.data[i*4+2]))
 }
 
-const runRecord = document.getElementById('run-record')
-var currentRecording = null
-var heldFrame = null
+const runRecord = document.getElementById('run-record') as HTMLImageElement
+var currentRecording: GifBuilder | null = null
+var heldFrame: number[] | null = null
 var heldTicks = 1
 
 export function recordFrame() {
 	if (currentRecording == null) return
-	const last = document.getElementById(renderTarget).last
+	const last = document.getElementById(renderTarget)!.last
 	if (last != undefined && arrayEqual(last.p[0], emulator.p[0]) && arrayEqual(last.p[1], emulator.p[1])) {
 		heldTicks++
 	}
 	else {
 		if (heldFrame != null) currentRecording.frame(heldFrame, heldTicks * 2)
 		if (emulator.hires) {
-			heldFrame = zip(emulator.p[0].slice(0,128*64), emulator.p[1], (a,b) => a | (b << 1))
+			heldFrame = zip(emulator.p[0].slice(0,128*64), emulator.p[1], (a: number, b:number) => a | (b << 1))
 		}
 		else {
 			heldFrame = range(128*64).map(x => {
@@ -108,7 +115,7 @@ runRecord.onclick = () => {
 		currentRecording.loop()
 		heldFrame = null
 		heldTicks = 1
-		document.getElementById(renderTarget).last = undefined // flush repaint buffer
+		document.getElementById(renderTarget)!.last = undefined // flush repaint buffer
 	}
 	else {
 		if (heldFrame != null) currentRecording.frame(heldFrame, heldTicks * 2)

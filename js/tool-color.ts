@@ -38,7 +38,7 @@ document.querySelectorAll('#color-table tr input').forEach((input,i) => {
   input.onchange = update
 })
 
-function updateColor() {
+export function updateColor() {
   document.querySelectorAll('#color-table tr').forEach((row,i) => {
     const v = emulator[paletteKeys[i]]
     row.querySelector('.swatch').style.background = v

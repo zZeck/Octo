@@ -138,7 +138,7 @@ drawOnCanvas(spriteDraw, (x, y, draw) => {
   updateSpriteEditor()
 })
 
-function updateSpriteEditor() {
+export function updateSpriteEditor() {
   document.querySelectorAll('#sprite-palette>span').forEach((x,i) => {
     x.style.backgroundColor = getColor(i)
   })

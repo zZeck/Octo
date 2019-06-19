@@ -36,12 +36,12 @@ export function ajax(method, url, payload, then) {
 
 export function readBytes(source: Editor, size?: number) {
   const tokens = source.getValue().trim().split(/\s+/)
-  return zip(range(size || tokens.length), tokens, (_,x) => {
+  return zip(range(size || tokens.length), tokens, (_: never, x) => {
     return ((x||'').slice(0,2)=='0b' ? parseInt(x.slice(2),2) : +x)||0
   })
 }
-export function writeBytes(target: Editor, size: number, bytes: Array<number>) {
-  target.setValue(zip(range(size || bytes.length), bytes, (_,x) => hexFormat(x & 0xFF)).join(' '))
+export function writeBytes(target: Editor, size: number | null, bytes: Array<number>) {
+  target.setValue(zip(range(size || bytes.length), bytes, (_: never, x: number) => hexFormat(x & 0xFF)).join(' '))
 }
 export function getBit(bytes: Array<number>, n: number) {
   return (bytes[Math.floor(n / 8)] >> (7-Math.floor(n % 8))) & 1
