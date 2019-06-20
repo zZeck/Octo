@@ -1,5 +1,5 @@
 import { emulator, zip, range } from "./util";
-import { arrayEqual, renderTarget } from "./shared";
+import { arrayEqual, renderTarget, CanvasWithLastFrame } from "./shared";
 
 /**
 * Recording animated GIFs
@@ -87,7 +87,7 @@ var heldTicks = 1
 
 export function recordFrame() {
 	if (currentRecording == null) return
-	const last = document.getElementById(renderTarget)!.last
+	const last = (document.getElementById(renderTarget) as CanvasWithLastFrame).last
 	if (last != undefined && arrayEqual(last.p[0], emulator.p[0]) && arrayEqual(last.p[1], emulator.p[1])) {
 		heldTicks++
 	}
@@ -114,8 +114,8 @@ runRecord.onclick = () => {
 		currentRecording.comment('made with octo on ' + new Date().toISOString())
 		currentRecording.loop()
 		heldFrame = null
-		heldTicks = 1
-		document.getElementById(renderTarget)!.last = undefined // flush repaint buffer
+		heldTicks = 1,
+		(document.getElementById(renderTarget) as CanvasWithLastFrame ).last = undefined // flush repaint buffer
 	}
 	else {
 		if (heldFrame != null) currentRecording.frame(heldFrame, heldTicks * 2)

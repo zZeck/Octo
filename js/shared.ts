@@ -39,10 +39,20 @@ export function packOptions(emulator: Emulator) {
 	return r
 }
 
+export interface CanvasWithLastFrame extends HTMLCanvasElement {
+	last?: Frame
+}
+
+interface Frame {
+	colors: string[],
+	p: number[][],
+	hires: boolean
+}
+
 export function setRenderTarget(scale: number, canvas: string) {
 	scaleFactor = scale;
 	renderTarget = canvas;
-	var c: HTMLCanvasElement = document.getElementById(canvas) as HTMLCanvasElement;
+	var c = document.getElementById(canvas) as CanvasWithLastFrame;
 
 	// Remove any existing previous delta frame so first frame is always drawn:
 	c.last = undefined;
@@ -105,7 +115,7 @@ export function getColor(id: number) {
 }
 
 export function renderDisplay(emulator: Emulator) {
-	var c: HTMLCanvasElement = document.getElementById(renderTarget) as HTMLCanvasElement;
+	var c= document.getElementById(renderTarget) as CanvasWithLastFrame;
 
 	// Canvas rendering can be expensive. Exit out early if nothing has changed.
 	var colors = [emulator.backgroundColor, emulator.fillColor, emulator.fillColor2, emulator.blendColor];
