@@ -51,7 +51,7 @@ export const editor: Editor & Doc = CodeMirror(document.getElementById('editor')
   
   const expandOut   = document.getElementById('expand-out')!
   const outputPanel = document.getElementById('output')!
-  const output      = textBox(document.getElementById('output'), true, 'no output')
+  const output      = textBox(document.getElementById('output')!, true, 'no output')
   const statusBar   = document.getElementById('status')!
   const statusText  = document.getElementById('status-text')!
   
@@ -104,7 +104,7 @@ export const editor: Editor & Doc = CodeMirror(document.getElementById('editor')
   const toolbox     = document.getElementById('toolbox')!
   const showToolbox = document.getElementById('show-toolbox')!
   const showManual  = document.getElementById('show-manual')!
-  export const speedMenu   = menuChooser(document.getElementById('main-speed'), emulator.tickrate, (x: number) => {
+  export const speedMenu   = menuChooser(document.getElementById('main-speed')!, emulator.tickrate, (x: number) => {
     emulator.tickrate = +x
     saveLocalOptions()
   })

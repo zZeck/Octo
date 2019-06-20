@@ -48,13 +48,13 @@ interface getSetValue {
 }
 //TODO put these property strings into enum, use to create this type and the CompatibilityProfile type
 const compatibilityFlags: flagFunctions & hack<getSetValue> = {
-  shiftQuirks:     checkBox(document.getElementById('compat-shift' ), false, setOptions),
-  loadStoreQuirks: checkBox(document.getElementById('compat-load'  ), false, setOptions),
-  vfOrderQuirks:   checkBox(document.getElementById('compat-vf'    ), false, setOptions),
-  clipQuirks:      checkBox(document.getElementById('compat-clip'  ), false, setOptions),
-  jumpQuirks:      checkBox(document.getElementById('compat-jump0' ), false, setOptions),
-  vBlankQuirks:    checkBox(document.getElementById('compat-vblank'), false, setOptions),
-  maxSize:         radioBar(document.getElementById('max-size'), 3584, setOptions),
+  shiftQuirks:     checkBox(document.getElementById('compat-shift' )!, false, setOptions),
+  loadStoreQuirks: checkBox(document.getElementById('compat-load'  )!, false, setOptions),
+  vfOrderQuirks:   checkBox(document.getElementById('compat-vf'    )!, false, setOptions),
+  clipQuirks:      checkBox(document.getElementById('compat-clip'  )!, false, setOptions),
+  jumpQuirks:      checkBox(document.getElementById('compat-jump0' )!, false, setOptions),
+  vBlankQuirks:    checkBox(document.getElementById('compat-vblank')!, false, setOptions),
+  maxSize:         radioBar(document.getElementById('max-size')!, 3584, setOptions),
 }
 
 function setCompatibilityProfile(x: string) {

@@ -1,5 +1,5 @@
 import { compile, runRom, editor } from "./htmlcode";
-import { readBytes, writeBytes, setVisible, hexFormat, emulator, textBox, radioBar } from "./util";
+import { readBytes, writeBytes, setVisible, hexFormat, emulator, textBox, radioBar, Formats } from "./util";
 import { formatInstruction, analyzeInit, analyzeWork, analyzeFinish, formatProgram } from "./decompiler";
 import { buildCartridge, preparePayload } from "./sharing";
 
@@ -8,9 +8,9 @@ import { buildCartridge, preparePayload } from "./sharing";
 **/
 
 const binaryInput    = document.getElementById('fileinput') as HTMLInputElement
-const binaryEditor   = textBox(document.getElementById('binary-editor'), false, '')!
-const decompilerMode = radioBar(document.getElementById('decompiler-mode'), 'static', (x: never) => {})!
-radioBar(document.getElementById('decompiler-numbers'), 'hex', (x: string) => emulator.numericFormatStr = x)!
+const binaryEditor   = textBox(document.getElementById('binary-editor')!, false, '')!
+const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (x: never) => {})!
+radioBar(document.getElementById('decompiler-numbers')!, 'hex', (x: Formats) => emulator.numericFormatStr = x)!
 
 function decompileRaw(rom: number[]) {
 	var r = '\n: main\n'

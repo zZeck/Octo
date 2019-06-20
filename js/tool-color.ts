@@ -36,7 +36,7 @@ enum PaletteFlags {
     cga1 = 'cga1',
 }
 
-const palettePresets = radioBar(document.getElementById('palette-presets'), 'octo', (x: PaletteFlags) => {
+const palettePresets = radioBar(document.getElementById('palette-presets')!, 'octo', (x: PaletteFlags) => {
   zip(paletteKeys, palettes[x], (a: number, b: number) => emulator[a] = b)
   saveLocalOptions()
   updateColor()

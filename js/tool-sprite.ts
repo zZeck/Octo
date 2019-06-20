@@ -7,11 +7,11 @@ import { getColor } from "./shared";
 
 const SPRITE_SCALE  = 20
 const spriteDraw    = document.getElementById('sprite-draw') as HTMLCanvasElement; //correct cast?
-const sprite16      = toggleButton(document.getElementById('sprite-16'), 0, changeSpriteSize)
-const spriteColor   = toggleButton(document.getElementById('sprite-color'), 0, updateSpriteEditor)
+const sprite16      = toggleButton(document.getElementById('sprite-16')!, 0, changeSpriteSize)
+const spriteColor   = toggleButton(document.getElementById('sprite-color')!, 0, updateSpriteEditor)
 const spriteClear   = document.getElementById('sprite-clear')!
-const spritePalette = radioBar(document.getElementById('sprite-palette'), 1, () => {})
-const spriteEditor  = textBox(document.getElementById('sprite-editor'), false, '')
+const spritePalette = radioBar(document.getElementById('sprite-palette')!, 1, () => {})
+const spriteEditor  = textBox(document.getElementById('sprite-editor')!, false, '')
 
 spriteClear.onclick = () => { spritePixels = []; updateSpriteEditor() }
 function spriteLength() { return (sprite16.getValue() ? 32 : 15) * (spriteColor.getValue() ? 2 : 1) }

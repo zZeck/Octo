@@ -11,7 +11,7 @@ import { arrayEqual, renderTarget } from "./shared";
 interface GifBuilder {
     comment: (text: string) => void;
     loop: (count?: number) => void;
-    frame: (pixels: number[], delay?: number | undefined) => void;
+    frame: (pixels: Uint8Array, delay?: number | undefined) => void;
     finish: () => number[];
 }
 
@@ -46,7 +46,7 @@ export function gifBuilder(width: number, height: number, colors: number[]): Gif
 			s(count)       // repeat count (0 is forever)
 			b(0)           // terminator
 		},
-		frame: (pixels: number[], delay?: number) => { //TODO delay undefined?
+		frame: (pixels: Uint8Array, delay?: number) => { //TODO delay undefined?  Uint8Array correct?
 			s(0xF921)      // graphic control extension
 			b(4)           // payload size
 			b(4)           // do not dispose frame
@@ -82,7 +82,7 @@ function paletteToRGB(pal: string[]) {
 
 const runRecord = document.getElementById('run-record') as HTMLImageElement
 var currentRecording: GifBuilder | null = null
-var heldFrame: number[] | null = null
+var heldFrame: Uint8Array | null = null
 var heldTicks = 1
 
 export function recordFrame() {
@@ -94,13 +94,13 @@ export function recordFrame() {
 	else {
 		if (heldFrame != null) currentRecording.frame(heldFrame, heldTicks * 2)
 		if (emulator.hires) {
-			heldFrame = zip(emulator.p[0].slice(0,128*64), emulator.p[1], (a: number, b:number) => a | (b << 1))
+			heldFrame = new Uint8Array(zip(emulator.p[0].slice(0,128*64), emulator.p[1], (a: number, b:number) => a | (b << 1)))//TODO correct construct call?
 		}
 		else {
-			heldFrame = range(128*64).map(x => {
+			heldFrame = new Uint8Array(range(128*64).map(x => {
 				const i = Math.floor((x % 128) / 2) + 64 * Math.floor((x / 128) / 2)
 				return emulator.p[0][i] | (emulator.p[1][i] << 1)
-			})
+			}))
 		}
 		heldTicks = 1
 	}

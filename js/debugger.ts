@@ -1,16 +1,16 @@
 import { escapeHtml } from "./shared";
-import { hexFormat, emulator, numericFormat, setVisible, range } from "./util";
+import { hexFormat, emulator, numericFormat, setVisible, range, Formats } from "./util";
 
 /**
 * Debugger and Profiler
 **/
 
-const runContinue = document.getElementById('run-continue')
-const debugPanel  = document.getElementById('debugger')
+const runContinue = document.getElementById('run-continue')!
+const debugPanel  = document.getElementById('debugger')!
 
-const regNumFormat: {[register: string]: string} = {}
+const regNumFormat: {[register: string]: Formats} = {}
 function cycleNumFormat(r:string) {
-	const f = ['hex','bin','dec','hex']
+	const f: Formats[] = [Formats.hex,Formats.bin,Formats.dec,Formats.hex]
 	regNumFormat[r] = f[f.indexOf(regNumFormat[r] || 'hex')+1]
 	haltBreakpoint()
 }

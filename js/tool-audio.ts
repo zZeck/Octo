@@ -6,10 +6,10 @@ import { Editor } from "codemirror";
 * Audio editor:
 **/
 
-const audioPatternEditor = textBox(document.getElementById('audio-pattern-editor'), false, '')
-const audioBlendEditor   = textBox(document.getElementById('audio-blend-editor'), false, '')
-const audioToneEditor    = textBox(document.getElementById('audio-tone-editor'), true, '')
-const audioPatternCanvas = document.getElementById('audio-pattern-view')
+const audioPatternEditor = textBox(document.getElementById('audio-pattern-editor')!, false, '')
+const audioBlendEditor   = textBox(document.getElementById('audio-blend-editor')!, false, '')
+const audioToneEditor    = textBox(document.getElementById('audio-tone-editor')!, true, '')
+const audioPatternCanvas = document.getElementById('audio-pattern-view') as HTMLCanvasElement
 const audioToneCanvas   = document.getElementById('audio-tone-view') as HTMLCanvasElement;//TODO correct?
 
 const PATTERN_SIZE = 16
@@ -77,7 +77,7 @@ let temp: CodeMirror.Editor;
 * Pattern panel
 **/
 
-drawOnCanvas(audioPatternCanvas, (x: number, y: number, draw: boolean) => {
+drawOnCanvas(audioPatternCanvas, (x: number, y: number, draw: number) => {
 	const index   = Math.min(PATTERN_SIZE*8, Math.max(0, Math.floor(x / PATTERN_SCALE)))
 	const pattern = readPattern(audioPatternEditor)
 	setBit(pattern, index, draw)
@@ -154,8 +154,8 @@ document.getElementById('audio-swap')!.onclick = () => {
 * Tone Generator panel
 **/
 
-const audioFreq   = document.getElementById('audio-freq')!
-const audioCutoff = document.getElementById('audio-cutoff')!
+const audioFreq   = document.getElementById('audio-freq') as HTMLInputElement
+const audioCutoff = document.getElementById('audio-cutoff') as HTMLInputElement
 
 function updateAudioTone() {
 	writePattern(audioToneEditor, generateFrequency(

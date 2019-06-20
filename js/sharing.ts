@@ -81,13 +81,13 @@ export function runPayload(options: EmulatorOptions, program: string) {
 	document.getElementById('main-run')!.click()
 }
 function runShared(key: string) {
-	ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions, program: string }, s: never) => {
+	ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions, program: string }, s?: never) => {
 		lastLoadedKey = key
 		runPayload(result.options, result.program)
 	})
 }
-function runGist(id: number) {//TODO type result better
-	ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, s: never) => {
+function runGist(id: string) {//TODO type result better
+	ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, s?: never) => {
 		runPayload(JSON.parse(result.files['options.json'].content), result.files['prog.ch8'].content)
 	})
 }
@@ -98,9 +98,9 @@ export function saveLocalProgram() { localStorage.setItem('octoProgram', JSON.st
 window.onload = () => {
 	// load examples
 	ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, (result) => {
-		const target = document.querySelector('#main-examples ul')
+		const target = document.querySelector<HTMLElement>('#main-examples ul')!
 		target.innerHTML = ''
-		result.forEach(x => {
+		result.forEach((x: {name: string, url: string}) => { //TODO type x better?
 			var r = document.createElement('li')
 			r.innerHTML = x.name
 			r.onclick = () => ajax('GET', x.url, null, result => {
@@ -119,8 +119,8 @@ window.onload = () => {
 
 	// restore the local data, if available
 	try {
-		const options = JSON.parse(localStorage.getItem('octoOptions'))
-		const program = JSON.parse(localStorage.getItem('octoProgram'))
+		const options = JSON.parse(localStorage.getItem('octoOptions')!)
+		const program = JSON.parse(localStorage.getItem('octoProgram')!)
 		if (options) unpackOptions(emulator, options)
 		if (program && program.trim().length) {
 			editor.setValue(program)
@@ -226,9 +226,9 @@ const BASE_IMAGE = [
 	0xCC, 0x36, 0xCB, 0x46, 0x02, 0x00, 0x3B, 
 ]
 
-function unLZW(minCodeSize, bytes) {
-	const prefix=[], suffix=[], clear=1<<minCodeSize
-	let   size, mask, next, old, first, i=0, b=0, d=0
+function unLZW(minCodeSize: number, bytes: number[]) {
+	const prefix: number[] =[], suffix: number[] =[], clear=1<<minCodeSize
+	let   size: number, mask: number, next: number, old!: number | null, first: number, i=0, b=0, d=0
 	for (var x=0; x<clear; x++) suffix[x]=x
 
 	const symbol = () => {
@@ -238,35 +238,35 @@ function unLZW(minCodeSize, bytes) {
 	const cleartable = () => {
 		size=minCodeSize+1, mask=(1<<size)-1, next=clear+2, old=null
 	}
-	const unpack = (c,r) => {
+	const unpack = (c: number, r: number[]) => {
 		const t=[]
-		if    (c==next) t.push(first),     c=old
+		if    (c==next) t.push(first),     c=old!//TODO safe?
 		while (c>clear) t.push(suffix[c]), c=prefix[c]
 		r.push(first=suffix[c])
 		Array.prototype.push.apply(r, t.reverse())
 		if (next>=4096) return
-		prefix[next]=old, suffix[next++]=first
+		prefix[next]=old!, suffix[next++]=first
 		if ((next&mask)==0 && next<4096) size++, mask+=next
 	}
 	cleartable()
 	const r=[]
 	while (i<bytes.length) {
 		const t=symbol()
-		if (t>next || t==clear+1) break
+		if (t>next! || t==clear+1) break
 		else if (t==clear)  cleartable()
-		else if (old==null) r.push(suffix[old=first=t])
+		else if (old!==null) r.push(suffix[old=first=t])
 		else                unpack(t, r), old=t
 	}
 	return r
 }
 
-function gifDecode(bytes) {
+function gifDecode(bytes: Uint8Array) {
 	let   i  = 6 // skip GIF89a
 	const b  = () => bytes[i++] || 0
 	const s  = () => b() | (b()<<8)
-	const l  = x => { const r=[]; for(let y=0;y<x;y++)r.push(b()); return r }
-	const cl = x => { const r=[]; for(let y=0;y<x;y++)r.push((b()<<16)|(b()<<8)|b()); return r }
-	const dl = () => { let r=[]; while(1) { const s=b(); if (!s) break; r=r.concat(l(s)); } return r }
+	const l  = (x: number) => { const r=[]; for(let y=0;y<x;y++)r.push(b()); return r }
+	const cl = (x: number) => { const r=[]; for(let y=0;y<x;y++)r.push((b()<<16)|(b()<<8)|b()); return r }
+	const dl = () => { let r: number[]=[]; while(1) { const s=b(); if (!s) break; r=r.concat(l(s)); } return r }
 
 	const width  = s()
 	const height = s()
@@ -295,7 +295,7 @@ function gifDecode(bytes) {
 	return { width, height, frames }
 }
 
-function printLabel(dest, pen, text) {
+function printLabel(dest: {w: number, h: number, buffer: Uint8Array}, pen: number, text: string) {
 	const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-'
 	let cursorx = 16, cursory = 32
 	text.toUpperCase().replace(/[^A-Z0-9-.\n ]/g, '.').split('').forEach(c => {
@@ -325,8 +325,12 @@ function printLabel(dest, pen, text) {
 	})
 }
 
-export function buildCartridge(label, data) {
-	const base = gifDecode(BASE_IMAGE)
+export function buildCartridge(label: string, data: {
+	key: null | string
+	options: EmulatorOptions
+	program: string
+	}) {
+	const base = gifDecode(new Uint8Array(BASE_IMAGE)) //TODO correct construct?
 	const bytes = JSON.stringify(data).split('').map(x => x.charCodeAt(0))
 	const payload = [
 		(bytes.length >> 24) & 0xFF,
@@ -337,18 +341,18 @@ export function buildCartridge(label, data) {
 	const w = base.width
 	const h = base.height
 	const PER_FRAME = (w * h) / 2
-	const expand = colors => {
-		const r = []
+	const expand = (colors: number[]) => {
+		const r: number[] = []
 		colors.forEach(c => {
 			for (let x=0; x<16; x++) r.push((c&0xFEFCFE) | ((x&0x8)<<13) | ((x&0x6)<<7) | (x&1))
 		})
 		return r
 	}
-	const encode = (buffer, data) => {
+	const encode = (buffer: Uint8Array, data: number[]) => {
 		if (data.length > buffer.length/2) throw 'data overflow!'
 		return buffer.map((x, i) => (x*16) + (((data[Math.floor(i/2)]||0) >> (i%2==0?4:0)) & 0xF))
 	}
-	const g = gifBuilder(w, h, expand(base.frames[0].palette))
+	const g = gifBuilder(w, h, expand(base.frames[0].palette!))
 	for (let x = 0; x < payload.length; x += PER_FRAME) {
 		const p = { w: w, h: h, buffer: new Uint8Array(base.frames[0].pixels) }
 		printLabel(p, 1, label)
@@ -357,11 +361,11 @@ export function buildCartridge(label, data) {
 	return g.finish()
 }
 
-export function parseCartridge(image) {
+export function parseCartridge(image: Uint8Array) {
 	const parts = gifDecode(image)
-	const nybble = x     => ((x>>13)&8) | ((x>>7)&6) | (x&1)
-	const byte   = (f,i) => (nybble(parts.frames[f].palette[parts.frames[f].pixels[i  ]])<<4) |
-	                        (nybble(parts.frames[f].palette[parts.frames[f].pixels[i+1]])   )
+	const nybble = (x: number)     => ((x>>13)&8) | ((x>>7)&6) | (x&1)
+	const byte   = (f: number, i: number) => (nybble(parts.frames[f].palette![parts.frames[f].pixels[i  ]])<<4) |
+	                        (nybble(parts.frames[f].palette![parts.frames[f].pixels[i+1]])   )
 	const size = (byte(0,0)<<24) | (byte(0,2)<<16) | (byte(0,4)<<8) | byte(0,6)
 	let json = ''
 	for (let x = 0, i = 8, f = 0; x < size; x++) {

@@ -2,6 +2,7 @@
 
 import { haltBreakpoint } from "./debugger";
 import { DebugInfo } from "./compiler";
+import { Formats } from "./util";
 
 export var keymap = [
 	// chip8    // keyboard
@@ -130,7 +131,7 @@ export class Emulator implements EmulatorOptions {
 	public screenRotation     = 0;
 	public maxSize            = 3584;
 	public maskFormatOverride = true;
-	public numericFormatStr   = "default";
+	public numericFormatStr: Formats   = Formats.default;
 
 	// interpreter state
 	public p: number[][]  = [[],[]];  // pixels
