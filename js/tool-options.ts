@@ -5,20 +5,23 @@ import { saveLocalOptions } from "./sharing";
 * Options
 **/
 
-const compatProfile  = radioBar(document.getElementById('compatibility-profile'), 'octo', setCompatibilityProfile)
-const screenRotation = radioBar(document.getElementById('screen-rotation'), 0, (x: number) => emulator.screenRotation = +x)
+enum CompatibilityProfileFlags {
+  chip8 = 'chip8',
+  schip = 'schip',
+  octo = 'octo',
+  xo = 'xo'
+}
 
-interface CompatibilityProfiles {
-  [key: string]: CompatibilityProfile & hack<number>;
+//TODO fix | 'none' hack?
+const compatProfile  = radioBar<CompatibilityProfileFlags | 'none'>(document.getElementById('compatibility-profile')!, CompatibilityProfileFlags.octo, setCompatibilityProfile)
+const screenRotation = radioBar<number>(document.getElementById('screen-rotation')!, 0, (x: number) => emulator.screenRotation = +x)
+
+type CompatibilityProfiles = {
+  [key in CompatibilityProfileFlags]: CompatibilityProfile;
 }
 
 type CompatibilityProfile = {
   [key in CampatibilityFlags]: number
-}
-
-//this kinda makes CompatibilityProfile type pointless
-interface hack<T> {
-  [key: string]: T
 }
 
 const compatibilityProfiles: CompatibilityProfiles = {
@@ -39,7 +42,11 @@ enum CampatibilityFlags {
 }
 
 type flagFunctions = {
-  [key in CampatibilityFlags]: getSetValue
+  [key in CampatibilityFlags]: key extends CampatibilityFlags.maxSize ? {
+    getValue: () => string | undefined;
+    setValue: (v: number) => number;
+    setVisible: (x: boolean) => 'flex' | 'none';
+  } : getSetValue
 }
 
 interface getSetValue {
@@ -47,36 +54,36 @@ interface getSetValue {
   setValue: (x: any) => any;
 }
 //TODO put these property strings into enum, use to create this type and the CompatibilityProfile type
-const compatibilityFlags: flagFunctions & hack<getSetValue> = {
+const compatibilityFlags: flagFunctions = {
   shiftQuirks:     checkBox(document.getElementById('compat-shift' )!, false, setOptions),
   loadStoreQuirks: checkBox(document.getElementById('compat-load'  )!, false, setOptions),
   vfOrderQuirks:   checkBox(document.getElementById('compat-vf'    )!, false, setOptions),
   clipQuirks:      checkBox(document.getElementById('compat-clip'  )!, false, setOptions),
   jumpQuirks:      checkBox(document.getElementById('compat-jump0' )!, false, setOptions),
   vBlankQuirks:    checkBox(document.getElementById('compat-vblank')!, false, setOptions),
-  maxSize:         radioBar(document.getElementById('max-size')!, 3584, setOptions),
+  maxSize:         radioBar<number>(document.getElementById('max-size')!, 3584, setOptions),
 }
 
-function setCompatibilityProfile(x: string) {
-  const p = compatibilityProfiles[x]
-  for (const key in compatibilityFlags) emulator[key] = p[key]
+function setCompatibilityProfile(x: CompatibilityProfileFlags | 'none') {
+  const p = compatibilityProfiles[x as CompatibilityProfileFlags]
+  for (const key in compatibilityFlags) emulator[key] = p[key as CampatibilityFlags]
   saveLocalOptions()
   updateOptions()
 }
 //TODO edited loops to be const key. correct?
 function setOptions() {
-  for (const key in compatibilityFlags) emulator[key] = compatibilityFlags[key].getValue()
+  for (const key in compatibilityFlags) emulator[key] = compatibilityFlags[key as CampatibilityFlags].getValue()
   saveLocalOptions()
   updateOptions()
 }
 //TODO edited loops to be const key. correct?
 export function updateOptions() {
-  for (const key in compatibilityFlags) compatibilityFlags[key].setValue(emulator[key])
+  for (const key in compatibilityFlags) compatibilityFlags[key as CampatibilityFlags].setValue(emulator[key])
   screenRotation.setValue(emulator.screenRotation)
-  compatProfile.setValue('none')
+  compatProfile.setValue('none')//TODO fix?
   for (const key in compatibilityProfiles) {
-    const p = compatibilityProfiles[key]
-    const same = Object.keys(p).every(x => emulator[x] == p[x])
-    if (same) compatProfile.setValue(key)
+    const p = compatibilityProfiles[key as CompatibilityProfileFlags]
+    const same = Object.keys(p).every(x => emulator[x] == p[x as CampatibilityFlags])
+    if (same) compatProfile.setValue(key as CompatibilityProfileFlags)
   }
 }

@@ -7,8 +7,8 @@ import { getColor } from "./shared";
 
 const SPRITE_SCALE  = 20
 const spriteDraw    = document.getElementById('sprite-draw') as HTMLCanvasElement; //correct cast?
-const sprite16      = toggleButton(document.getElementById('sprite-16')!, 0, changeSpriteSize)
-const spriteColor   = toggleButton(document.getElementById('sprite-color')!, 0, updateSpriteEditor)
+const sprite16      = toggleButton(document.getElementById('sprite-16')!, false, changeSpriteSize) //TODO was 0 just being used for false?
+const spriteColor   = toggleButton(document.getElementById('sprite-color')!, false, updateSpriteEditor) //TODO was 0 just being used for false?
 const spriteClear   = document.getElementById('sprite-clear')!
 const spritePalette = radioBar(document.getElementById('sprite-palette')!, 1, () => {})
 const spriteEditor  = textBox(document.getElementById('sprite-editor')!, false, '')
@@ -56,7 +56,7 @@ function getSpritePixels(dim: {cols: number, rows: number}, dx: number, dy: numb
   const c = spriteColor.getValue()
   return range(dim.rows).map(row => {
     return range(dim.cols).map(col => {
-      return getSpritePixel(mod(col - dx, dim.cols), mod(row - dy, dim.rows), dim.cols == 16, c)
+      return getSpritePixel(mod(col - dx, dim.cols), mod(row - dy, dim.rows), dim.cols == 16, Number(c))//TODO construct correct?
     })
   })
 }
@@ -64,7 +64,7 @@ function setSpritePixels(dim: {rows: number, cols: number }, pix: number[][]) {
   const c = spriteColor.getValue()
   range(dim.rows).forEach(row => {
     range(dim.cols).forEach(col => {
-      setSpritePixel(col, row, dim.cols == 16, c, (pix[row]||[])[col]||0)
+      setSpritePixel(col, row, dim.cols == 16, c as any, (pix[row]||[])[col]||0)//TODO value of c is ignored in function
     })
   })
 }
@@ -112,7 +112,7 @@ function showSprite() {
   g.fillRect(0, 0, spriteDraw.width, spriteDraw.height)
   range(d.rows).forEach(row => {
     range(d.cols).forEach(col => {
-      g.fillStyle = getColor(getSpritePixel(col, row, d.cols == 16, c))
+      g.fillStyle = getColor(getSpritePixel(col, row, d.cols == 16, Number(c)))//TODO cast correct?
       g.fillRect(col * SPRITE_SCALE, row * SPRITE_SCALE, SPRITE_SCALE, SPRITE_SCALE)
     })
   })
@@ -132,8 +132,8 @@ drawOnCanvas(spriteDraw, (x: number, y: number, draw: boolean) => {
     Math.floor(x / SPRITE_SCALE),
     Math.floor(y / SPRITE_SCALE),
     sprite16.getValue(),
-    spriteColor.getValue(),
-    draw ? spritePalette.getValue() : 0
+    Number(spriteColor.getValue()),
+    draw ? Number(spritePalette.getValue()) : 0 //TODO string to number correct?
   )
   updateSpriteEditor()
 })

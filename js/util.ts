@@ -59,17 +59,17 @@ export function readBytes(source: Editor, size?: number) {
     return ((x||'').slice(0,2)=='0b' ? parseInt(x.slice(2),2) : +x)||0
   })
 }
-export function writeBytes(target: Editor, size: number | null, bytes: number[]) {//TODO is ArrayBuffer | number[] correct?
-  target.setValue(zip(range(size || bytes.length), bytes, (_: number, x: number) => hexFormat(x & 0xFF)).join(' '))
+export function writeBytes(target: Editor, size: number | null, bytes: ArrayBuffer | number[]) {//TODO is ArrayBuffer | number[] correct?
+  target.setValue(zip(range(size || (bytes as number[]).length), (bytes as number[]), (_: number, x: number) => hexFormat(x & 0xFF)).join(' '))
 }
 export function getBit(bytes: Array<number>, n: number) {
   return (bytes[Math.floor(n / 8)] >> (7-Math.floor(n % 8))) & 1
 }
-export function setBit(bytes: number[], n: number, v: number) {
+export function setBit(bytes: number[], n: number, v: boolean | number) {
   const mask = 128 >> Math.floor(n % 8)
-  bytes[Math.floor(n / 8)] = (bytes[Math.floor(n / 8)] & ~mask) | (mask * v)
+  bytes[Math.floor(n / 8)] = (bytes[Math.floor(n / 8)] & ~mask) | (mask * Number(v))//TODO fix boolean option?
 }
-export function drawOnCanvas(target: HTMLCanvasElement, body: (x: number, y: number, draw: number) => void) {
+export function drawOnCanvas(target: HTMLCanvasElement, body: (x: number, y: number, draw: boolean) => void) {
   var mode = 0
   function drag(event: MouseEvent) {
     if (mode == 0) { return }
@@ -77,7 +77,7 @@ export function drawOnCanvas(target: HTMLCanvasElement, body: (x: number, y: num
     body(
       event.clientX - r.left,
       event.clientY - r.top,
-      Number(mode == 1) //TODO correct cast?
+      mode == 1
     )
   }
   function release(event: MouseEvent) { mode = 0; drag(event) }
@@ -96,19 +96,19 @@ export function setVisible(element: HTMLElement, value: boolean, disp?: string) 
 
 //TODO makey parametric polymorphic so value and change T types are connected?
 // or perhaps use overloads if mapping is not like that?
-export function radioBar(element: HTMLElement, value: string, change: (x: string) => string) {
+export function radioBar<T extends string | number>(element: HTMLElement, value: T, change: (x: T) => void) {
   element.classList.add('radiobar')
   const get = () => element.querySelector<HTMLElement>('span.selected')!.dataset.value
-  const set = (v: string) => (element.querySelectorAll('span').forEach(x => {
+  const set = (v: T) => (element.querySelectorAll('span').forEach(x => {
     x.classList.toggle('selected', x.dataset.value == v)
   }), v)
   const vis = (x: boolean) => element.style.display = x ? 'flex' : 'none'
-  element.querySelectorAll('span').forEach(x => x.onclick = () => change(set(x.dataset.value!)))
+  element.querySelectorAll('span').forEach(x => x.onclick = () => change(set(x.dataset.value as T)))
   set(value)
   return { getValue: get, setValue: set, setVisible: vis }
 }
 
-export function checkBox(element: HTMLElement, value: boolean, change: (x: boolean) => string) {
+export function checkBox(element: HTMLElement, value: boolean, change: (x: boolean) => void) {
   element.classList.add('checkbox')
   const c = document.createElement('span')
   c.classList.add('check')
@@ -120,7 +120,7 @@ export function checkBox(element: HTMLElement, value: boolean, change: (x: boole
   return { getValue: get, setValue: set }
 }
 
-export function toggleButton(element: HTMLElement, value: boolean, change: (x: boolean) => string) {
+export function toggleButton(element: HTMLElement, value: boolean, change: (x: boolean) => void) {
   const get = () => element.classList.contains('selected')
   const set = (x: boolean) => (element.classList.toggle('selected', x), x)
   element.onclick = () => change(set(!get()))

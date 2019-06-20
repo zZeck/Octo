@@ -9,8 +9,8 @@ import { buildCartridge, preparePayload } from "./sharing";
 
 const binaryInput    = document.getElementById('fileinput') as HTMLInputElement
 const binaryEditor   = textBox(document.getElementById('binary-editor')!, false, '')!
-const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (x: never) => {})!
-radioBar(document.getElementById('decompiler-numbers')!, 'hex', (x: Formats) => emulator.numericFormatStr = x)!
+const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (x: string) => {})!
+radioBar(document.getElementById('decompiler-numbers')!, Formats.hex, (x: Formats) => emulator.numericFormatStr = x)!
 
 function decompileRaw(rom: number[]) {
 	var r = '\n: main\n'
@@ -24,7 +24,7 @@ function decompileRaw(rom: number[]) {
 	editor.setValue('# decompiled program:\n' + r)
 }
 function decompileStatic(rom: number[]) {
-	const decompileCover = document.getElementById('decompile-cover')
+	const decompileCover = document.getElementById('decompile-cover')!
 	setVisible(decompileCover, true, 'flex')
 	analyzeInit(rom, {
 		shiftQuirks:     emulator.shiftQuirks,
@@ -52,7 +52,7 @@ function decompileStatic(rom: number[]) {
 
 binaryInput.onchange = () => {
 	const reader = new FileReader()
-	reader.onload = () => writeBytes(binaryEditor, null, new Uint8Array(reader.result as ArrayBuffer))
+	reader.onload = () => writeBytes(binaryEditor, null, (reader.result as ArrayBuffer))
 	reader.readAsArrayBuffer(binaryInput.files![0])
 }
 document.getElementById('binary-decompile')!.onclick = () => {

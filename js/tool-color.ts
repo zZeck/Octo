@@ -12,6 +12,7 @@ const paletteKeys = [
   'blendColor',
   'buzzColor',
   'quietColor',
+  'none'//TODO this correct? used by updateColor
 ]
 //TODO type better
 const palettes: PalleteDefinitions & {[key: string]: string[]} = {
@@ -36,8 +37,10 @@ enum PaletteFlags {
     cga1 = 'cga1',
 }
 
-const palettePresets = radioBar(document.getElementById('palette-presets')!, 'octo', (x: PaletteFlags) => {
-  zip(paletteKeys, palettes[x], (a: number, b: number) => emulator[a] = b)
+//must use specify type parameter as PaletteFlags so more narrow string literal type of PaletteFlags.octo is not infered
+//TODO fix none hack for updateColor use of setValue
+const palettePresets = radioBar<PaletteFlags | 'none'>(document.getElementById('palette-presets')!, PaletteFlags.octo, (x: PaletteFlags | 'none') => {
+  zip(paletteKeys, palettes[x], (a: string, b: string) => emulator[a] = b)
   saveLocalOptions()
   updateColor()
 })
@@ -60,6 +63,6 @@ export function updateColor() {
   })
   palettePresets.setValue('none')
   for (const key in palettes) {
-    if (paletteKeys.every((x,i) => emulator[x] == palettes[key][i])) palettePresets.setValue(key)
+    if (paletteKeys.every((x,i) => emulator[x] == palettes[key][i])) palettePresets.setValue(key as PaletteFlags)//TODO infer better type for key?
   }
 }
