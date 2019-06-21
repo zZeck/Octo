@@ -59,8 +59,9 @@ export function setRenderTarget(scale: number, canvas: string) {
 
 	var w  = scaleFactor * 128;
 	var h  = scaleFactor *  64;
-	var wm = (scaleFactor * -64) + "px";
-	var hm = (scaleFactor * -32) + "px";
+	//TODO unused?
+	//var wm = (scaleFactor * -64) + "px";
+	//var hm = (scaleFactor * -32) + "px";
 
 	if (emulator.screenRotation == 90 || emulator.screenRotation == 270) {
 		c.width  = h;
@@ -163,7 +164,7 @@ export function renderDisplay(emulator: Emulator) {
 
 var audio: AudioContext;
 var audioNode: ScriptProcessorNode | null;
-var audioSource; //TODO unused?
+//var audioSource; //TODO unused?
 var audioData:  AudioBuffer[];
 
 class AudioBuffer {
@@ -281,7 +282,7 @@ export function playPattern(soundLength: number, buffer: number[], remainingTick
 
 	for(var i = 0; i < samples; ++i) {
 		var srcIndex = Math.floor(i * FREQ / audio.sampleRate);
-		var cell = srcIndex >> 3;
+		//var cell = srcIndex >> 3; //TODO unused?
 		var bit = srcIndex & 7;
 		audioBuffer[i] = (buffer[srcIndex >> 3] & (0x80 >> bit)) ? VOLUME: 0;
 	}

@@ -9,13 +9,15 @@ const runContinue = document.getElementById('run-continue')!
 const debugPanel  = document.getElementById('debugger')!
 
 const regNumFormat: {[register: string]: Formats} = {}
-function cycleNumFormat(r:string) {
+//TODO this is used by dumpRegisters in strange way
+export function cycleNumFormat(r:string) {
 	const f: Formats[] = [Formats.hex,Formats.bin,Formats.dec,Formats.hex]
 	regNumFormat[r] = f[f.indexOf(regNumFormat[r] || 'hex')+1]
 	haltBreakpoint()
 }
 
-function getLabel(addr: number ,reg?: number, raw?: boolean) {
+//TODO fix reg? seems to be used in const register below
+function getLabel(addr: number, _reg?: number, raw?: boolean) {
 	var n = 'hex-font', x = 0
 	for (var k in emulator.metadata.labels) {
 		var v = emulator.metadata.labels[k]
@@ -29,7 +31,7 @@ function dumpRegisters(showV: boolean, name: string) {
 	//TODO if click function name passed in then set to onCLick?
 	const line = (text: string, click?: string) => '<span' + (click ? ' onClick="'+click+'"' : '')+'>' + text + '</span><br>'
 	const register = (n: string, v: number, f: (addr: any, reg?: any, raw?: any) => string) => line(n + ' := ' + numericFormat(v, regNumFormat[n || 'hex']) + ' ' + f(v,n), 'cycleNumFormat(\''+n+'\')')
-	const aliases = (addr: number, reg: number[]) => {
+	const aliases = (_addr: number, reg: number[]) => {//TODO fix addr?
 		var a = emulator.metadata.aliases
 		var r = +('0x'+reg.slice(1))
 		var n = Object.keys(a).filter(k => a[k] == r).join(', ')

@@ -9,7 +9,7 @@ import { buildCartridge, preparePayload } from "./sharing";
 
 const binaryInput    = document.getElementById('fileinput') as HTMLInputElement
 const binaryEditor   = textBox(document.getElementById('binary-editor')!, false, '')!
-const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (x: string) => {})!
+const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (_x: string) => {})!//TODO unused x?
 radioBar(document.getElementById('decompiler-numbers')!, Formats.hex, (x: Formats) => emulator.numericFormatStr = x)!
 
 function decompileRaw(rom: number[]) {

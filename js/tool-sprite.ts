@@ -40,7 +40,7 @@ function getSpritePixel(x: number, y: number, wide: boolean, color: number) {
   const c2     = !!(t.mask & spritePixels[t.layer2])
   return Number(c1) + (2 * (Number(c2) & color))//TODO casts?
 }
-function setSpritePixel(x: number, y: number, wide: boolean, color: number, p: number) {
+function setSpritePixel(x: number, y: number, wide: boolean, _color: number, p: number) {//TODO unused _color?
   if (x >= (wide ? 16 :  8)) return
   if (y >= (wide ? 16 : 15)) return
   var t = spritePixel(x,y,wide)

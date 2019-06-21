@@ -71,13 +71,11 @@ function generateFrequency(frequency: number, cutoff: number) {
 	return r
 }
 
-let temp: CodeMirror.Editor;
-
 /**
 * Pattern panel
 **/
 
-drawOnCanvas(audioPatternCanvas, (x: number, y: number, draw: boolean) => {
+drawOnCanvas(audioPatternCanvas, (x: number, _y: number, draw: boolean) => {//TODO unused?
 	const index   = Math.min(PATTERN_SIZE*8, Math.max(0, Math.floor(x / PATTERN_SCALE)))
 	const pattern = readPattern(audioPatternEditor)
 	setBit(pattern, index, draw)

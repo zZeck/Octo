@@ -51,7 +51,7 @@ var lastLoadedKey: string | null = null
 const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/'
 
 export function share() {
-	ajax('POST', sharingBaseUrl, preparePayload(), (r, s) => {
+	ajax('POST', sharingBaseUrl, preparePayload(), (r, _s) => {//TODO unused s?
 		if (r.error) { setStatusMessage(r.error, false); return }
 		var l = window.location.href.replace(/(index\.html|\?key=.*)*$/, 'index.html?key=' + r.key)
 		window.location.href = l
@@ -81,13 +81,13 @@ export function runPayload(options: EmulatorOptions, program: string) {
 	document.getElementById('main-run')!.click()
 }
 function runShared(key: string) {
-	ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions, program: string }, s?: never) => {
+	ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions, program: string }, _s?: never) => {//TODO unused s?
 		lastLoadedKey = key
 		runPayload(result.options, result.program)
 	})
 }
 function runGist(id: string) {//TODO type result better
-	ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, s?: never) => {
+	ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, _s?: never) => {//TODO unused s?
 		runPayload(JSON.parse(result.files['options.json'].content), result.files['prog.ch8'].content)
 	})
 }
@@ -279,7 +279,8 @@ function gifDecode(bytes: Uint8Array) {
 		const here = b()
 		if (here == 0x3B) break
 		else if (here == 0x2C) {
-			const left = s(), top = s(), iw = s(), ih = s(), ip = b()
+			//const left = s(), top = s() //TODO unused?
+			const iw = s(), ih = s(), ip = b()
 			const lct = (ip & 0x80) ? cl(1 << ((ip & 0x70)+1)) : null
 			if (ip & 0x40) throw 'interlaced GIFs are not supported'
 			if (iw != width || ih != height) throw 'windowing is nyi!'

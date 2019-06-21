@@ -831,4 +831,5 @@ go () {
 }
 }
 
-this.Compiler = Compiler as any;
+//TODO fix
+//this.Compiler = Compiler as any;

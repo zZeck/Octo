@@ -430,15 +430,15 @@ function apply(address: number) {
 	if (o == 0x2)               { ret['rets'] = single(address + 2);             } // call
 	if (o == 0x6)               { ret[x] = single(nn);                           } // vx := nn
 	if (o == 0x7)               { ret[x] = unary(function(a) { return a + nn;}); } // vx += nn
-	if (o == 0x8 && n == 0x0)   { binary  (function(a, b) { return     b; });    } // vx := vy
+	if (o == 0x8 && n == 0x0)   { binary  (function(_a, b) { return     b; });    } // vx := vy //TODO fix _a?
 	if (o == 0x8 && n == 0x1)   { binary  (function(a, b) { return a | b; });    } // vx |= vy
 	if (o == 0x8 && n == 0x2)   { binary  (function(a, b) { return a & b; });    } // vx &= vy
 	if (o == 0x8 && n == 0x3)   { binary  (function(a, b) { return a ^ b; });    } // vx ^= vy
 	if (o == 0x8 && n == 0x4)   { bincarry(function(a, b) { return [a +  b, Number(a + b > 0xFF)]; }); } //TODO is this a bug?
 	if (o == 0x8 && n == 0x5)   { bincarry(function(a, b) { return [a -  b, Number(a >= b)];       }); }
-	if (o == 0x8 && n == 0x6)   { bincarry(function(a, b) { return [b >> 1, b & 1];        }); }
+	if (o == 0x8 && n == 0x6)   { bincarry(function(_a, b) { return [b >> 1, b & 1];        }); }//TODO fix _a?
 	if (o == 0x8 && n == 0x7)   { bincarry(function(a, b) { return [b -  a, Number(b >= a)];       }); }
-	if (o == 0x8 && n == 0xE)   { bincarry(function(a, b) { return [b << 1, b & 128];      }); }
+	if (o == 0x8 && n == 0xE)   { bincarry(function(_a, b) { return [b << 1, b & 128];      }); }//TODO fix _a?
 	if (o == 0xA)               { ret['i'] = isingle(nnn);       } // i := nnn
 	if (o == 0xC)               { ret[x]   = maskedrand();       } // vx := random nn
 	if (o == 0xF && nn == 0x01) { ret['plane'] = single(x);      } // plane n
@@ -533,17 +533,18 @@ function successors(address: number, prevret: {[key: number]: boolean}) {
 	if (o  == 0x2)    { return [nnn];       } // simple call
 
 	// simple skips
+	//TODO fix unused args?
 	if (o == 0x3) {
-		return preciseSkip(address, function(x, y, nn) { return x == nn; });
+		return preciseSkip(address, function(x, _y, nn) { return x == nn; });
 	}
 	if (o == 0x4) {
-		return preciseSkip(address, function(x, y, nn) { return x != nn; });
+		return preciseSkip(address, function(x, _y, nn) { return x != nn; });
 	}
 	if (o == 0x5) {
-		return preciseSkip(address, function(x, y, nn) { return x == y; });
+		return preciseSkip(address, function(x, y, _nn) { return x == y; });
 	}
 	if (o == 0x9) {
-		return preciseSkip(address, function(x, y, nn) { return x != y; });
+		return preciseSkip(address, function(x, y, _nn) { return x != y; });
 	}
 
 	if ((a & 0xF0) == 0xE0 && (nn == 0x9E || nn == 0xA1)) {
@@ -672,7 +673,8 @@ export function analyzeFinish() {
 	}
 }
 
-function analyze(rom: number[], quirks: {[quirk: string]: boolean}) {
+//TODO unused?
+export function analyze(rom: number[], quirks: {[quirk: string]: boolean}) {
 	analyzeInit(rom, quirks);
 	while(!analyzeWork()) {}
 	analyzeFinish();
@@ -829,8 +831,8 @@ export function formatProgram(programSize: number) {
 }
 
 //TODO no longer needed because of imports?
-this.analyze       = analyze;
+/*this.analyze       = analyze;
 this.analyzeInit   = analyzeInit;
 this.analyzeWork   = analyzeWork;
 this.analyzeFinish = analyzeFinish;
-this.formatProgram = formatProgram;
+this.formatProgram = formatProgram;*/

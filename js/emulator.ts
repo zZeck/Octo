@@ -159,11 +159,11 @@ export class Emulator implements EmulatorOptions {
 	stack_breakpoint!: number;
 
 	// external interface stubs
-	//these are assigned in htmlcode
+	//TODO note: these are assigned in htmlcode
 	public exitVector  () {}                                   // fired by 'exit'
 	public importFlags () { return [0, 0, 0, 0, 0, 0, 0, 0]; } // load persistent flags
-	public exportFlags (flags: number[]) {}                              // save persistent flags
-	public buzzTrigger (ticks: number, remainingTicks: number) {}                              // fired when buzzer played
+	public exportFlags (_flags: number[]) {}                              // save persistent flags
+	public buzzTrigger (_ticks: number, _remainingTicks: number) {}   // fired when buzzer played //TODO unused?
 
 	
 	public init (rom: RomData) {
