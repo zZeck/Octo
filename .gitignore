@@ -4,3 +4,4 @@ tools/Doct/doct
 tools/Doct/rom.h
 
 node_modules/
+dist/
