@@ -1,4 +1,4 @@
-import { compile, runRom, editor } from "./htmlcode";
+import { compile, runRom, editor } from "./index";
 import { readBytes, writeBytes, setVisible, hexFormat, emulator, textBox, radioBar, Formats } from "./util";
 import { formatInstruction, analyzeInit, analyzeWork, analyzeFinish, formatProgram } from "./decompiler";
 import { buildCartridge, preparePayload } from "./sharing";

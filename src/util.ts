@@ -1,7 +1,8 @@
 import { Emulator, EmulatorOptions } from "./emulator";
-import { setStatusMessage } from "./htmlcode";
-import { Editor } from "./codemirror";
-import CodeMirror from "./codemirror";
+import { setStatusMessage } from "./index";
+import { Editor } from "codemirror";
+import CodeMirror from "codemirror";
+
 
 /**
 * Misc. utility functions

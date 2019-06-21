@@ -1,6 +1,6 @@
 import { emulator, ajax } from "./util";
 import { packOptions, unpackOptions } from "./shared";
-import { editor, speedMenu, setStatusMessage } from "./htmlcode";
+import { editor, speedMenu, setStatusMessage } from "./index";
 import { gifBuilder } from "./recording";
 import { EmulatorOptions } from "./emulator";
 

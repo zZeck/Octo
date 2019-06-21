@@ -1,7 +1,6 @@
 import { range, textBox, readBytes, writeBytes, setBit, getBit, mod, emulator, zip, drawOnCanvas } from "./util";
 import { audioSetup, playPattern } from "./shared";
-import { Editor } from "./codemirror";
-
+import { Editor } from "codemirror";
 /**
 * Audio editor:
 **/

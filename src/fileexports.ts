@@ -1,6 +1,6 @@
 "use strict";
 
-import { compile } from "./htmlcode";
+import { compile } from "./index";
 
 ////////////////////////////////////
 //
