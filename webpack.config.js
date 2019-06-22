@@ -45,7 +45,7 @@ module.exports = {
 		]
   },
   devServer: {
-		contentBase: './dist'
+		contentBase: './assets'
 	},
 	resolve: {
 	  extensions: [ '.tsx', '.ts', '.js' ]

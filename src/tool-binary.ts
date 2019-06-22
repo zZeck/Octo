@@ -34,7 +34,7 @@ function decompileStatic(rom: number[]) {
 	})
 	const process = () => {
 		var finished = false;
-		for(var z = 0; z < 100 && !finished; z++) { finished || analyzeWork() } //TODO |= replaced with ||
+		for(var z = 0; z < 100 && !finished; z++) { finished = analyzeWork() }
 		if (!finished) {
 			window.setTimeout(process, 0)
 			return
@@ -52,7 +52,7 @@ function decompileStatic(rom: number[]) {
 
 binaryInput.onchange = () => {
 	const reader = new FileReader()
-	reader.onload = () => writeBytes(binaryEditor, null, (reader.result as ArrayBuffer))
+	reader.onload = () => writeBytes(binaryEditor, null, new Uint8Array(reader.result as ArrayBuffer))
 	reader.readAsArrayBuffer(binaryInput.files![0])
 }
 document.getElementById('binary-decompile')!.onclick = () => {
