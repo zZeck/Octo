@@ -215,13 +215,14 @@ export class Emulator implements EmulatorOptions {
 
 	public math (x: number, y: number, op: number) {
 		// basic arithmetic opcodes
+		let t: number;
 		switch(op) {
 			case 0x0: this.v[x]  = this.v[y]; break;
 			case 0x1: this.v[x] |= this.v[y]; break;
 			case 0x2: this.v[x] &= this.v[y]; break;
 			case 0x3: this.v[x] ^= this.v[y]; break;
 			case 0x4:
-				let t = this.v[x]+this.v[y];
+				t = this.v[x]+this.v[y];
 				this.writeCarry(x, t, Number((t > 0xFF)));
 				break;
 			case 0x5:

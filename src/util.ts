@@ -15,7 +15,7 @@ export function range(x: number) { return Array.apply(undefined, Array(x)).map((
 export function zip<T, U, V>(a: T[], b: U[], dyad: (x: T, y: U) => V): Array<V> { return a.map((x,i) => dyad(x, b[i])) }
 export function mod(x: number, y: number) { x %= y; if (x < 0) x += y; return x }
 
-export enum Formats {
+export const enum Formats {
   dec = 'dec',
   hex = 'hex',
   bin = 'bin',
