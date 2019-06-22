@@ -13,6 +13,7 @@ import { updateOptions } from "./tool-options";
 import { Editor, Doc } from "codemirror";
 import CodeMirror from "codemirror";
 
+//TODO possibly generate statically
 var html = require("../docs/Manual.md");
 var container = document.getElementById("manual")!;
 
