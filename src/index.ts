@@ -13,6 +13,11 @@ import { updateOptions } from "./tool-options";
 import { Editor, Doc } from "codemirror";
 import CodeMirror from "codemirror";
 
+var html = require("../docs/Manual.md");
+var container = document.getElementById("manual")!;
+
+container.innerHTML = html;
+
 export const editor: Editor & Doc = CodeMirror(document.getElementById('editor')!, {
   mode:           'octo',
   theme:          'monokai',

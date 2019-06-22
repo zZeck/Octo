@@ -1,15 +1,5 @@
 <html>
 <head>
-	<!--<script src='lib/codemirror/codemirror.min.js'></script>
-	<script src='lib/codemirror/octomode.js'></script>
-  <script src='lib/filesaver.js'></script>
-  <script src='js/emulator.js'></script>
-  <script src='js/compiler.js'></script>
-  <script src='js/decompiler.js'></script>
-  <script src='js/shared.js'></script>
-  <script src='js/util.js'></script>
-  <script src='js/sharing.js'></script>-->
-
 	<link rel='stylesheet' href='styles/codemirror.min.css'>
   <link rel='stylesheet' href='styles/monokai.css'>
   <link rel='stylesheet' href='styles/mainWindow.css'>
@@ -17,6 +7,7 @@
 
 <body>
   <div id='header'>
+    <!--TODO replace this repo link to point to URL provided to webpack-->
     <a href='https://github.com/JohnEarnest/Octo'><img src='images/logo.png'/></a>
     <input type="file" id="maininput" style="display:none">
     <div class='head' id='main-run'>Run</div>
@@ -51,7 +42,8 @@
     <div id='editor'></div>
 
     <div id='manual'>
-      <iframe src="https://johnearnest.github.io/Octo/docs/Manual.html"></iframe>
+      <!--TODO replace this to load html generated from markdown by webpack plugin for loading markdown-->
+      <!--<iframe src="https://johnearnest.github.io/Octo/docs/Manual.html"></iframe>-->
     </div>
 
     <div id='toolbox'>

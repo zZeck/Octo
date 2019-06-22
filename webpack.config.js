@@ -41,7 +41,21 @@ module.exports = {
 					'css-loader',
           'sass-loader'
 				]
-			}
+			},
+			{
+				test: /\.md$/,
+				use: [
+						{
+								loader: "html-loader"
+						},
+						{
+								loader: "markdown-loader",
+								options: {
+										/* your options here */
+								}
+						}
+				]
+		}
 		]
   },
   devServer: {
