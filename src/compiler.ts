@@ -782,6 +782,4 @@ export class Compiler {
             this.immediate(0x20, this.wideValue(token));
         }
     }
-
-
 }

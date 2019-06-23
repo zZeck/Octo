@@ -100,9 +100,15 @@ function dumpProfile (): string {
     }
     return (
         '<table class=\'debug-profile\'><tr> <td>ticks</td> <td>time</td> <td>calls</td> <td>source</td> </tr>' +
-			profile.sort((a, b) => b.percent - a.percent).slice(0, 20).map(
-			    x => '<tr><td>' + x.ticks + '</td> <td>' + x.percent.toFixed(2) + '%</td> <td>' + x.calls + '</td> <td>' + x.source + '</td></tr>'
-			).join('') +
+            profile.sort((a, b): number => b.percent - a.percent).slice(0, 20)
+                .map(
+                    (x: {
+                        ticks: number;
+                        percent: number;
+                        calls: number;
+                        source: string;
+                    }): string => `<tr><td>${x.ticks}</td> <td>${x.percent.toFixed(2)}%</td> <td>${x.calls}</td> <td>${x.source}</td></tr>`
+                ).join('') +
 		'</table>' +
 		'<div class=\'debug-profile-results\'>' +
 			'<div>Full results:<div>' +

@@ -27,13 +27,13 @@ const optionFlags = [
     'screenRotation',
     'maxSize'
 ];
-export function unpackOptions (emulator: Emulator, options: EmulatorOptions): void {
-    optionFlags.forEach(x => { if (x in options) emulator[x] = options[x]; });
-    if (options['enableXO']) emulator.maxSize = 65024; // legacy option
+export function unpackOptions (emulatorToUnpack: Emulator, options: EmulatorOptions): void {
+    optionFlags.forEach((x: string): void => { if (x in options) emulatorToUnpack[x] = options[x]; });
+    if (options['enableXO']) emulatorToUnpack.maxSize = 65024; // legacy option
 }
 export function packOptions (emulator: Emulator): EmulatorOptions {
     const r: EmulatorOptions = {} as EmulatorOptions;
-    optionFlags.forEach(x => r[x] = emulator[x]);
+    optionFlags.forEach((x: string): void => {r[x] = emulator[x];});
     return r;
 }
 
@@ -108,26 +108,27 @@ export function getColor (id: number): string {
         case 2: return emulator.fillColor2;
         case 3: return emulator.blendColor;
         default: throw Error(`invalid color: ${id}`);
+    }
 }
 
 //used in embed.html and index.ts
-export function renderDisplay (emulator: Emulator): void {
+export function renderDisplay (emulatorToRender: Emulator): void {
     const c = document.getElementById(renderTarget) as CanvasWithLastFrame;
 
     // Canvas rendering can be expensive. Exit out early if nothing has changed.
-    const colors = [emulator.backgroundColor, emulator.fillColor, emulator.fillColor2, emulator.blendColor];
+    const colors = [emulatorToRender.backgroundColor, emulatorToRender.fillColor, emulatorToRender.fillColor2, emulatorToRender.blendColor];
     if (c.last !== undefined) {
-        if (arrayEqual(c.last.p[0], emulator.p[0]) && arrayEqual(c.last.p[1], emulator.p[1]) &&
+        if (arrayEqual(c.last.p[0], emulatorToRender.p[0]) && arrayEqual(c.last.p[1], emulatorToRender.p[1]) &&
 				arrayEqual(c.last.colors, colors)) {
             return;
         }
-        if (c.last.hires !== emulator.hires) { c.last = undefined; } // full redraw when switching resolution
+        if (c.last.hires !== emulatorToRender.hires) { c.last = undefined; } // full redraw when switching resolution
     }
     const g = c.getContext('2d')!;
-    getTransform(emulator, g);
-    const w = emulator.hires ? 128 : 64;
-    const h = emulator.hires ? 64 : 32;
-    const size = emulator.hires ? scaleFactor : scaleFactor * 2;
+    getTransform(emulatorToRender, g);
+    const w = emulatorToRender.hires ? 128 : 64;
+    const h = emulatorToRender.hires ? 64 : 32;
+    const size = emulatorToRender.hires ? scaleFactor : scaleFactor * 2;
     const lastPixels = c.last !== undefined ? c.last.p : [[], []];
 
     g.scale(size, size);
@@ -135,7 +136,7 @@ export function renderDisplay (emulator: Emulator): void {
     for (let y = 0; y < h; ++y) {
         for (let x = 0; x < w; ++x, ++z) {
             const oldColorIdx = lastPixels[0][z] + (lastPixels[1][z] << 1);
-            const colorIdx = emulator.p[0][z] + (emulator.p[1][z] << 1);
+            const colorIdx = emulatorToRender.p[0][z] + (emulatorToRender.p[1][z] << 1);
             if (oldColorIdx !== colorIdx) {
                 g.fillStyle = getColor(colorIdx);
                 g.fillRect(x, y, 1, 1);
@@ -146,8 +147,8 @@ export function renderDisplay (emulator: Emulator): void {
 
     c.last = {
         colors: colors,
-        p: [emulator.p[0].slice(), emulator.p[1].slice()],
-        hires: emulator.hires
+        p: [emulatorToRender.p[0].slice(), emulatorToRender.p[1].slice()],
+        hires: emulatorToRender.hires
     };
 }
 
@@ -163,10 +164,12 @@ let audioNode: ScriptProcessorNode | null;
 let audioData: AudioBuffer[];
 
 class AudioBuffer {
-    pointer: number;
-    buffer: number[];
-    duration: number;
 
+    public duration: number;
+
+    private pointer: number;
+    private buffer: number[];
+    
     // TODO this constructor may be wrong
     public constructor (buffer: number[], duration: number) {
         /* if (!(this instanceof AudioBuffer)) {
@@ -220,11 +223,11 @@ export function audioSetup (): boolean {
         audioNode.onaudioprocess = function (audioProcessingEvent: AudioProcessingEvent): void {
             const outputBuffer = audioProcessingEvent.outputBuffer;
             const outputData = outputBuffer.getChannelData(0);
-            const samples_n = outputBuffer.length;
+            const samplesN = outputBuffer.length;
 
             let index = 0;
-            while (audioData.length && index < samples_n) {
-                const size = samples_n - index;
+            while (audioData.length && index < samplesN) {
+                const size = samplesN - index;
                 // TODO fix this cast
                 const written = audioData[0].write(outputData as unknown as number[], index, size);
                 index += written;
@@ -233,14 +236,14 @@ export function audioSetup (): boolean {
                 }
             }
 
-            while (index < samples_n) {
+            while (index < samplesN) {
                 outputData[index++] = 0;
             }
             // the last one can be long sound with high value of buzzer, so always keep it
             if (audioData.length > 1) {
                 let audioDataSize = 0;
                 const audioBufferSize = audioNode!.bufferSize;
-                audioData.forEach(function (buffer) { audioDataSize += buffer.duration; });
+                audioData.forEach(function (buffer): void { audioDataSize += buffer.duration; });
                 while (audioDataSize > audioBufferSize && audioData.length > 1) {
                     audioDataSize -= audioData.shift()!.duration;
                 }

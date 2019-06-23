@@ -52,7 +52,7 @@ let lastLoadedKey: string | null = null;
 const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/';
 
 export function share (): void {
-    ajax<{error: string; key: string}>('POST', sharingBaseUrl, preparePayload(), (r, _s): void => { // TODO unused s?
+    ajax<{error: string; key: string}>('POST', sharingBaseUrl, preparePayload(), (r): void => { // TODO unused s?
         if (r.error) { setStatusMessage(r.error, false); return; }
         const l = window.location.href.replace(/(index\.html|\?key=.*)*$/u, 'index.html?key=' + r.key);
         window.location.href = l;
@@ -248,15 +248,16 @@ function unLZW (minCodeSize: number, bytes: number[]): number[] {
         next = clear + 2;
         old = null;
     };
-    const unpack = (c: number, r: number[]): void => {
+    const unpack = (chunk: number, r: number[]): void => {
+        let c = chunk;
         const t = [];
-        if (c == next) t.push(first), c = old!;// TODO safe?
-        while (c > clear) t.push(suffix[c]), c = prefix[c];
+        if (c == next) {t.push(first); c = old!;}// TODO safe?
+        while (c > clear) {t.push(suffix[c]); c = prefix[c];}
         r.push(first = suffix[c]);
         Array.prototype.push.apply(r, t.reverse());
         if (next >= 4096) return;
-        prefix[next] = old!, suffix[next++] = first;
-        if ((next & mask) == 0 && next < 4096) size++, mask += next;
+        prefix[next] = old!; suffix[next++] = first;
+        if ((next & mask) == 0 && next < 4096) {size++; mask += next;}
     };
     cleartable();
     const r = [];
@@ -265,7 +266,7 @@ function unLZW (minCodeSize: number, bytes: number[]): number[] {
         if (t > next! || t == clear + 1) break;
         else if (t == clear) cleartable();
         else if (old !== null) r.push(suffix[old = first = t]);
-        else unpack(t, r), old = t;
+        else {unpack(t, r); old = t;}
     }
     return r;
 }
@@ -375,11 +376,11 @@ export function buildCartridge (label: string, data: {
     return g.finish();
 }
 
-export function parseCartridge (image: Uint8Array): any {
+export function parseCartridge (image: Uint8Array): { options: EmulatorOptions; program: string } {
     const parts = gifDecode(image);
-    const nybble = (x: number) => x >> 13 & 8 | x >> 7 & 6 | x & 1;
-    const byte = (f: number, i: number) => nybble(parts.frames[f].palette![parts.frames[f].pixels[i ]]) << 4 |
-	                        nybble(parts.frames[f].palette![parts.frames[f].pixels[i + 1]]);
+    const nybble = (x: number): number => x >> 13 & 8 | x >> 7 & 6 | x & 1;
+    const byte = (f: number, i: number): number => nybble(parts.frames[f].palette![parts.frames[f].pixels[i]]) << 4 |
+                            nybble(parts.frames[f].palette![parts.frames[f].pixels[i + 1]]);
     const size = byte(0, 0) << 24 | byte(0, 2) << 16 | byte(0, 4) << 8 | byte(0, 6);
     let json = '';
     for (let x = 0, i = 8, f = 0; x < size; x++) {
