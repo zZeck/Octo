@@ -8,10 +8,10 @@ import CodeMirror, { Editor } from 'codemirror';
 
 export const emulator = new Emulator();
 
-export function range (x: number): number[] { return Array.apply(undefined, Array(x)).map((_, i) => i); }
+export function range (x: number): number[] { return Array(...Array(x)).map((_, i): number => i); }
 // TODO is this correct? sort of odd for zip type sig?
-export function zip<T, U, V> (a: T[], b: U[], dyad: (x: T, y: U) => V): V[] { return a.map((x, i) => dyad(x, b[i])); }
-export function mod (x: number, y: number) { x %= y; if (x < 0) x += y; return x; }
+export function zip<T, U, V> (a: T[], b: U[], dyad: (x: T, y: U) => V): V[] { return a.map((x, i): V => dyad(x, b[i])); }
+export function mod (x: number, y: number): number { let modValue = x; modValue %= y; if (modValue < 0) modValue += y; return modValue; }
 
 export const enum Formats {
     dec = 'dec',
@@ -24,13 +24,13 @@ type formatsToFunctions = {
     [key in Formats]: (n: number) => string
 };
 
-const FORMATS: formatsToFunctions = { dec: decimalFormat, hex: hexFormat, bin: binaryFormat, default: hexFormat };
 function zeroPad (str: string, n: number): string { const d = str.length % n; return (d == 0 ? '' : '00000000'.substr(0, n - d)) + str; }
 function decimalFormat (n: number): string { return n.toString(10); }
 export function hexFormat (n: number): string { return '0x' + zeroPad(n.toString(16).toUpperCase(), 2); }
 function binaryFormat (n: number): string { return '0b' + zeroPad(n.toString(2), 8); }
-export function maskFormat (n: number): string { return emulator.maskFormatOverride ? binaryFormat(n) : numericFormat(n); }
+const FORMATS: formatsToFunctions = { dec: decimalFormat, hex: hexFormat, bin: binaryFormat, default: hexFormat };
 export function numericFormat (n: number, format?: Formats): string { return FORMATS[format || emulator.numericFormatStr](n); }
+export function maskFormat (n: number): string { return emulator.maskFormatOverride ? binaryFormat(n) : numericFormat(n); }
 
 export interface Payload {
     key: string | null;
@@ -98,15 +98,15 @@ export function setVisible (element: HTMLElement, value: boolean, disp?: string)
 export function radioBar<T extends string | number> (element: HTMLElement, value: T, change: (x: T) => void): {
     getValue: () => string | undefined;
     setValue: (v: T) => T;
-    setVisible: (x: boolean) => "flex" | "none";
+    setVisible: (x: boolean) => void;
 } {
     element.classList.add('radiobar');
     const get = (): string | undefined => element.querySelector<HTMLElement>('span.selected')!.dataset.value;
-    const set = (v: T): T => (element.querySelectorAll('span').forEach((x: HTMLSpanElement): void => {
+    const set = (v: T): T => {element.querySelectorAll('span').forEach((x: HTMLSpanElement): void => {
         x.classList.toggle('selected', x.dataset.value == v);
-    }), v);
-    const vis = (x: boolean): "flex" | "none" => element.style.display = x ? 'flex' : 'none';
-    element.querySelectorAll('span').forEach(x => x.onclick = () => change(set(x.dataset.value as T)));
+    }); return v;};
+    const vis = (x: boolean): void => {element.style.display = x ? 'flex' : 'none';};
+    element.querySelectorAll('span').forEach((x): void => {x.onclick = (): void => {change(set(x.dataset.value as T));};});
     set(value);
     return { getValue: get, setValue: set, setVisible: vis };
 }
@@ -119,9 +119,9 @@ export function checkBox (element: HTMLElement, value: boolean, change: (x: bool
     const c = document.createElement('span');
     c.classList.add('check');
     element.prepend(c);
-    const get = () => c.classList.contains('selected');
-    const set = (x: boolean) => (c.classList.toggle('selected', x), x);
-    c.onclick = () => change(set(!get()));
+    const get = (): boolean => c.classList.contains('selected');
+    const set = (x: boolean): boolean => {c.classList.toggle('selected', x); return x;};
+    c.onclick = (): void => change(set(!get()));
     set(value);
     return { getValue: get, setValue: set };
 }
@@ -130,9 +130,9 @@ export function toggleButton (element: HTMLElement, value: boolean, change: (x: 
     getValue: () => boolean;
     setVisible: (x: boolean) => boolean;
 } {
-    const get = () => element.classList.contains('selected');
-    const set = (x: boolean) => (element.classList.toggle('selected', x), x);
-    element.onclick = () => change(set(!get()));
+    const get = (): boolean => element.classList.contains('selected');
+    const set = (x: boolean): boolean => {element.classList.toggle('selected', x); return x;};
+    element.onclick = (): void => change(set(!get()));
     set(value);
     return { getValue: get, setVisible: set };
 }
@@ -141,11 +141,11 @@ export function menuChooser (element: HTMLElement, value: number, change: (x: nu
     getValue: () => string | undefined;
     setValue: (v: number) => number;
 } {
-    const get = () => element.querySelector<HTMLElement>('li.selected')!.dataset.value;
-    const set = (v: number): number => (element.querySelectorAll('li').forEach((x: HTMLLIElement): void => {
+    const get = (): string | undefined => element.querySelector<HTMLElement>('li.selected')!.dataset.value;
+    const set = (v: number): number => {element.querySelectorAll('li').forEach((x: HTMLLIElement): void => {
         x.classList.toggle('selected', x.dataset.value == String(v)); // TODO correct cast?
-    }), v);
-    element.querySelectorAll('li')!.forEach((x): void => x.onclick = (): void => change(set(Number(x.dataset.value!)))); // TODO correct cast?
+    }); return v;};//TODO ), v) here originally. Mistake?
+    element.querySelectorAll('li')!.forEach((x): void => {x.onclick = (): void => {change(set(Number(x.dataset.value!))); }; } ); // TODO correct cast?
     set(value);
     return { getValue: get, setValue: set };
 }
