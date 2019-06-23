@@ -155,8 +155,8 @@ const audioCutoff = document.getElementById('audio-cutoff') as HTMLInputElement;
 
 function updateAudioTone () {
     writePattern(audioToneEditor, generateFrequency(
-        +audioFreq.value || 0,
-        +audioCutoff.value || 0
+        Number(audioFreq.value) || 0,
+        Number(audioCutoff.value) || 0
     ));
 }
 updateAudioTone();

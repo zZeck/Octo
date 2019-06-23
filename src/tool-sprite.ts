@@ -36,16 +36,16 @@ function spritePixel (x: number, y: number, wide: boolean) {
 }
 function getSpritePixel (x: number, y: number, wide: boolean, color: number) {
     const t = spritePixel(x, y, wide);
-    const c1 = !!(t.mask & spritePixels[t.layer1]);
-    const c2 = !!(t.mask & spritePixels[t.layer2]);
+    const c1 = Boolean(t.mask & spritePixels[t.layer1]);
+    const c2 = Boolean(t.mask & spritePixels[t.layer2]);
     return Number(c1) + 2 * (Number(c2) & color);// TODO casts?
 }
 function setSpritePixel (x: number, y: number, wide: boolean, _color: number, p: number) { // TODO unused _color?
     if (x >= (wide ? 16 : 8)) return;
     if (y >= (wide ? 16 : 15)) return;
     const t = spritePixel(x, y, wide);
-    spritePixels[t.layer1] = spritePixels[t.layer1] & ~t.mask | -!!(p & 1) & t.mask;
-    spritePixels[t.layer2] = spritePixels[t.layer2] & ~t.mask | -!!(p & 2) & t.mask;
+    spritePixels[t.layer1] = spritePixels[t.layer1] & ~t.mask | -Boolean(p & 1) & t.mask;
+    spritePixels[t.layer2] = spritePixels[t.layer2] & ~t.mask | -Boolean(p & 2) & t.mask;
 }
 
 /**

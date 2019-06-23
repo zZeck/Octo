@@ -49,7 +49,7 @@ editor.on('gutterClick', function (cm, n) {
 function getVisualBreakpoints (debuginfo: DebugInfo) {
     const r: {[address: number]: string} = {};
     document.querySelectorAll<HTMLElement>('#editor .breakpoint').forEach((x) => {
-        const line = +x.dataset.line!;
+        const line = Number(x.dataset.line!);
         const addr = debuginfo.getAddr(line);
         if (addr) { r[addr] = 'source line ' + (line + 1); }
     });
@@ -111,7 +111,7 @@ const toolbox = document.getElementById('toolbox')!;
 const showToolbox = document.getElementById('show-toolbox')!;
 const showManual = document.getElementById('show-manual')!;
 export const speedMenu = menuChooser(document.getElementById('main-speed')!, emulator.tickrate, (x: number) => {
-    emulator.tickrate = +x;
+    emulator.tickrate = Number(x);
     saveLocalOptions();
 });
 

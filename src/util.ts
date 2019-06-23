@@ -55,7 +55,7 @@ export function ajax (method: string, url: string, payload: Payload | null, then
 export function readBytes (source: Editor, size?: number) {
     const tokens = source.getValue().trim().split(/\s+/);
     return zip(range(size! || tokens.length), tokens, (_: number, x) => {
-        return ((x || '').startsWith('0b') ? parseInt(x.slice(2), 2) : +x) || 0;
+        return ((x || '').startsWith('0b') ? parseInt(x.slice(2), 2) : Number(x)) || 0;
     });
 }
 export function writeBytes (target: Editor, size: number | null, bytes: ArrayBuffer | number[]) { // TODO is ArrayBuffer | number[] correct?

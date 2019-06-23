@@ -7,24 +7,22 @@ import { breakPoints as BreakPoints } from './emulator';
 //
 /// /////////////////////////////////
 
-function parse (token: string) {
-    const num = parseNumber(token);
-    return isNaN(num) ? token : num;
-}
+const BinaryPrefix = '0b';
 
-function parseNumber (token: string) {
+function parseNumber (token: string): number {
     // Check if this token is a valid binary number
-    if (/^[+\-]?0b[01]+$/.test(token)) {
+    if (/^[+-]?0b[01]+$/u.test(token)) {
         let bitstring;
         const isNegative = token.startsWith('-');
 
         // Check for any leading +/- sign character
         if (isNegative || token.startsWith('+')) {
             // Remove sign character and 0b- prefix
-            bitstring = token.slice(3);
+            
+            bitstring = token.slice(1 + BinaryPrefix.length);
         } else {
             // Remove 0b- prefix
-            bitstring = token.slice(2);
+            bitstring = token.slice(BinaryPrefix.length);
         }
 
         const value = parseInt(bitstring, 2);
@@ -32,16 +30,21 @@ function parseNumber (token: string) {
     }
 
     // Check if this token is a valid hexadecimal number
-    if (/^[+\-]?0x[0-9a-f]+$/i.test(token)) {
+    if (/^[+-]?0x[0-9a-f]+$/iu.test(token)) {
         return parseInt(token, 16);
     }
 
     // Check if this token is a valid decimal number
-    if (/^[+\-]?[0-9]+$/.test(token)) {
+    if (/^[+-]?[0-9]+$/u.test(token)) {
         return parseInt(token, 10);
     }
 
     return NaN;
+}
+
+function parse (token: string): string | number {
+    const num = parseNumber(token);
+    return isNaN(num) ? token : num;
 }
 
 function tokenize (text: string): [stringOrNumber, number, number][] {
@@ -73,7 +76,7 @@ function tokenize (text: string): [stringOrNumber, number, number][] {
         }
     }
     if (token.length > 0) {
-        ret.push([ parse(token), tokenStart, index + 1]);
+        ret.push([parse(token), tokenStart, index + 1]);
     }
     return ret;
 }
@@ -85,212 +88,110 @@ function tokenize (text: string): [stringOrNumber, number, number][] {
 /// /////////////////////////////////
 
 export class DebugInfo {
-    lines: string[];
-    _locs: { [address: number]: number};
+    public lines: string[];
+    private _locs: { [address: number]: number};
 
-    constructor (source: string) {
+    public constructor (source: string) {
         this.lines = source.split('\n');
         this._locs = {}; // map<addr, line>
     }
 
-    mapAddr (addr: number, pos: number) {
+    public mapAddr (addr: number, pos: number): void {
         this._locs[addr] = pos;
     }
 
-    getLine (addr: number) {
+    public getLine (addr: number): number | undefined {
         const i = this._locs[addr];
         return i != undefined ? this.posToLine(i) : undefined;
     }
 
-    getAddr (line: number) {
+    public getAddr (line: number): number | undefined {
         for (const addr in this._locs) {
             if (this.posToLine(this._locs[addr]) == line) return addr as unknown as number; // TODO fix
         }
         return undefined;
     }
 
-    posToLine (pos: number) {
+    private posToLine (pos: number): number {
         let i;
+        let decreasingPosition = pos;
         for (i = 0; i < this.lines.length; i++) {
-            pos -= this.lines[i].length + 1;
-            if (pos <= 0) { break; }
+            decreasingPosition -= this.lines[i].length + 1;
+            if (decreasingPosition <= 0) { break; }
         }
         return i;
     }
 }
 
+const programEntryAddress = 0x200;
+
 const unaryFunc: {[func: string]: (x: number, m: number[]) => number} = {
-    '-': function (x: number) { return -x; },
-    '~': function (x: number) { return ~x; },
-    '!': function (x: number) { return +!x; },
-    'sin': function (x: number) { return Math.sin(x); },
-    'cos': function (x: number) { return Math.cos(x); },
-    'tan': function (x: number) { return Math.tan(x); },
-    'exp': function (x: number) { return Math.exp(x); },
-    'log': function (x: number) { return Math.log(x); },
-    'abs': function (x: number) { return Math.abs(x); },
-    'sqrt': function (x: number) { return Math.sqrt(x); },
-    'sign': function (x: number) { return Math.sign(x); },
-    'ceil': function (x: number) { return Math.ceil(x); },
-    'floor': function (x: number) { return Math.floor(x); },
-    '@': function (x: number, m: number[]) { return m[(0 | x) - 0x200] || 0; }
+    '-': function (x: number): number { return -x; },
+    '~': function (x: number): number { return ~x; },
+    '!': function (x: number): number { return Number(!x); },
+    'sin': function (x: number): number { return Math.sin(x); },
+    'cos': function (x: number): number { return Math.cos(x); },
+    'tan': function (x: number): number { return Math.tan(x); },
+    'exp': function (x: number): number { return Math.exp(x); },
+    'log': function (x: number): number { return Math.log(x); },
+    'abs': function (x: number): number { return Math.abs(x); },
+    'sqrt': function (x: number): number { return Math.sqrt(x); },
+    'sign': function (x: number): number { return Math.sign(x); },
+    'ceil': function (x: number): number { return Math.ceil(x); },
+    'floor': function (x: number): number { return Math.floor(x); },
+    '@': function (x: number, m: number[]): number { return m[(0 | x) - programEntryAddress] || 0; }
 };
 const binaryFunc: {[func: string]: (x: number, y: number) => number} = {
-    '-': function (x: number, y: number) { return x - y; },
-    '+': function (x: number, y: number) { return x + y; },
-    '*': function (x: number, y: number) { return x * y; },
-    '/': function (x: number, y: number) { return x / y; },
-    '%': function (x: number, y: number) { return x % y; },
-    '&': function (x: number, y: number) { return x & y; },
-    '|': function (x: number, y: number) { return x | y; },
-    '^': function (x: number, y: number) { return x ^ y; },
-    '<<': function (x: number, y: number) { return x << y; },
-    '>>': function (x: number, y: number) { return x >> y; },
-    'pow': function (x: number, y: number) { return Math.pow(x, y); },
-    'min': function (x: number, y: number) { return Math.min(x, y); },
-    'max': function (x: number, y: number) { return Math.max(x, y); },
-    '<': function (x: number, y: number) { return +(x < y); },
-    '>': function (x: number, y: number) { return +(x > y); },
-    '<=': function (x: number, y: number) { return +(x <= y); },
-    '>=': function (x: number, y: number) { return +(x >= y); },
-    '==': function (x: number, y: number) { return +(x == y); },
-    '!=': function (x: number, y: number) { return +(x != y); }
+    '-': function (x: number, y: number): number { return x - y; },
+    '+': function (x: number, y: number): number { return x + y; },
+    '*': function (x: number, y: number): number { return x * y; },
+    '/': function (x: number, y: number): number { return x / y; },
+    '%': function (x: number, y: number): number { return x % y; },
+    '&': function (x: number, y: number): number { return x & y; },
+    '|': function (x: number, y: number): number { return x | y; },
+    '^': function (x: number, y: number): number { return x ^ y; },
+    '<<': function (x: number, y: number): number { return x << y; },
+    '>>': function (x: number, y: number): number { return x >> y; },
+    'pow': function (x: number, y: number): number { return Math.pow(x, y); },
+    'min': function (x: number, y: number): number { return Math.min(x, y); },
+    'max': function (x: number, y: number): number { return Math.max(x, y); },
+    '<': function (x: number, y: number): number { return Number(x < y); },
+    '>': function (x: number, y: number): number { return Number(x > y); },
+    '<=': function (x: number, y: number): number { return Number(x <= y); },
+    '>=': function (x: number, y: number): number { return Number(x >= y); },
+    '==': function (x: number, y: number): number { return Number(x == y); },
+    '!=': function (x: number, y: number): number { return Number(x != y); }
 };
 
 type stringOrNumber = string | number;
 type marker = [stringOrNumber, number, number];
 
+const Int8Min = -128;
+const Int8Max = 255;
+
 export class Compiler {
-    rom: number[];
-    dbginfo: DebugInfo;
-    loops: [number, marker][];// stack<[addr, marker]>
-    branches: [number, marker, string][];// stack<[addr, marker, type]>
-    whiles: (number | null)[];// stack<int>
-    dict: {[name: string]: number};// map<name, addr>
-    protos: {[name: string]: number[]};// map<name, list<addr>>
-    longproto: {[name: string]: boolean};// set<name, true>
-    aliases: {[name: string]: number};// map<name, registernum>
-    constants: {[keyString: string]: number };// map<name, token>
-    macros: {[name: string]: {args: string[]; body: [stringOrNumber, number, number][]}};// map<name, {args, body}>
-    hasmain: boolean;
-    schip: boolean;
-    xo: boolean;
-    breakpoints: BreakPoints;// map<address, name>
-    hereaddr: number;
-    pos: stringOrNumber[] | null;
-    currentToken: number;
-    tokens: [stringOrNumber, number, number][];
 
-    constructor (source: string) {
-        this.rom = []; // list<int>
-        this.dbginfo = new DebugInfo(source);
-        this.loops = []; // stack<[addr, marker]>
-        this.branches = []; // stack<[addr, marker, type]>
-        this.whiles = []; // stack<int>
-        this.dict = {}; // map<name, addr>
-        this.protos = {}; // map<name, list<addr>>
-        this.longproto = {}; // set<name, true>
-        this.aliases = {}; // map<name, registernum>
-        this.constants = { // map<name, token>
-            'OCTO_KEY_1': 0x1,
-            'OCTO_KEY_2': 0x2,
-            'OCTO_KEY_3': 0x3,
-            'OCTO_KEY_4': 0xC,
-            'OCTO_KEY_Q': 0x4,
-            'OCTO_KEY_W': 0x5,
-            'OCTO_KEY_E': 0x6,
-            'OCTO_KEY_R': 0xD,
-            'OCTO_KEY_A': 0x7,
-            'OCTO_KEY_S': 0x8,
-            'OCTO_KEY_D': 0x9,
-            'OCTO_KEY_F': 0xE,
-            'OCTO_KEY_Z': 0xA,
-            'OCTO_KEY_X': 0x0,
-            'OCTO_KEY_C': 0xB,
-            'OCTO_KEY_V': 0xF
-        };
-        this.macros = {}; // map<name, {args, body}>
-        this.hasmain = true;
-        this.schip = false;
-        this.xo = false;
-        this.breakpoints = {}; // map<address, name>
-        this.hereaddr = 0x200;
+    public dict: {[name: string]: number};// map<name, addr>
+    public rom: number[];
+    public dbginfo: DebugInfo;
+    public aliases: {[name: string]: number};// map<name, registernum>
+    public schip: boolean;
+    public xo: boolean;
+    public breakpoints: BreakPoints;// map<address, name>
+    public pos: stringOrNumber[] | null;
 
-        this.pos = null;
-        this.currentToken = 0;
-        this.tokens = tokenize(source);
-    }
-
-    data (a: number) {
-        if (typeof this.rom[this.hereaddr - 0x200] !== 'undefined') {
-            throw 'Data overlap. Address ' + hexFormat(this.hereaddr) + ' has already been defined.';
-        }
-        this.rom[this.hereaddr - 0x200] = a & 0xFF;
-        if (this.pos) this.dbginfo.mapAddr(this.hereaddr, Number(this.pos[1]));
-        this.hereaddr++;
-    }
-
-    end () { return this.currentToken >= this.tokens.length; }
-    next () { this.pos = this.tokens[this.currentToken++]; return this.pos[0]; }
-    raw () { this.pos = this.tokens[this.currentToken++]; return this.pos; }
-    peek () { return this.tokens[this.currentToken][0]; }
-    here () { return this.hereaddr; }
-    inst (a: number, b: number) { this.data(a); this.data(b); }
-
-    immediate (op: number, nnn: number) {
-        this.inst(op | nnn >> 8 & 0xF, nnn & 0xFF);
-    }
-
-    fourop (op: number, x: number, y: number, n: number) {
-        this.inst(op << 4 | x, y << 4 | n & 0xF);
-    }
-    jump (addr: number, dest: number) {
-        this.rom[addr - 0x200] = 0x10 | dest >> 8 & 0xF;
-        this.rom[addr - 0x1FF] = dest & 0xFF;
-    }
-
-    isRegister (name?: string | number) {
-        if (!name && name != 0) { name = this.peek(); }
-        if (typeof name !== 'string') { return false; }
-        if (name in this.aliases) { return true; }
-        name = name.toUpperCase();
-        if (name.length != 2) { return false; }
-        if (!name.startsWith('V')) { return false; }
-        return '0123456789ABCDEF'.includes(name[1]);
-    }
-
-    register (name?: stringOrNumber) {
-        if (!name) { name = this.next(); }
-        if (!this.isRegister(name)) {
-            throw "Expected register, got '" + name + "'";
-        }
-        if (name in this.aliases) {
-            return this.aliases[name];
-        }
-        name = (name as string).toUpperCase();
-        return '0123456789ABCDEF'.indexOf(name[1]);
-    }
-
-    expect (token: string) {
-        const thing = this.next();
-        if (thing != token) { throw "Expected '" + token + "', got '" + thing + "'!"; }
-    }
-
-    constantValue () {
-        let number = this.next();
-        if (typeof number !== 'number') {
-            if (number in this.protos) {
-                throw 'Constants cannot refer to the address of a forward declaration.';
-            } else if (number in this.dict) {
-                number = this.dict[number];
-            } else if (number in this.constants) {
-                number = this.constants[number];
-            } else { throw "Undefined name '" + number + "'."; }
-        }
-        return number;
-    }
-
-    reservedNames = {
+    private loops: [number, marker][];// stack<[addr, marker]>
+    private branches: [number, marker, string][];// stack<[addr, marker, type]>
+    private whiles: (number | null)[];// stack<int>
+    private protos: {[name: string]: number[]};// map<name, list<addr>>
+    private longproto: {[name: string]: boolean};// set<name, true>
+    private constants: {[keyString: string]: number };// map<name, token>
+    private macros: {[name: string]: {args: string[]; body: [stringOrNumber, number, number][]}};// map<name, {args, body}>
+    private hasmain: boolean;
+    private hereaddr: number;
+    private currentToken: number;
+    private tokens: [stringOrNumber, number, number][];
+    private reservedNames = {
         ':=': true,
         '|=': true,
         '&=': true,
@@ -356,14 +257,164 @@ export class Compiler {
         ':call': true
     };
 
-    checkName (name: string, kind: string) {
+    public constructor (source: string) {
+        this.rom = []; // list<int>
+        this.dbginfo = new DebugInfo(source);
+        this.loops = []; // stack<[addr, marker]>
+        this.branches = []; // stack<[addr, marker, type]>
+        this.whiles = []; // stack<int>
+        this.dict = {}; // map<name, addr>
+        this.protos = {}; // map<name, list<addr>>
+        this.longproto = {}; // set<name, true>
+        this.aliases = {}; // map<name, registernum>
+        this.constants = { // map<name, token>
+            'OCTO_KEY_1': 0x1,
+            'OCTO_KEY_2': 0x2,
+            'OCTO_KEY_3': 0x3,
+            'OCTO_KEY_4': 0xC,
+            'OCTO_KEY_Q': 0x4,
+            'OCTO_KEY_W': 0x5,
+            'OCTO_KEY_E': 0x6,
+            'OCTO_KEY_R': 0xD,
+            'OCTO_KEY_A': 0x7,
+            'OCTO_KEY_S': 0x8,
+            'OCTO_KEY_D': 0x9,
+            'OCTO_KEY_F': 0xE,
+            'OCTO_KEY_Z': 0xA,
+            'OCTO_KEY_X': 0x0,
+            'OCTO_KEY_C': 0xB,
+            'OCTO_KEY_V': 0xF
+        };
+        this.macros = {}; // map<name, {args, body}>
+        this.hasmain = true;
+        this.schip = false;
+        this.xo = false;
+        this.breakpoints = {}; // map<address, name>
+        this.hereaddr = 0x200;
+
+        this.pos = null;
+        this.currentToken = 0;
+        this.tokens = tokenize(source);
+    }
+
+    public go (): void {
+        this.aliases['compare-temp'] = 0xE;
+        this.aliases['unpack-hi'] = 0x0;
+        this.aliases['unpack-lo'] = 0x1;
+
+        this.inst(0, 0); // reserve a jump slot
+        while (!this.end()) {
+            if (typeof this.peek() === 'number') {
+                const nn = this.next();
+                if (nn < Int8Min || nn > Int8Max) {
+                    throw Error(`Literal value '${nn}' does not fit in a byte- must be in range [-128, 255].`);
+                }
+                this.data(nn as number);
+            } else {
+                this.instruction(this.next());
+            }
+        }
+        if (this.hasmain == true) {
+            // resolve the main branch
+            this.jump(programEntryAddress, this.wideValue('main'));
+        }
+        const keys = Object.keys(this.protos);
+
+        if (keys.length > 0) {
+            throw Error(`Undefined names: ${keys}`);
+        }
+        if (this.loops.length > 0) {
+            this.pos = this.loops[0][1];
+            throw Error("This 'loop' does not have a matching 'again'.");
+        }
+        if (this.branches.length > 0) {
+            this.pos = this.branches[0][1];
+            throw Error(`This '${this.branches[0][2]}' does not have a matching 'end'.`);
+        }
+        for (let index = 0; index < this.rom.length; index++) {
+            if (typeof this.rom[index] === 'undefined') { this.rom[index] = 0x00; }
+        }
+    }
+
+    private data (a: number): void {
+        if (typeof this.rom[this.hereaddr - programEntryAddress] !== 'undefined') {
+            throw Error('Data overlap. Address ' + hexFormat(this.hereaddr) + ' has already been defined.');
+        }
+        this.rom[this.hereaddr - programEntryAddress] = a & 0xFF;
+        if (this.pos) this.dbginfo.mapAddr(this.hereaddr, Number(this.pos[1]));
+        this.hereaddr++;
+    }
+
+    private end (): boolean { return this.currentToken >= this.tokens.length; }
+    private next (): stringOrNumber { this.pos = this.tokens[this.currentToken++]; return this.pos[0]; }
+    private raw (): stringOrNumber[] { this.pos = this.tokens[this.currentToken++]; return this.pos; }
+    private peek (): stringOrNumber { return this.tokens[this.currentToken][0]; }
+    private here (): number { return this.hereaddr; }
+    private inst (a: number, b: number): void { this.data(a); this.data(b); }
+
+    private immediate (op: number, nnn: number): void {
+        this.inst(op | nnn >> 8 & 0xF, nnn & 0xFF);
+    }
+
+    private fourop (op: number, x: number, y: number, n: number): void {
+        this.inst(op << 4 | x, y << 4 | n & 0xF);
+    }
+    private jump (addr: number, dest: number): void {
+        this.rom[addr - programEntryAddress] = 0x10 | dest >> 8 & 0xF;
+        this.rom[addr - programEntryAddress - 1] = dest & 0xFF;
+    }
+
+    private isRegister (name?: string | number): boolean {
+        if (!name && name != 0) { name = this.peek(); }
+        if (typeof name !== 'string') { return false; }
+        if (name in this.aliases) { return true; }
+        name = name.toUpperCase();
+        if (name.length != 2) { return false; }
+        if (!name.startsWith('V')) { return false; }
+        return '0123456789ABCDEF'.includes(name[1]);
+    }
+
+    private register (name?: stringOrNumber): number {
+        if (!name) { name = this.next(); }
+        if (!this.isRegister(name)) {
+            throw Error(`Expected register, got '${name}'`);
+        }
+        if (name in this.aliases) {
+            return this.aliases[name];
+        }
+        name = (name as string).toUpperCase();
+        return '0123456789ABCDEF'.indexOf(name[1]);
+    }
+
+    private expect (token: string): void {
+        const thing = this.next();
+        if (thing != token) { throw Error(`Expected '${token}', got '${thing}'!`); }
+    }
+
+    private constantValue (): number {
+        let number = this.next();
+        if (typeof number !== 'number') {
+            if (number in this.protos) {
+                throw Error('Constants cannot refer to the address of a forward declaration.');
+            } else if (number in this.dict) {
+                number = this.dict[number];
+            } else if (number in this.constants) {
+                number = this.constants[number];
+            } else { throw Error("Undefined name '" + number + "'."); }
+        }
+        return number;
+    }
+
+    
+
+    private checkName (name: string, kind: string): string {
         if (name in this.reservedNames || name.startsWith('OCTO_')) {
-            throw "The name '" + name + "' is reserved and cannot be used for a " + kind + '.';
+            throw Error("The name '" + name + "' is reserved and cannot be used for a " + kind + '.');
         }
         return name;
     }
 
-    veryWideValue () {
+    private veryWideValue (): number {
         // i := long NNNN
         let nnnn = this.next();
         if (typeof nnnn !== 'number') {
@@ -382,12 +433,12 @@ export class Compiler {
             }
         }
         if (typeof nnnn !== 'number' || nnnn < 0 || nnnn > 0xFFFF) {
-            throw "Value '" + nnnn + "' cannot fit in 16 bits!";
+            throw Error(`Value '${nnnn}' cannot fit in 16 bits!`);
         }
         return nnnn & 0xFFFF;
     }
 
-    wideValue (nnn?: number | string) {
+    private wideValue (nnn?: number | string): number {
         // can be forward references.
         // call, jump, jump0, i:=
         // TODO is & to && correct here?
@@ -406,38 +457,38 @@ export class Compiler {
             }
         }
         if (typeof nnn !== 'number' || nnn < 0 || nnn > 0xFFF) {
-            throw "Value '" + nnn + "' cannot fit in 12 bits!";
+            throw Error(`Value '${nnn}' cannot fit in 12 bits!`);
         }
         return nnn & 0xFFF;
     }
 
-    shortValue (nn?: number | string) {
+    private shortValue (nn?: number | string): number {
         // vx:=, vx+=, vx==, v!=, random
         if (!nn && nn != 0) { nn = this.next(); }
         if (typeof nn !== 'number') {
-            if (nn in this.constants) { nn = this.constants[nn]; } else { throw "Undefined name '" + nn + "'."; }
+            if (nn in this.constants) { nn = this.constants[nn]; } else { throw Error("Undefined name '" + nn + "'."); }
         }
         // silently trim negative numbers, but warn
         // about positive numbers which are too large:
         if (typeof nn !== 'number' || nn < -128 || nn > 255) {
-            throw "Argument '" + nn + "' does not fit in a byte- must be in range [-128, 255].";
+            throw Error(`Argument '${nn}' does not fit in a byte- must be in range [-128, 255].`);
         }
         return nn & 0xFF;
     }
 
-    tinyValue () {
+    private tinyValue (): number {
         // sprite length, unpack high nybble
         let n = this.next();
         if (typeof n !== 'number') {
-            if (n in this.constants) { n = this.constants[n]; } else { throw "Undefined name '" + n + "'."; }
+            if (n in this.constants) { n = this.constants[n]; } else { throw Error("Undefined name '" + n + "'."); }
         }
         if (typeof n !== 'number' || n < 0 || n > 15) {
-            throw "Invalid argument '" + n + "'; must be in range [0,15].";
+            throw Error(`Invalid argument '${n}'; must be in range [0,15].`);
         }
         return n & 0xF;
     }
 
-    conditional (negated: boolean) {
+    private conditional (negated: boolean): void {
         const reg = this.register();
         let token = this.next();
         const compTemp = this.aliases['compare-temp'];
@@ -469,11 +520,11 @@ export class Compiler {
             this.fourop(0x8, compTemp, reg, 0x5); // ve -= v1
             this.inst(0x4F, 1); // if vf != 1 then ...
         } else {
-            throw "Conditional flag expected, got '" + token + '!';
+            throw Error(`Conditional flag expected, got '${token}!`);
         }
     }
 
-    controlToken () {
+    private controlToken (): [stringOrNumber, number, number] {
         // ignore a condition
         const op = this.tokens[this.currentToken + 1][0];
         let index = 3;
@@ -482,7 +533,7 @@ export class Compiler {
         return this.tokens[index + this.currentToken];
     }
 
-    iassign (token: string) {
+    private iassign (token: string): void {
         if (token == ':=') {
             const o = this.next();
             if (o == 'hex') { this.inst(0xF0 | this.register(), 0x29); } else if (o == 'bighex') {
@@ -497,22 +548,22 @@ export class Compiler {
         } else if (token == '+=') {
             this.inst(0xF0 | this.register(), 0x1E);
         } else {
-            throw "The operator '" + token + "' cannot target the i register.";
+            throw Error("The operator '" + token + "' cannot target the i register.");
         }
     }
 
-    vassign (reg: number, token: string) {
+    private vassign (reg: number, token: string): void {
         if (token == ':=') {
             const o = this.next();
             if (this.isRegister(o)) { this.fourop(0x8, reg, this.register(o), 0x0); } else if (o == 'random') { this.inst(0xC0 | reg, this.shortValue()); } else if (o == 'key') { this.inst(0xF0 | reg, 0x0A); } else if (o == 'delay') { this.inst(0xF0 | reg, 0x07); } else { this.inst(0x60 | reg, this.shortValue(o)); }
         } else if (token == '+=') {
             if (this.isRegister()) { this.fourop(0x8, reg, this.register(), 0x4); } else { this.inst(0x70 | reg, this.shortValue()); }
         } else if (token == '|=') { this.fourop(0x8, reg, this.register(), 0x1); } else if (token == '&=') { this.fourop(0x8, reg, this.register(), 0x2); } else if (token == '^=') { this.fourop(0x8, reg, this.register(), 0x3); } else if (token == '-=') { this.fourop(0x8, reg, this.register(), 0x5); } else if (token == '=-') { this.fourop(0x8, reg, this.register(), 0x7); } else if (token == '>>=') { this.fourop(0x8, reg, this.register(), 0x6); } else if (token == '<<=') { this.fourop(0x8, reg, this.register(), 0xE); } else {
-            throw "Unrecognized operator '" + token + "'.";
+            throw Error("Unrecognized operator '" + token + "'.");
         }
     }
 
-    resolveLabel (offset: number) {
+    private resolveLabel (offset: number): void {
         let target = this.here() + offset;
         const label = this.checkName(this.next() as string, 'label');
         if (target == 0x202 && label == 'main') {
@@ -521,23 +572,22 @@ export class Compiler {
             this.hereaddr = 0x200;
             target = this.here();
         }
-        if (label in this.dict) { throw "The name '" + label + "' has already been defined."; }
+        if (label in this.dict) { throw Error("The name '" + label + "' has already been defined."); }
         this.dict[label] = target;
 
         if (label in this.protos) {
-            for (let z = 0; z < this.protos[label].length; z++) {
-                const addr = this.protos[label][z];
+            for (const addr of this.protos[label]) {
                 if (this.longproto[addr]) {
                     // i := long target
                     this.rom[addr - 0x200] = target >> 8 & 0xFF;
                     this.rom[addr - 0x1FF] = target & 0xFF;
                 } else if ((this.rom[addr - 0x200] & 0xF0) == 0x60) {
                     // :unpack target
-                    if ((target & 0xFFF) != target) { throw "Value '" + target + "' for label '" + label + "' cannot not fit in 12 bits!"; }
+                    if ((target & 0xFFF) != target) { throw Error("Value '" + target + "' for label '" + label + "' cannot not fit in 12 bits!"); }
                     this.rom[addr - 0x1FF] = this.rom[addr - 0x1FF] & 0xF0 | target >> 8 & 0xF;
                     this.rom[addr - 0x1FD] = target & 0xFF;
                 } else {
-                    if ((target & 0xFFF) != target) { throw "Value '" + target + "' for label '" + label + "' cannot not fit in 12 bits!"; }
+                    if ((target & 0xFFF) != target) { throw Error("Value '" + target + "' for label '" + label + "' cannot not fit in 12 bits!"); }
                     this.rom[addr - 0x200] = this.rom[addr - 0x200] & 0xF0 | target >> 8 & 0xF;
                     this.rom[addr - 0x1FF] = target & 0xFF;
                 }
@@ -546,25 +596,25 @@ export class Compiler {
         }
     }
 
-    parseTerminal (name: string): number {
+    private parseTerminal (name: string): number {
         // NUMBER | CONSTANT | LABEL | '(' expression ')'
         const x = this.peek();
         if (x == 'PI') { this.next(); return Math.PI; }
         if (x == 'E') { this.next(); return Math.E; }
         if (x == 'HERE') { this.next(); return this.hereaddr; }
-        if (+x == +x) { return +this.next(); }
+        if (Number(x) == Number(x)) { return Number(this.next()); }
         if (x in this.constants) { return this.constants[this.next()]; }
         if (x in this.dict) { return this.dict[this.next()]; }
         if (x in this.protos) {
-            throw "Cannot use forward declaration '" + x + "' in calculated constant '" + name + '".';
+            throw Error(`Cannot use forward declaration '${x}' in calculated constant '${name}".`);
         }
-        if (this.next() != '(') { throw "Undefined constant '" + x + "'."; }
+        if (this.next() != '(') { throw Error(`Undefined constant '${x}'.`); }
         const value = this.parseCalc(name);
-        if (this.next() != ')') { throw "Expected ')' for calculated constant '" + name + "'."; }
+        if (this.next() != ')') { throw Error(`Expected ')' for calculated constant '${name}'.`); }
         return value;
     }
 
-    parseCalc (name: string): number {
+    private parseCalc (name: string): number {
         // UNARY expression | terminal BINARY expression | terminal
         if (this.peek() in unaryFunc) {
             return unaryFunc[this.next()](this.parseCalc(name), this.rom);
@@ -572,19 +622,19 @@ export class Compiler {
         const t = this.parseTerminal(name);
         if (this.peek() in binaryFunc) {
             return binaryFunc[this.next()](t, this.parseCalc(name));
-        } else {
-            return t;
-        }
+        } 
+        return t;
+        
     }
 
-    parseCalculated (name: string): number {
-        if (this.next() != '{') { throw "Expected '{' for calculated constant '" + name + "'."; }
+    private parseCalculated (name: string): number {
+        if (this.next() != '{') { throw Error("Expected '{' for calculated constant '" + name + "'."); }
         const value = this.parseCalc(name);
-        if (this.next() != '}') { throw "Expected '}' for calculated constant '" + name + "'."; }
+        if (this.next() != '}') { throw Error("Expected '}' for calculated constant '" + name + "'."); }
         return value;
     }
 
-    instruction (token: stringOrNumber) {
+    private instruction (token: stringOrNumber): void {
         if (token == ':') { this.resolveLabel(0); } else if (token == ':next') { this.resolveLabel(1); } else if (token == ':unpack') {
             const v = this.tinyValue();
             const a = this.wideValue();
@@ -592,16 +642,16 @@ export class Compiler {
             this.inst(0x60 | this.aliases['unpack-lo'], a);
         } else if (token == ':breakpoint') { this.breakpoints[this.here()] = this.next() as string; } else if (token == ':proto') { this.next(); } // deprecated.
         else if (token == ':alias') { this.aliases[this.checkName(this.next() as string, 'alias')] = this.register(); } else if (token == ':const') {
-            var name = this.checkName(this.next() as string, 'constant');
-            if (name in this.constants) { throw "The name '" + name + "' has already been defined."; }
+            const name = this.checkName(this.next() as string, 'constant');
+            if (name in this.constants) { throw Error("The name '" + name + "' has already been defined."); }
             this.constants[name] = this.constantValue();
         } else if (token == ':macro') {
-            var name = this.checkName(this.next() as string, 'macro');
+            const name = this.checkName(this.next() as string, 'macro');
             const args = [];
             while (this.peek() != '{' && !this.end()) {
                 args.push(this.checkName(this.next() as string, 'macro argument'));
             }
-            if (this.next() != '{') { throw "Expected '{' for definition of macro '" + name + "'."; }
+            if (this.next() != '{') { throw Error("Expected '{' for definition of macro '" + name + "'."); }
             const body = [];
             let depth = 1;
             while (!this.end()) {
@@ -610,16 +660,16 @@ export class Compiler {
                 if (depth == 0) { break; }
                 body.push(this.raw());
             }
-            if (this.next() != '}') { throw "Expected '}' for definition of macro '" + name + "'."; }
+            if (this.next() != '}') { throw Error("Expected '}' for definition of macro '" + name + "'."); }
             this.macros[name] = { args: args, body: body as any };
         } else if (token in this.macros) {
             const macro = this.macros[token];
             const bindings: {[binding: string]: stringOrNumber[]} = {};
-            for (var x = 0; x < macro.args.length; x++) {
+            for (const arg of macro.args) {
                 if (this.end()) {
-                    throw "Not enough arguments for expansion of macro '" + token + "'";
+                    throw Error(`Not enough arguments for expansion of macro '${token}'`);
                 }
-                bindings[macro.args[x]] = this.raw();
+                bindings[arg] = this.raw();
             }
             for (var x = 0; x < macro.body.length; x++) {
                 const chunk = macro.body[x];
@@ -661,18 +711,18 @@ export class Compiler {
                 this.inst(0x00, 0x00);
             } else {
                 this.pos = control;
-                throw "Expected 'then' or 'begin'.";
+                throw Error("Expected 'then' or 'begin'.");
             }
         } else if (token == 'else') {
             if (this.branches.length < 1) {
-                throw "This 'else' does not have a matching 'begin'.";
+                throw Error("This 'else' does not have a matching 'begin'.");
             }
             this.jump(this.branches.pop()![0], this.here() + 2);
             this.branches.push([this.here(), this.pos as any, 'else']);
             this.inst(0x00, 0x00);
         } else if (token == 'end') {
             if (this.branches.length < 1) {
-                throw "This 'end' does not have a matching 'begin'.";
+                throw Error("This 'end' does not have a matching 'begin'.");
             }
             this.jump(this.branches.pop()![0], this.here());
         } else if (token == 'jump0') { this.immediate(0xB0, this.wideValue()); } else if (token == 'jump') { this.immediate(0x10, this.wideValue()); } else if (token == 'native') { this.immediate(0x00, this.wideValue()); } else if (token == 'sprite') {
@@ -686,14 +736,14 @@ export class Compiler {
             this.whiles.push(null);
         } else if (token == 'while') {
             if (this.loops.length < 1) {
-                throw "This 'while' is not within a loop.";
+                throw Error("This 'while' is not within a loop.");
             }
             this.conditional(true);
             this.whiles.push(this.here());
             this.immediate(0x10, 0);
         } else if (token == 'again') {
             if (this.loops.length < 1) {
-                throw "This 'again' does not have a matching 'loop'.";
+                throw Error("This 'again' does not have a matching 'loop'.");
             }
             this.immediate(0x10, this.loops.pop()![0]);
             while (this.whiles[this.whiles.length - 1] != null) {
@@ -702,7 +752,7 @@ export class Compiler {
             this.whiles.pop();
         } else if (token == 'plane') {
             const plane = this.tinyValue();
-            if (plane > 3) { throw 'the plane bitmask must be [0, 3].'; }
+            if (plane > 3) { throw Error('the plane bitmask must be [0, 3].'); }
             this.xo = true;
             this.inst(0xF0 | plane, 0x01);
         } else if (token == 'audio') {
@@ -710,12 +760,12 @@ export class Compiler {
             this.inst(0xF0, 0x02);
         } else if (token == 'scroll-down') { this.schip = true; this.inst(0x00, 0xC0 | this.tinyValue()); } else if (token == 'scroll-up') { this.xo = true; this.inst(0x00, 0xD0 | this.tinyValue()); } else if (token == 'scroll-right') { this.schip = true; this.inst(0x00, 0xFB); } else if (token == 'scroll-left') { this.schip = true; this.inst(0x00, 0xFC); } else if (token == 'exit') { this.schip = true; this.inst(0x00, 0xFD); } else if (token == 'lores') { this.schip = true; this.inst(0x00, 0xFE); } else if (token == 'hires') { this.schip = true; this.inst(0x00, 0xFF); } else if (token == 'saveflags') {
             var flags = this.register();
-            if (flags > 7) { throw 'saveflags argument must be v[0,7].'; }
+            if (flags > 7) { throw Error('saveflags argument must be v[0,7].'); }
             this.schip = true;
             this.inst(0xF0 | flags, 0x75);
         } else if (token == 'loadflags') {
             var flags = this.register();
-            if (flags > 7) { throw 'loadflags argument must be v[0,7].'; }
+            if (flags > 7) { throw Error('loadflags argument must be v[0,7].'); }
             this.schip = true;
             this.inst(0xF0 | flags, 0x85);
         } else if (token == 'i') {
@@ -729,45 +779,5 @@ export class Compiler {
         }
     }
 
-    go () {
-        this.aliases['compare-temp'] = 0xE;
-        this.aliases['unpack-hi'] = 0x0;
-        this.aliases['unpack-lo'] = 0x1;
 
-        this.inst(0, 0); // reserve a jump slot
-        while (!this.end()) {
-            if (typeof this.peek() === 'number') {
-                const nn = this.next();
-                if (nn < -128 || nn > 255) {
-                    throw "Literal value '" + nn + "' does not fit in a byte- must be in range [-128, 255].";
-                }
-                this.data(nn as number);
-            } else {
-                this.instruction(this.next());
-            }
-        }
-        if (this.hasmain == true) {
-            // resolve the main branch
-            this.jump(0x200, this.wideValue('main'));
-        }
-        const keys = [];
-        for (const k in this.protos) { keys.push(k); }
-        if (keys.length > 0) {
-            throw 'Undefined names: ' + keys;
-        }
-        if (this.loops.length > 0) {
-            this.pos = this.loops[0][1];
-            throw "This 'loop' does not have a matching 'again'.";
-        }
-        if (this.branches.length > 0) {
-            this.pos = this.branches[0][1];
-            throw "This '" + this.branches[0][2] + "' does not have a matching 'end'.";
-        }
-        for (let index = 0; index < this.rom.length; index++) {
-            if (typeof this.rom[index] === 'undefined') { this.rom[index] = 0x00; }
-        }
-    }
 }
-
-// TODO fix
-// this.Compiler = Compiler as any;

@@ -33,7 +33,7 @@ function dumpRegisters (showV: boolean, name: string) {
     const register = (n: string, v: number, f: (addr: any, reg?: any, raw?: any) => string) => line(n + ' := ' + numericFormat(v, regNumFormat[n || 'hex']) + ' ' + f(v, n), 'cycleNumFormat(\'' + n + '\')');
     const aliases = (_addr: number, reg: number[]) => { // TODO fix addr?
         const a = emulator.metadata.aliases;
-        const r = +('0x' + reg.slice(1));
+        const r = Number('0x' + reg.slice(1));
         const n = Object.keys(a).filter(k => a[k] == r).join(', ');
         return n.length ? '(' + n + ')' : '';
     };

@@ -474,9 +474,9 @@ export class Emulator implements EmulatorOptions {
                 var dist = Math.abs(x - y);
                 if (x < y) { for (var z = 0; z <= dist; z++) { this.v[x + z] = this.m[this.i + z]; } } else { for (var z = 0; z <= dist; z++) { this.v[x - z] = this.m[this.i + z]; } }
                 return;
-            } else {
-                haltBreakpoint('unknown opcode ' + op);
-            }
+            } 
+            haltBreakpoint('unknown opcode ' + op);
+            
         }
         if (o == 0x9 && n != 0) {
             haltBreakpoint('unknown opcode ' + op);

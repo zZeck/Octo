@@ -14,7 +14,7 @@ enum CompatibilityProfileFlags {
 
 // TODO fix | 'none' hack?
 const compatProfile = radioBar<CompatibilityProfileFlags | 'none'>(document.getElementById('compatibility-profile')!, CompatibilityProfileFlags.octo, setCompatibilityProfile);
-const screenRotation = radioBar<number>(document.getElementById('screen-rotation')!, 0, (x: number) => emulator.screenRotation = +x);
+const screenRotation = radioBar<number>(document.getElementById('screen-rotation')!, 0, (x: number) => emulator.screenRotation = Number(x));
 
 type CompatibilityProfiles = {
     [key in CompatibilityProfileFlags]: CompatibilityProfile;

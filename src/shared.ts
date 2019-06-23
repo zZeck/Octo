@@ -80,7 +80,7 @@ function getTransform (emulator: Emulator, g: CanvasRenderingContext2D) {
             g.translate(0, -y);
             break;
         case 180:
-            g.rotate(1.0 * Math.PI);
+            g.rotate(Number(Math.PI));
             g.translate(-x, -y);
             break;
         case 270:
