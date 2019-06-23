@@ -240,10 +240,10 @@ export function compile (): RomData | null {
         writeBytes(output, null, c.rom);
         const maxRom = emulator.maxSize;
         if (c.rom.length > maxRom) {
-            throw 'Rom is too large- ' + (c.rom.length - maxRom) + ' bytes over!';
+            throw Error(`Rom is too large- ${(c.rom.length - maxRom)} bytes over!`);
         }
         setStatusMessage(
-            c.rom.length + ' bytes, ' + (maxRom - c.rom.length) + ' free.' +
+            `${c.rom.length} bytes, ${(maxRom - c.rom.length)} free.` +
       (c.schip ? ' (SuperChip instructions used)' : '') +
       (c.xo ? ' (XO-Chip instructions used)' : ''),
             true
@@ -277,7 +277,7 @@ export function compile (): RomData | null {
 const runCover = document.getElementById('run-cover')!;
 let intervalHandle: number | null = null;
 
-export function runRom (rom: RomData) {
+export function runRom (rom: RomData): void {
     if (rom === null) return;
     if (intervalHandle != null) stopRom();
     emulator.exitVector = stopRom;
@@ -290,7 +290,7 @@ export function runRom (rom: RomData) {
     setVisible(runCover, true, 'flex');
     runCover.style.backgroundColor = emulator.quietColor;
     setRenderTarget(5, 'target');
-    intervalHandle = setInterval(() => {
+    intervalHandle = setInterval((): void => {
         for (let z = 0; z < emulator.tickrate && !emulator.waiting; z++) {
             if (!emulator.breakpoint) {
                 if (emulator.vBlankQuirks && (emulator.m[emulator.pc] & 0xF0) == 0xD0) { z = emulator.tickrate; }
@@ -310,7 +310,7 @@ export function runRom (rom: RomData) {
     }, 1000 / 60) as unknown as number; // TODO fix to be Timeout type?
 }
 
-function stopRom () {
+function stopRom (): void {
     emulator.halted = true;
     setVisible(runCover, false);
     window.clearInterval(intervalHandle!);

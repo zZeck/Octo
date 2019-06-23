@@ -7,6 +7,7 @@
 //
 /// /////////////////////////////////
 import { numericFormat, maskFormat, hexFormat } from './util';
+import { programEntryAddress } from './compiler';
 
 let LOAD_STORE_QUIRKS = false; // ignore i increment with loads
 let SHIFT_QUIRKS = false; // shift vx in place, ignore vy
@@ -225,12 +226,11 @@ function copyReachingSet (source: {[register: string]: {[reg: string]: boolean}}
     };
 } {
     const ret: {[registerName: string]: {[key: string]: boolean}} = {};
-    for (let z = 0; z < regNames.length; z++) {
-        const register = regNames[z] as string;
+    for (const register of regNames) {
         ret[register] = {};
         const values = Object.keys(source[register]);
-        for (let vindex = 0; vindex < values.length; vindex++) {
-            ret[register][values[vindex]] = true;
+        for (const value of values) {
+            ret[register][value] = true;
         }
     }
     return ret;
@@ -256,18 +256,23 @@ function singleResult (address: number): string {
     return ' # result is always ' + numericFormat(parseInt(vals[0]));
 }
 
-function apply (address: number) {
+function apply (address: number): {
+    [registerName: string]: {
+        [key: string]: boolean;
+    };
+} {
     // apply this instruction to the reaching set
     // producing a successor reaching set.
 
     // flag this address as executable
-    function setType (address: number, desired: string) {
-        const t = type[address];
+    function setType (typeAddress: number, typeDesired: string): void {
+        const t = type[typeAddress];
+        let desired = typeDesired;
         if (desired == 'code' && t == 'smc') { return; }
         if (desired == 'data' && t == 'smc') { return; }
         if (desired == 'code' && t == 'data') { desired = 'smc'; }
         if (desired == 'data' && t == 'code') { desired = 'smc'; }
-        type[address] = desired;
+        type[typeAddress] = desired;
     }
     setType(address, 'code');
     setType(address + 1, 'code');
@@ -308,29 +313,37 @@ function apply (address: number) {
     }
 
     // helper routines:
-    function iota (max: number) {
+    function iota (max: number): {
+        [key: number]: boolean;
+    } {
         const i: {[key: number]: boolean} = {};
         for (let z = 0; z <= max; z++) { i[z] = true; }
         return i;
     }
-    function maskedrand () {
+    function maskedrand (): {
+        [key: number]: boolean;
+    } {
         const i: {[key: number]: boolean} = {};
         for (let z = 0; z <= 0xFF; z++) { i[z & nn] = true; }
         return i;
     }
-    function single (value: number) {
+    function single (value: number): {
+        [key: number]: boolean;
+    } {
         const s: {[key: number]: boolean} = {};
         s[value] = true;
         return s;
     }
-    function unary (unop: (x: number) => number) {
+    function unary (unop: (x: number) => number): {
+        [key: number]: boolean;
+    } {
         const r: {[key: number]: boolean} = {};
         for (const a in ret[x]) {
             r[unop(parseInt(a)) & 0xFF] = true;
         }
         return r;
     }
-    function binary (binop: (x: number, y: number) => number) {
+    function binary (binop: (x: number, y: number) => number): void {
         const r: {[key: number]: boolean} = {};
         if (x == y) {
             for (var a in ret[x]) {
@@ -346,10 +359,10 @@ function apply (address: number) {
         }
         ret[x] = r;
     }
-    function capi (i: number) {
-        return Math.min(i, romsize + 1 + 0x200);
+    function capi (i: number): number {
+        return Math.min(i, romsize + 1 + programEntryAddress);
     }
-    function ioffset (delta: number) {
+    function ioffset (delta: number): void {
         if (LOAD_STORE_QUIRKS) { return; }
         const s: {[key: number]: boolean} = {};
         for (const a in ret['i']) {
@@ -357,12 +370,16 @@ function apply (address: number) {
         }
         ret['i'] = s;
     }
-    function isingle (value: number) {
+    function isingle (value: number): {
+        [key: number]: boolean;
+    } {
         value = capi(value);
         const s: {[key: number]: boolean} = {}; s[value] = true;
         return s;
     }
-    function ioffsets () {
+    function ioffsets (): {
+        [key: number]: boolean;
+    } {
         const s: {[key: number]: boolean} = {};
         for (const a in ret['i']) {
             for (const b in ret[x]) {
@@ -371,7 +388,7 @@ function apply (address: number) {
         }
         return s;
     }
-    function bincarry (binop: (x: number, y: number) => number[]) {
+    function bincarry (binop: (x: number, y: number) => number[]): void {
         const r: {[key: number]: boolean} = {};
         const c: {[key: number]: boolean} = {};
         if (x == y) {
@@ -398,7 +415,9 @@ function apply (address: number) {
             ret[0xF] = c;
         }
     }
-    function chaseReturns () {
+    function chaseReturns (): {
+        [key: string]: boolean;
+    } {
         const destinations: {[key: string]: boolean} = {};
         for (const rsource in ret['rets']) {
             for (const rdest in reaching[parseInt(rsource) - 2]['rets']) {
@@ -407,7 +426,7 @@ function apply (address: number) {
         }
         return destinations;
     }
-    function markRead (size: number, offset?: number) {
+    function markRead (size: number, offset?: number): void {
         if (!offset) { offset = 0; }
         for (const w in ret['i']) {
             const addr = parseInt(w) + offset;
@@ -416,7 +435,7 @@ function apply (address: number) {
             }
         }
     }
-    function markWrite (size: number, offset?: number) {
+    function markWrite (size: number, offset?: number): void {
         // todo: distinguish read-only/read-write data?
         markRead(size, offset);
     }
@@ -427,16 +446,16 @@ function apply (address: number) {
     if (op == 0x00EE) { ret['rets'] = chaseReturns(); } // return
     if (o == 0x2) { ret['rets'] = single(address + 2); } // call
     if (o == 0x6) { ret[x] = single(nn); } // vx := nn
-    if (o == 0x7) { ret[x] = unary(function (a) { return a + nn; }); } // vx += nn
-    if (o == 0x8 && n == 0x0) { binary(function (_a, b) { return b; }); } // vx := vy //TODO fix _a?
-    if (o == 0x8 && n == 0x1) { binary(function (a, b) { return a | b; }); } // vx |= vy
-    if (o == 0x8 && n == 0x2) { binary(function (a, b) { return a & b; }); } // vx &= vy
-    if (o == 0x8 && n == 0x3) { binary(function (a, b) { return a ^ b; }); } // vx ^= vy
-    if (o == 0x8 && n == 0x4) { bincarry(function (a, b) { return [a + b, Number(a + b > 0xFF)]; }); } // TODO is this a bug?
-    if (o == 0x8 && n == 0x5) { bincarry(function (a, b) { return [a - b, Number(a >= b)]; }); }
-    if (o == 0x8 && n == 0x6) { bincarry(function (_a, b) { return [b >> 1, b & 1]; }); }// TODO fix _a?
-    if (o == 0x8 && n == 0x7) { bincarry(function (a, b) { return [b - a, Number(b >= a)]; }); }
-    if (o == 0x8 && n == 0xE) { bincarry(function (_a, b) { return [b << 1, b & 128]; }); }// TODO fix _a?
+    if (o == 0x7) { ret[x] = unary(function (a): number { return a + nn; }); } // vx += nn
+    if (o == 0x8 && n == 0x0) { binary(function (_a, b): number { return b; }); } // vx := vy //TODO fix _a?
+    if (o == 0x8 && n == 0x1) { binary(function (a, b): number { return a | b; }); } // vx |= vy
+    if (o == 0x8 && n == 0x2) { binary(function (a, b): number { return a & b; }); } // vx &= vy
+    if (o == 0x8 && n == 0x3) { binary(function (a, b): number { return a ^ b; }); } // vx ^= vy
+    if (o == 0x8 && n == 0x4) { bincarry(function (a, b): number { return [a + b, Number(a + b > 0xFF)]; }); } // TODO is this a bug?
+    if (o == 0x8 && n == 0x5) { bincarry(function (a, b): number { return [a - b, Number(a >= b)]; }); }
+    if (o == 0x8 && n == 0x6) { bincarry(function (_a, b): number { return [b >> 1, b & 1]; }); }// TODO fix _a?
+    if (o == 0x8 && n == 0x7) { bincarry(function (a, b): number { return [b - a, Number(b >= a)]; }); }
+    if (o == 0x8 && n == 0xE) { bincarry(function (_a, b): number { return [b << 1, b & 128]; }); }// TODO fix _a?
     if (o == 0xA) { ret['i'] = isingle(nnn); } // i := nnn
     if (o == 0xC) { ret[x] = maskedrand(); } // vx := random nn
     if (o == 0xF && nn == 0x01) { ret['plane'] = single(x); } // plane n
@@ -468,8 +487,8 @@ function apply (address: number) {
         // load vx
         // todo: model written sets so that
         // load results can be more precise?
-        var all = iota(0xFF);
-        for (var z = 0; z <= x; z++) { ret[z] = all; }
+        const all = iota(0xFF);
+        for (let z = 0; z <= x; z++) { ret[z] = all; }
         markRead(x);
         ioffset(x);
     }
@@ -815,10 +834,3 @@ export function formatProgram (programSize: number) {
 
     return ret;
 }
-
-// TODO no longer needed because of imports?
-/* this.analyze       = analyze;
-this.analyzeInit   = analyzeInit;
-this.analyzeWork   = analyzeWork;
-this.analyzeFinish = analyzeFinish;
-this.formatProgram = formatProgram; */

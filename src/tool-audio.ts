@@ -14,19 +14,19 @@ const audioToneCanvas = document.getElementById('audio-tone-view') as HTMLCanvas
 const PATTERN_SIZE = 16;
 const PATTERN_SCALE = 2;
 const emptySound = range(PATTERN_SIZE).map(() => 0);
-function readPattern (source: Editor) { return readBytes(source, PATTERN_SIZE); }
-function writePattern (target: Editor, bytes: number[]) { return writeBytes(target, PATTERN_SIZE, bytes); }
+function readPattern (source: Editor): number[] { return readBytes(source, PATTERN_SIZE); }
+function writePattern (target: Editor, bytes: number[]): void { return writeBytes(target, PATTERN_SIZE, bytes); }
 writePattern(audioPatternEditor, emptySound);
 writePattern(audioBlendEditor, emptySound);
 
-function shiftBytes (bytes: number[], n: number) {
+function shiftBytes (bytes: number[], n: number): number[] {
     const r = bytes.map(x => x);
     for (let x = 0; x < bytes.length * 8; x++) {
         setBit(r, x, getBit(bytes, mod(x + n, bytes.length * 8)));
     }
     return r;
 }
-function drawBytes (target: HTMLCanvasElement, bytes: number[]) {
+function drawBytes (target: HTMLCanvasElement, bytes: number[]): void {
     const w = target.width;
     const h = target.height;
     const g = target.getContext('2d')!;
@@ -39,7 +39,7 @@ function drawBytes (target: HTMLCanvasElement, bytes: number[]) {
         g.fillRect(z * PATTERN_SCALE, 0, PATTERN_SCALE * (bytes[a] >> b & 1), 32);
     });
 }
-function generateFrequency (frequency: number, cutoff: number) {
+function generateFrequency (frequency: number, cutoff: number): number[] {
     const w = audioToneCanvas.width;
     const h = audioToneCanvas.height;
     const g = audioToneCanvas.getContext('2d')!;
@@ -74,7 +74,7 @@ function generateFrequency (frequency: number, cutoff: number) {
 * Pattern panel
 **/
 
-drawOnCanvas(audioPatternCanvas, (x: number, _y: number, draw: boolean) => { // TODO unused?
+drawOnCanvas(audioPatternCanvas, (x: number, _y: number, draw: boolean): void => { // TODO unused?
     const index = Math.min(PATTERN_SIZE * 8, Math.max(0, Math.floor(x / PATTERN_SCALE)));
     const pattern = readPattern(audioPatternEditor);
     setBit(pattern, index, draw);
@@ -82,30 +82,30 @@ drawOnCanvas(audioPatternCanvas, (x: number, _y: number, draw: boolean) => { // 
     updateAudio();
 });
 
-document.getElementById('audio-play')!.onclick = () => {
+document.getElementById('audio-play')!.onclick = (): void => {
     if (audioSetup()) {
         playPattern(30, readPattern(audioPatternEditor));// TODO correct to have missing param?
     } else {
         document.getElementById('audio-error')!.innerHTML = 'Your browser does not support HTML5 Audio!';
     }
 };
-document.getElementById('audio-random')!.onclick = () => {
+document.getElementById('audio-random')!.onclick = (): void => {
     writePattern(audioPatternEditor, emptySound.map(() => Math.random() * 256 & 0xFF));
     updateAudio();
 };
-document.getElementById('audio-clear')!.onclick = () => {
+document.getElementById('audio-clear')!.onclick = (): void => {
     writePattern(audioPatternEditor, emptySound);
     updateAudio();
 };
-document.getElementById('audio-left')!.onclick = () => {
+document.getElementById('audio-left')!.onclick = (): void => {
     writePattern(audioPatternEditor, shiftBytes(readPattern(audioPatternEditor), 1));
     updateAudio();
 };
-document.getElementById('audio-right')!.onclick = () => {
+document.getElementById('audio-right')!.onclick = (): void => {
     writePattern(audioPatternEditor, shiftBytes(readPattern(audioPatternEditor), -1));
     updateAudio();
 };
-document.getElementById('audio-not')!.onclick = () => {
+document.getElementById('audio-not')!.onclick = (): void => {
     writePattern(audioPatternEditor, readPattern(audioPatternEditor).map(a => ~a));
     updateAudio();
 };
@@ -114,7 +114,7 @@ document.getElementById('audio-not')!.onclick = () => {
 * Blend panel
 **/
 
-document.getElementById('audio-and')!.onclick = () => {
+document.getElementById('audio-and')!.onclick = (): void => {
     writePattern(audioPatternEditor, zip(
         readPattern(audioPatternEditor),
         readPattern(audioBlendEditor),
@@ -122,7 +122,7 @@ document.getElementById('audio-and')!.onclick = () => {
     ));
     updateAudio();
 };
-document.getElementById('audio-or')!.onclick = () => {
+document.getElementById('audio-or')!.onclick = (): void => {
     writePattern(audioPatternEditor, zip(
         readPattern(audioPatternEditor),
         readPattern(audioBlendEditor),
@@ -130,7 +130,7 @@ document.getElementById('audio-or')!.onclick = () => {
     ));
     updateAudio();
 };
-document.getElementById('audio-xor')!.onclick = () => {
+document.getElementById('audio-xor')!.onclick = (): void => {
     writePattern(audioPatternEditor, zip(
         readPattern(audioPatternEditor),
         readPattern(audioBlendEditor),
@@ -138,7 +138,7 @@ document.getElementById('audio-xor')!.onclick = () => {
     ));
     updateAudio();
 };
-document.getElementById('audio-swap')!.onclick = () => {
+document.getElementById('audio-swap')!.onclick = (): void => {
     const a = readPattern(audioPatternEditor);
     const b = readPattern(audioBlendEditor);
     writePattern(audioPatternEditor, b);
@@ -153,7 +153,7 @@ document.getElementById('audio-swap')!.onclick = () => {
 const audioFreq = document.getElementById('audio-freq') as HTMLInputElement;
 const audioCutoff = document.getElementById('audio-cutoff') as HTMLInputElement;
 
-function updateAudioTone () {
+function updateAudioTone (): void {
     writePattern(audioToneEditor, generateFrequency(
         Number(audioFreq.value) || 0,
         Number(audioCutoff.value) || 0
@@ -166,11 +166,19 @@ audioFreq.onkeyup = updateAudioTone;
 audioCutoff.onchange = updateAudioTone;
 audioCutoff.onkeyup = updateAudioTone;
 
-document.getElementById('audio-toblend')!.onclick = () => {
+export function updateAudio (): void {
+    audioPatternEditor.refresh();
+    audioBlendEditor.refresh();
+    audioToneEditor.refresh();
+    drawBytes(audioPatternCanvas, readPattern(audioPatternEditor));
+    updateAudioTone();
+}
+
+document.getElementById('audio-toblend')!.onclick = (): void => {
     writePattern(audioBlendEditor, readPattern(audioToneEditor));
     updateAudio();
 };
-document.getElementById('audio-topat')!.onclick = () => {
+document.getElementById('audio-topat')!.onclick = (): void => {
     writePattern(audioPatternEditor, readPattern(audioToneEditor));
     updateAudio();
 };
@@ -179,11 +187,5 @@ document.getElementById('audio-topat')!.onclick = () => {
 * Main
 **/
 
-export function updateAudio () {
-    audioPatternEditor.refresh();
-    audioBlendEditor.refresh();
-    audioToneEditor.refresh();
-    drawBytes(audioPatternCanvas, readPattern(audioPatternEditor));
-    updateAudioTone();
-}
+
 audioPatternEditor.on('change', updateAudio);

@@ -84,7 +84,7 @@
         "@typescript-eslint/member-ordering": "error",
         "@typescript-eslint/no-extra-parens": ["error"],
         "@typescript-eslint/no-for-in-array": "error",
-        "@typescript-eslint/no-magic-numbers": ["error", { "ignoreNumericLiteralTypes": true, "ignore": [-1, 0, 1], "enforceConst": true }],
+        
         "@typescript-eslint/no-require-imports": "error",
         "@typescript-eslint/no-this-alias": ["error"],
         "@typescript-eslint/no-useless-constructor": "error",
@@ -103,7 +103,8 @@
               "ignoreStatic": true
             }
           ],
-        "@typescript-eslint/unified-signatures": "error"
+        "@typescript-eslint/unified-signatures": "error",
+        "@typescript-eslint/no-non-null-assertion": "off"
 
     }
     

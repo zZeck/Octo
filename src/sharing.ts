@@ -48,6 +48,7 @@ const placeholderProgram = `# Chip8 is a virtual machine designed in 1977 for pr
 **/
 
 let lastLoadedKey: string | null = null;
+//TODO change this url
 const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/';
 
 export function share () {

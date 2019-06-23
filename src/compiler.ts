@@ -123,7 +123,7 @@ export class DebugInfo {
     }
 }
 
-const programEntryAddress = 0x200;
+export const programEntryAddress = 0x200;
 
 const unaryFunc: {[func: string]: (x: number, m: number[]) => number} = {
     '-': function (x: number): number { return -x; },
@@ -365,25 +365,27 @@ export class Compiler {
     }
 
     private isRegister (name?: string | number): boolean {
-        if (!name && name != 0) { name = this.peek(); }
-        if (typeof name !== 'string') { return false; }
-        if (name in this.aliases) { return true; }
-        name = name.toUpperCase();
-        if (name.length != 2) { return false; }
-        if (!name.startsWith('V')) { return false; }
-        return '0123456789ABCDEF'.includes(name[1]);
+        let normalizedName = name;
+        if (!normalizedName && normalizedName != 0) { normalizedName = this.peek(); }
+        if (typeof normalizedName !== 'string') { return false; }
+        if (normalizedName in this.aliases) { return true; }
+        normalizedName = normalizedName.toUpperCase();
+        if (normalizedName.length != 2) { return false; }
+        if (!normalizedName.startsWith('V')) { return false; }
+        return '0123456789ABCDEF'.includes(normalizedName[1]);
     }
 
     private register (name?: stringOrNumber): number {
-        if (!name) { name = this.next(); }
-        if (!this.isRegister(name)) {
-            throw Error(`Expected register, got '${name}'`);
+        let normalizedName = name;
+        if (!normalizedName) { normalizedName = this.next(); }
+        if (!this.isRegister(normalizedName)) {
+            throw Error(`Expected register, got '${normalizedName}'`);
         }
-        if (name in this.aliases) {
-            return this.aliases[name];
+        if (normalizedName in this.aliases) {
+            return this.aliases[normalizedName];
         }
-        name = (name as string).toUpperCase();
-        return '0123456789ABCDEF'.indexOf(name[1]);
+        normalizedName = (normalizedName as string).toUpperCase();
+        return '0123456789ABCDEF'.indexOf(normalizedName[1]);
     }
 
     private expect (token: string): void {
@@ -442,38 +444,40 @@ export class Compiler {
         // can be forward references.
         // call, jump, jump0, i:=
         // TODO is & to && correct here?
-        if (!nnn && nnn != 0) { nnn = this.next(); }
-        if (typeof nnn !== 'number') {
-            if (nnn in this.constants) {
-                nnn = this.constants[nnn];
-            } else if (nnn in this.protos) {
-                this.protos[nnn].push(this.here());
-                nnn = 0;
-            } else if (nnn in this.dict) {
-                nnn = this.dict[nnn];
+        let value = nnn;
+        if (!value && value != 0) { value = this.next(); }
+        if (typeof value !== 'number') {
+            if (value in this.constants) {
+                value = this.constants[value];
+            } else if (value in this.protos) {
+                this.protos[value].push(this.here());
+                value = 0;
+            } else if (value in this.dict) {
+                value = this.dict[value];
             } else {
-                this.protos[this.checkName(nnn, 'label')] = [this.here()];
-                nnn = 0;
+                this.protos[this.checkName(value, 'label')] = [this.here()];
+                value = 0;
             }
         }
-        if (typeof nnn !== 'number' || nnn < 0 || nnn > 0xFFF) {
-            throw Error(`Value '${nnn}' cannot fit in 12 bits!`);
+        if (typeof value !== 'number' || value < 0 || value > 0xFFF) {
+            throw Error(`Value '${value}' cannot fit in 12 bits!`);
         }
-        return nnn & 0xFFF;
+        return value & 0xFFF;
     }
 
     private shortValue (nn?: number | string): number {
+        let processedByte = nn;
         // vx:=, vx+=, vx==, v!=, random
-        if (!nn && nn != 0) { nn = this.next(); }
-        if (typeof nn !== 'number') {
-            if (nn in this.constants) { nn = this.constants[nn]; } else { throw Error("Undefined name '" + nn + "'."); }
+        if (!processedByte && processedByte != 0) { processedByte = this.next(); }
+        if (typeof processedByte !== 'number') {
+            if (processedByte in this.constants) { processedByte = this.constants[processedByte]; } else { throw Error("Undefined name '" + processedByte + "'."); }
         }
         // silently trim negative numbers, but warn
         // about positive numbers which are too large:
-        if (typeof nn !== 'number' || nn < -128 || nn > 255) {
-            throw Error(`Argument '${nn}' does not fit in a byte- must be in range [-128, 255].`);
+        if (typeof processedByte !== 'number' || processedByte < -128 || processedByte > 255) {
+            throw Error(`Argument '${processedByte}' does not fit in a byte- must be in range [-128, 255].`);
         }
-        return nn & 0xFF;
+        return processedByte & 0xFF;
     }
 
     private tinyValue (): number {
@@ -583,11 +587,11 @@ export class Compiler {
                     this.rom[addr - 0x1FF] = target & 0xFF;
                 } else if ((this.rom[addr - 0x200] & 0xF0) == 0x60) {
                     // :unpack target
-                    if ((target & 0xFFF) != target) { throw Error("Value '" + target + "' for label '" + label + "' cannot not fit in 12 bits!"); }
+                    if ((target & 0xFFF) != target) { throw Error(`Value '${target}' for label '${label}' cannot not fit in 12 bits!`); }
                     this.rom[addr - 0x1FF] = this.rom[addr - 0x1FF] & 0xF0 | target >> 8 & 0xF;
                     this.rom[addr - 0x1FD] = target & 0xFF;
                 } else {
-                    if ((target & 0xFFF) != target) { throw Error("Value '" + target + "' for label '" + label + "' cannot not fit in 12 bits!"); }
+                    if ((target & 0xFFF) != target) { throw Error(`Value '${target}' for label '${label }' cannot not fit in 12 bits!`); }
                     this.rom[addr - 0x200] = this.rom[addr - 0x200] & 0xF0 | target >> 8 & 0xF;
                     this.rom[addr - 0x1FF] = target & 0xFF;
                 }
@@ -671,18 +675,18 @@ export class Compiler {
                 }
                 bindings[arg] = this.raw();
             }
-            for (var x = 0; x < macro.body.length; x++) {
+            for (let x = 0; x < macro.body.length; x++) {
                 const chunk = macro.body[x];
                 const value = chunk[0] in bindings ? bindings[chunk[0]] : chunk;
                 this.tokens.splice(x + this.currentToken, 0, value as [string | number, number, number]);
             }
         } else if (token == ':calc') {
-            var name = this.checkName(this.next() as string, 'calculated constant');
+            const name = this.checkName(this.next() as string, 'calculated constant');
             this.constants[name] = this.parseCalculated(name);
         } else if (token == ':byte') {
             this.data(this.peek() == '{' ? this.parseCalculated('ANONYMOUS') : this.shortValue());
         } else if (token == ':org') { this.hereaddr = this.constantValue(); } else if (token == ';') { this.inst(0x00, 0xEE); } else if (token == 'return') { this.inst(0x00, 0xEE); } else if (token == 'clear') { this.inst(0x00, 0xE0); } else if (token == 'bcd') { this.inst(0xF0 | this.register(), 0x33); } else if (token == 'save') {
-            var reg = this.register();
+            const reg = this.register();
             if (!this.end() && this.peek() == '-') {
                 this.expect('-');
                 this.xo = true;
@@ -691,7 +695,7 @@ export class Compiler {
                 this.inst(0xF0 | reg, 0x55);
             }
         } else if (token == 'load') {
-            var reg = this.register();
+            const reg = this.register();
             if (!this.end() && this.peek() == '-') {
                 this.expect('-');
                 this.xo = true;
@@ -759,12 +763,12 @@ export class Compiler {
             this.xo = true;
             this.inst(0xF0, 0x02);
         } else if (token == 'scroll-down') { this.schip = true; this.inst(0x00, 0xC0 | this.tinyValue()); } else if (token == 'scroll-up') { this.xo = true; this.inst(0x00, 0xD0 | this.tinyValue()); } else if (token == 'scroll-right') { this.schip = true; this.inst(0x00, 0xFB); } else if (token == 'scroll-left') { this.schip = true; this.inst(0x00, 0xFC); } else if (token == 'exit') { this.schip = true; this.inst(0x00, 0xFD); } else if (token == 'lores') { this.schip = true; this.inst(0x00, 0xFE); } else if (token == 'hires') { this.schip = true; this.inst(0x00, 0xFF); } else if (token == 'saveflags') {
-            var flags = this.register();
+            const flags = this.register();
             if (flags > 7) { throw Error('saveflags argument must be v[0,7].'); }
             this.schip = true;
             this.inst(0xF0 | flags, 0x75);
         } else if (token == 'loadflags') {
-            var flags = this.register();
+            const flags = this.register();
             if (flags > 7) { throw Error('loadflags argument must be v[0,7].'); }
             this.schip = true;
             this.inst(0xF0 | flags, 0x85);

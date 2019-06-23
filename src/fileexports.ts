@@ -7,7 +7,7 @@ import { compile } from './index';
 /// /////////////////////////////////
 
 // TODO is this used?
-export function saveBinaryFile () {
+export function saveBinaryFile (): void {
     // Compile given Octo source and check for error
     const prog = compile();
     if (prog === null) {
@@ -28,7 +28,7 @@ export function saveBinaryFile () {
 //
 /// /////////////////////////////////
 // TODO is this used?
-export function saveSourceFile () {
+export function saveSourceFile (): void {
     const input = document.getElementById('input') as HTMLInputElement;
     const blob = new Blob([input.value], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, 'source.8o');
