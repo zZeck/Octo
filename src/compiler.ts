@@ -1,5 +1,5 @@
 import { hexFormat } from './util';
-import { breakPoints as BreakPoints } from './emulator';
+import { BreakPoints } from './emulator';
 
 /// /////////////////////////////////
 //
@@ -606,7 +606,7 @@ export class Compiler {
         if (x == 'PI') { this.next(); return Math.PI; }
         if (x == 'E') { this.next(); return Math.E; }
         if (x == 'HERE') { this.next(); return this.hereaddr; }
-        if (Number(x) == Number(x)) { return Number(this.next()); }
+        if (isFinite(Number(x))) { return Number(this.next()); }//TODO replaced +x == +x condition. Is this correct?
         if (x in this.constants) { return this.constants[this.next()]; }
         if (x in this.dict) { return this.dict[this.next()]; }
         if (x in this.protos) {
@@ -665,7 +665,7 @@ export class Compiler {
                 body.push(this.raw());
             }
             if (this.next() != '}') { throw Error("Expected '}' for definition of macro '" + name + "'."); }
-            this.macros[name] = { args: args, body: body as any };
+            this.macros[name] = { args: args, body: body as [string | number, number, number][] };
         } else if (token in this.macros) {
             const macro = this.macros[token];
             const bindings: {[binding: string]: stringOrNumber[]} = {};
@@ -711,7 +711,7 @@ export class Compiler {
             } else if (control[0] == 'begin') {
                 this.conditional(true);
                 this.expect('begin');
-                this.branches.push([this.here(), this.pos as any, 'begin']);
+                this.branches.push([this.here(), this.pos as [string | number, number, number], 'begin']);
                 this.inst(0x00, 0x00);
             } else {
                 this.pos = control;
@@ -722,7 +722,7 @@ export class Compiler {
                 throw Error("This 'else' does not have a matching 'begin'.");
             }
             this.jump(this.branches.pop()![0], this.here() + 2);
-            this.branches.push([this.here(), this.pos as any, 'else']);
+            this.branches.push([this.here(), this.pos as [string | number, number, number], 'else']);
             this.inst(0x00, 0x00);
         } else if (token == 'end') {
             if (this.branches.length < 1) {
@@ -750,7 +750,7 @@ export class Compiler {
                 throw Error("This 'again' does not have a matching 'loop'.");
             }
             this.immediate(0x10, this.loops.pop()![0]);
-            while (this.whiles[this.whiles.length - 1] != null) {
+            while (this.whiles[this.whiles.length - 1] !== null) {//TODO replaced != with !==. Is this ever undefined?
                 this.jump(this.whiles.pop()!, this.here());
             }
             this.whiles.pop();

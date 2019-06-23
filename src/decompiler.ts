@@ -338,7 +338,7 @@ function apply (address: number): {
         [key: number]: boolean;
     } {
         const r: {[key: number]: boolean} = {};
-        for (const a in ret[x]) {
+        for (const a of Object.keys(ret[x])) {
             r[unop(parseInt(a)) & 0xFF] = true;
         }
         return r;
@@ -346,13 +346,13 @@ function apply (address: number): {
     function binary (binop: (x: number, y: number) => number): void {
         const r: {[key: number]: boolean} = {};
         if (x == y) {
-            for (let a in ret[x]) {
+            for (const a of Object.keys(ret[x])) {
                 const tmp = parseInt(a);
                 r[binop(tmp, tmp) & 0xFF] = true;
             }
         } else {
-            for (let a in ret[x]) {
-                for (const b in ret[y]) {
+            for (const a of Object.keys(ret[x])) {
+                for (const b of Object.keys(ret[y])) {
                     r[binop(parseInt(a), parseInt(b)) & 0xFF] = true;
                 }
             }
@@ -365,7 +365,7 @@ function apply (address: number): {
     function ioffset (delta: number): void {
         if (LOAD_STORE_QUIRKS) { return; }
         const s: {[key: number]: boolean} = {};
-        for (const a in ret['i']) {
+        for (const a of Object.keys(ret['i'])) {
             s[capi(parseInt(a) + delta)] = true;
         }
         ret['i'] = s;
@@ -381,8 +381,8 @@ function apply (address: number): {
         [key: number]: boolean;
     } {
         const s: {[key: number]: boolean} = {};
-        for (const a in ret['i']) {
-            for (const b in ret[x]) {
+        for (const a of Object.keys(ret['i'])) {
+            for (const b of Object.keys(ret[x])) {
                 s[capi(parseInt(a) + parseInt(b))] = true;
             }
         }
@@ -392,17 +392,17 @@ function apply (address: number): {
         const r: {[key: number]: boolean} = {};
         const c: {[key: number]: boolean} = {};
         if (x == y) {
-            for (var a in ret[x]) {
+            for (const a of Object.keys( ret[x])) {
                 const tmp = parseInt(a);
-                var v = binop(tmp, tmp);
-                r[v[0] & 0xFF ] = true;
+                const v = binop(tmp, tmp);
+                r[v[0] & 0xFF] = true;
                 c[v[1] ? 1 : 0] = true;
             }
         } else {
-            for (var a in ret[x]) {
-                for (const b in ret[y]) {
-                    var v = binop(parseInt(a), parseInt(b));
-                    r[v[0] & 0xFF ] = true;
+            for (const a of Object.keys(ret[x])) {
+                for (const b of Object.keys(ret[y])) {
+                    const v = binop(parseInt(a), parseInt(b));
+                    r[v[0] & 0xFF] = true;
                     c[v[1] ? 1 : 0] = true;
                 }
             }
@@ -419,8 +419,8 @@ function apply (address: number): {
         [key: string]: boolean;
     } {
         const destinations: {[key: string]: boolean} = {};
-        for (const rsource in ret['rets']) {
-            for (const rdest in reaching[parseInt(rsource) - 2]['rets']) {
+        for (const rsource of Object.keys(ret['rets'])) {
+            for (const rdest of Object.keys(reaching[parseInt(rsource) - 2]['rets'])) {
                 destinations[rdest] = true;
             }
         }
@@ -428,7 +428,7 @@ function apply (address: number): {
     }
     function markRead (size: number, offset?: number): void {
         if (!offset) { offset = 0; }
-        for (const w in ret['i']) {
+        for (const w of Object.keys(ret['i'])) {
             const addr = parseInt(w) + offset;
             for (let z = 0; z <= size; z++) {
                 setType(addr + z, 'data');
@@ -462,10 +462,10 @@ function apply (address: number): {
     if (o == 0xF && nn == 0x07) { ret[x] = iota(0xFF); } // vx := delay
     if (o == 0xF && nn == 0x0A) { ret[x] = iota(0xF); } // vx := key
     if (o == 0xF && nn == 0x1E) { ret['i'] = ioffsets(); } // i += vx
-    if (o == 0xF && nn == 0x29) { ret['i'] = unary(function (a) { return 5 * a; }); }
-    if (o == 0xF && nn == 0x30) { ret['i'] = unary(function (a) { return 10 * a + 16 * 5; }); }
-    if (o == 0xF && nn == 0x75) { for (var z = 0; z <= x; z++) { ret['f' + z] = ret[z]; } }
-    if (o == 0xF && nn == 0x85) { for (var z = 0; z <= x; z++) { ret[z] = ret['f' + z]; } }
+    if (o == 0xF && nn == 0x29) { ret['i'] = unary(function (a): number { return 5 * a; }); }
+    if (o == 0xF && nn == 0x30) { ret['i'] = unary(function (a): number { return 10 * a + 16 * 5; }); }
+    if (o == 0xF && nn == 0x75) { for (let z = 0; z <= x; z++) { ret[`f${z}`] = ret[z]; } }
+    if (o == 0xF && nn == 0x85) { for (let z = 0; z <= x; z++) { ret[z] = ret[`f${z}`]; } }
 
     // memory operations:
     if (o == 0xD) {
@@ -528,9 +528,9 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
         // on the reaching set to an address.
         let pass = false;
         let skip = false;
-        for (const vx in reaching[address][x]) {
+        for (const vx of Object.keys(reaching[address][x])) {
             if (pass && skip) { break; }
-            for (const vy in reaching[address][y]) {
+            for (const vy of Object.keys(reaching[address][y])) {
                 if (predicate(parseInt(vx), parseInt(vy), nn)) { skip = true; } else { pass = true; }
             }
         }
@@ -568,7 +568,7 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
     if (op == 0x00EE) {
         // return - follow all valid source addrs.
         const ret = [];
-        for (var v in prevret) {
+        for (const v of Object.keys(prevret)) {
             ret.push(parseInt(v));
         }
         return ret;
@@ -576,7 +576,7 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
     if (o == 0xB) {
         // jump0 - follow all possible targets.
         const ret = [];
-        for (var v in reaching[address][0]) {
+        for (const v of Object.keys(reaching[address][0])) {
             ret.push(nnn + parseInt(v));
         }
         return ret;
@@ -642,9 +642,7 @@ export function analyzeWork (): boolean {
     // apply successor set to children and enlist them
     const children = successors(here, prevret);
 
-    for (let x = 0; x < children.length; x++) {
-        const child = children[x];
-
+    for (const child of children) {
         const isReturn = program[child] == 0x00 && program[child + 1] == 0xEE;
 
         if (child == here && isReturn) {
@@ -709,7 +707,7 @@ export function formatProgram (programSize: number): string {
     // introducing additional padding bytes
     // or lost label declarations.
     function findOutside (source: {[key: number]: number[]}, dest: {[key: number]: boolean}, names: {[key: number]: string}): void {
-        for (const a in source) {
+        for (const a of Object.keys(source)) {
             const addr = parseInt(a);
             if (addr < 0x200 || addr >= 0x200 + programSize) {
                 dest[addr] = true;

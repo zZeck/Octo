@@ -19,7 +19,7 @@ export function gifBuilder (width: number, height: number, colors: number[]): Gi
     const buffer: number[] = [];
     const b = (x?: number): number => buffer.push(x as any & 0xFF); // TODO fix delay?
     const s = (x?: number): void => { b(x); b(x as any >> 8); }; // TODO fix delay?
-    const t = (x: string): void => x.split('').forEach((x: string): number => b(x.charCodeAt(0)));
+    const t = (x: string): void => x.split('').forEach((y: string): number => b(y.charCodeAt(0)));
     const z = Math.ceil(Math.log(colors.length) / Math.log(2));
 
     t('GIF89a'); // header
@@ -75,9 +75,9 @@ export function gifBuilder (width: number, height: number, colors: number[]): Gi
 function paletteToRGB (pal: string[]): number[] {
     // convert CSS colors into packed RGB colors
     const g = document.createElement('canvas').getContext('2d')!;
-    pal.forEach((x, i) => { g.fillStyle = x; g.fillRect(i, 0, 1, 1); });
+    pal.forEach((x, i): void => { g.fillStyle = x; g.fillRect(i, 0, 1, 1); });
     const d = g.getImageData(0, 0, pal.length, 1);
-    return pal.map((_, i) => d.data[i * 4] << 16 | d.data[i * 4 + 1] << 8 | d.data[i * 4 + 2]);
+    return pal.map((_, i): number => d.data[i * 4] << 16 | d.data[i * 4 + 1] << 8 | d.data[i * 4 + 2]);
 }
 
 const runRecord = document.getElementById('run-record') as HTMLImageElement;
@@ -85,15 +85,16 @@ let currentRecording: GifBuilder | null = null;
 let heldFrame: Uint8Array | null = null;
 let heldTicks = 1;
 
+//TODO strict null
 export function recordFrame (): void {
-    if (currentRecording == null) return;
+    if (currentRecording === null) return;
     const last = (document.getElementById(renderTarget) as CanvasWithLastFrame).last;
     if (last != undefined && arrayEqual(last.p[0], emulator.p[0]) && arrayEqual(last.p[1], emulator.p[1])) {
         heldTicks++;
     } else {
-        if (heldFrame != null) currentRecording.frame(heldFrame, heldTicks * 2);
+        if (heldFrame !== null) currentRecording.frame(heldFrame, heldTicks * 2);
         if (emulator.hires) {
-            heldFrame = new Uint8Array(zip(emulator.p[0].slice(0, 128 * 64), emulator.p[1], (a: number, b: number) => a | b << 1));// TODO correct construct call?
+            heldFrame = new Uint8Array(zip(emulator.p[0].slice(0, 128 * 64), emulator.p[1], (a: number, b: number): number => a | b << 1));// TODO correct construct call?
         } else {
             heldFrame = new Uint8Array(range(128 * 64).map((x: number): number => {
                 const i = Math.floor(x % 128 / 2) + 64 * Math.floor(x / 128 / 2);
@@ -105,17 +106,17 @@ export function recordFrame (): void {
 }
 
 runRecord.onclick = (): void => {
-    if (currentRecording == null) {
+    if (currentRecording === null) {//TODO strict null
         runRecord.src = 'images/recording.png';
         const pal = [emulator.backgroundColor, emulator.fillColor, emulator.fillColor2, emulator.blendColor];
         currentRecording = gifBuilder(128, 64, paletteToRGB(pal));
         currentRecording.comment('made with octo on ' + new Date().toISOString());
         currentRecording.loop();
         heldFrame = null;
-        heldTicks = 1,
+        heldTicks = 1;
         (document.getElementById(renderTarget) as CanvasWithLastFrame).last = undefined; // flush repaint buffer
     } else {
-        if (heldFrame != null) currentRecording.frame(heldFrame, heldTicks * 2);
+        if (heldFrame !== null) currentRecording.frame(heldFrame, heldTicks * 2);//TODO strict null
         saveAs(new Blob([new Uint8Array(currentRecording.finish())], { type: 'image/gif' }), 'recording.gif');
         runRecord.src = 'images/record.png';
         currentRecording = null;

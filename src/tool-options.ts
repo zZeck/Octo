@@ -14,7 +14,7 @@ enum CompatibilityProfileFlags {
 
 // TODO fix | 'none' hack?
 const compatProfile = radioBar<CompatibilityProfileFlags | 'none'>(document.getElementById('compatibility-profile')!, CompatibilityProfileFlags.octo, setCompatibilityProfile);
-const screenRotation = radioBar<number>(document.getElementById('screen-rotation')!, 0, (x: number) => emulator.screenRotation = Number(x));
+const screenRotation = radioBar<number>(document.getElementById('screen-rotation')!, 0, (x: number): void => {emulator.screenRotation = Number(x);});
 
 type CompatibilityProfiles = {
     [key in CompatibilityProfileFlags]: CompatibilityProfile;
@@ -45,7 +45,7 @@ type flagFunctions = {
     [key in CampatibilityFlags]: key extends CampatibilityFlags.maxSize ? {
         getValue: () => string | undefined;
         setValue: (v: number) => number;
-        setVisible: (x: boolean) => 'flex' | 'none';
+        setVisible: (x: boolean) => void;
     } : GetSetValue
 };
 
@@ -66,24 +66,24 @@ const compatibilityFlags: flagFunctions = {
 
 function setCompatibilityProfile (x: CompatibilityProfileFlags | 'none'): void {
     const p = compatibilityProfiles[x as CompatibilityProfileFlags];
-    for (const key in compatibilityFlags) emulator[key] = p[key as CampatibilityFlags];
+    for (const key of Object.keys(compatibilityFlags)) emulator[key] = p[key as CampatibilityFlags];
     saveLocalOptions();
     updateOptions();
 }
 // TODO edited loops to be const key. correct?
 function setOptions (): void {
-    for (const key in compatibilityFlags) emulator[key] = compatibilityFlags[key as CampatibilityFlags].getValue();
+    for (const key of Object.keys(compatibilityFlags)) emulator[key] = compatibilityFlags[key as CampatibilityFlags].getValue();
     saveLocalOptions();
     updateOptions();
 }
 // TODO edited loops to be const key. correct?
 export function updateOptions (): void {
-    for (const key in compatibilityFlags) compatibilityFlags[key as CampatibilityFlags].setValue(emulator[key]);
+    for (const key of Object.keys(compatibilityFlags)) compatibilityFlags[key as CampatibilityFlags].setValue(emulator[key]);
     screenRotation.setValue(emulator.screenRotation);
     compatProfile.setValue('none');// TODO fix?
-    for (const key in compatibilityProfiles) {
+    for (const key of Object.keys(compatibilityProfiles)) {
         const p = compatibilityProfiles[key as CompatibilityProfileFlags];
-        const same = Object.keys(p).every(x => emulator[x] == p[x as CampatibilityFlags]);
+        const same = Object.keys(p).every((x: string): boolean => emulator[x] == p[x as CampatibilityFlags]);
         if (same) compatProfile.setValue(key as CompatibilityProfileFlags);
     }
 }

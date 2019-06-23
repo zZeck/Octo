@@ -10,13 +10,13 @@ import { saveAs } from 'file-saver';
 
 const binaryInput = document.getElementById('fileinput') as HTMLInputElement;
 const binaryEditor = textBox(document.getElementById('binary-editor')!, false, '')!;
-const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (_x: string) => {})!;// TODO unused x?
-radioBar(document.getElementById('decompiler-numbers')!, Formats.hex, (x: Formats) => emulator.numericFormatStr = x)!;
+const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (_x: string): void => {})!;// TODO unused x?
+radioBar(document.getElementById('decompiler-numbers')!, Formats.hex, (x: Formats): void => {emulator.numericFormatStr = x;});
 
 function decompileRaw (rom: number[]): void {
     let r = '\n: main\n';
     for (let x = 0; x < rom.length; x += 2) {
-        const a = rom[x ] | 0;
+        const a = rom[x] | 0;
         const b = rom[x + 1] | 0;
         r += '\t' + hexFormat(a) + ' ' + hexFormat(b) + ' # ' + hexFormat(0x200 + x);
         r += '\t' + formatInstruction(a, b);
@@ -53,7 +53,7 @@ function decompileStatic (rom: number[]): void {
 
 binaryInput.onchange = (): void => {
     const reader = new FileReader();
-    reader.onload = () => writeBytes(binaryEditor, null, new Uint8Array(reader.result as ArrayBuffer));
+    reader.onload = (): void => writeBytes(binaryEditor, null, new Uint8Array(reader.result as ArrayBuffer));
     reader.readAsArrayBuffer(binaryInput.files![0]);
 };
 document.getElementById('binary-decompile')!.onclick = (): void => {
@@ -67,7 +67,7 @@ document.getElementById('binary-open')!.onclick = (): void => {
 };
 document.getElementById('binary-save-ch8')!.onclick = (): void => {
     const prog = compile();
-    if (prog == null) { return; }
+    if (prog === null) { return; }//TODO strict null
     const name = (document.getElementById('binary-filename') as HTMLInputElement).value;
     saveAs(new Blob([new Uint8Array(prog.rom)], { type: 'application/octet-stream' }), name + '.ch8');
 };

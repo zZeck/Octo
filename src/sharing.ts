@@ -52,7 +52,7 @@ let lastLoadedKey: string | null = null;
 const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/';
 
 export function share (): void {
-    ajax('POST', sharingBaseUrl, preparePayload(), (r, _s): void => { // TODO unused s?
+    ajax<{error: string; key: string}>('POST', sharingBaseUrl, preparePayload(), (r, _s): void => { // TODO unused s?
         if (r.error) { setStatusMessage(r.error, false); return; }
         const l = window.location.href.replace(/(index\.html|\?key=.*)*$/u, 'index.html?key=' + r.key);
         window.location.href = l;
@@ -86,13 +86,13 @@ export function runPayload (options: EmulatorOptions, program: string): void {
     document.getElementById('main-run')!.click();
 }
 function runShared (key: string): void {
-    ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions; program: string }, _s?: never): void => { // TODO unused s?
+    ajax<{options: EmulatorOptions; program: string }>('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions; program: string }): void => { // TODO unused s?
         lastLoadedKey = key;
         runPayload(result.options, result.program);
     });
 }
 function runGist (id: string): void { // TODO type result better
-    ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, _s?: never): void => { // TODO unused s?
+    ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}): void => { // TODO unused s?
         runPayload(JSON.parse(result.files['options.json'].content), result.files['prog.ch8'].content);
     });
 }
@@ -102,13 +102,13 @@ export function saveLocalProgram (): void { localStorage.setItem('octoProgram', 
 
 window.onload = (): void => {
     // load examples
-    ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, (result): void => {
+    ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, (result: {name: string; url: string}[]): void => {
         const target = document.querySelector<HTMLElement>('#main-examples ul')!;
         target.innerHTML = '';
         result.forEach((x: {name: string; url: string}): void => { // TODO type x better?
             const r = document.createElement('li');
             r.innerHTML = x.name;
-            r.onclick = (): void => ajax('GET', x.url, null, (clickRequestResult): void => {
+            r.onclick = (): void => ajax('GET', x.url, null, (clickRequestResult: {content: string}): void => {
                 editor.setValue(window.atob(clickRequestResult.content.replace(/(?:\r\n|\r|\n)/gu, '')));
                 setStatusMessage('loaded example program <tt>' + x.name + '</tt>', true);
             });
@@ -117,9 +117,9 @@ window.onload = (): void => {
     });
 
     // load a shared program, if specified
-    const key = location.search.match(/key=([a-zA-Z0-9-_]+)/);
+    const key = location.search.match(/key=([a-zA-Z0-9-_]+)/u);
     if (key) { runShared(key[1]); return; }
-    const gistId = location.search.match(/gist=(\w+)/);
+    const gistId = location.search.match(/gist=(\w+)/u);
     if (gistId) { runGist(gistId[1]); return; }
 
     // restore the local data, if available
@@ -236,11 +236,17 @@ function unLZW (minCodeSize: number, bytes: number[]): number[] {
     for (let x = 0; x < clear; x++) suffix[x] = x;
 
     const symbol = (): number => {
-        while (b < size) d += bytes[i++] << b, b += 8;
-        const r = d & mask; return d >>= size, b -= size, r;
+        while (b < size) {d += bytes[i++] << b; b += 8; }
+        const r = d & mask;
+        d >>= size;
+        b -= size;
+        return r;
     };
     const cleartable = (): void => {
-        size = minCodeSize + 1, mask = (1 << size) - 1, next = clear + 2, old = null;
+        size = minCodeSize + 1;
+        mask = (1 << size) - 1;
+        next = clear + 2;
+        old = null;
     };
     const unpack = (c: number, r: number[]): void => {
         const t = [];
@@ -277,7 +283,7 @@ function gifDecode (bytes: Uint8Array): {
     const s = (): number => b() | b() << 8;
     const l = (x: number): number[] => { const r = []; for (let y = 0; y < x; y++)r.push(b()); return r; };
     const cl = (x: number): number[] => { const r = []; for (let y = 0; y < x; y++)r.push(b() << 16 | b() << 8 | b()); return r; };
-    const dl = (): number[] => { let r: number[] = []; while (1) { const s = b(); if (!s) break; r = r.concat(l(s)); } return r; };
+    const dl = (): number[] => { let r: number[] = []; while (1) { const s1 = b(); if (!s1) break; r = r.concat(l(s1)); } return r; };
 
     const width = s();
     const height = s();

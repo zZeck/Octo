@@ -13,14 +13,14 @@ const audioToneCanvas = document.getElementById('audio-tone-view') as HTMLCanvas
 
 const PATTERN_SIZE = 16;
 const PATTERN_SCALE = 2;
-const emptySound = range(PATTERN_SIZE).map(() => 0);
+const emptySound = range(PATTERN_SIZE).map((): number => 0);
 function readPattern (source: Editor): number[] { return readBytes(source, PATTERN_SIZE); }
 function writePattern (target: Editor, bytes: number[]): void { return writeBytes(target, PATTERN_SIZE, bytes); }
 writePattern(audioPatternEditor, emptySound);
 writePattern(audioBlendEditor, emptySound);
 
 function shiftBytes (bytes: number[], n: number): number[] {
-    const r = bytes.map(x => x);
+    const r = bytes.map((x: number): number => x);
     for (let x = 0; x < bytes.length * 8; x++) {
         setBit(r, x, getBit(bytes, mod(x + n, bytes.length * 8)));
     }
@@ -33,7 +33,7 @@ function drawBytes (target: HTMLCanvasElement, bytes: number[]): void {
     g.fillStyle = emulator.backgroundColor;
     g.fillRect(0, 0, w, h);
     g.fillStyle = emulator.fillColor;
-    range(8 * PATTERN_SIZE).forEach(z => {
+    range(8 * PATTERN_SIZE).forEach((z: number): void => {
         const a = Math.floor(z / 8);
         const b = 7 - Math.floor(z % 8);
         g.fillRect(z * PATTERN_SCALE, 0, PATTERN_SCALE * (bytes[a] >> b & 1), 32);
@@ -105,7 +105,7 @@ document.getElementById('audio-play')!.onclick = (): void => {
     }
 };
 document.getElementById('audio-random')!.onclick = (): void => {
-    writePattern(audioPatternEditor, emptySound.map(() => Math.random() * 256 & 0xFF));
+    writePattern(audioPatternEditor, emptySound.map((): number => Math.random() * 256 & 0xFF));
     updateAudio();
 };
 document.getElementById('audio-clear')!.onclick = (): void => {
@@ -121,7 +121,7 @@ document.getElementById('audio-right')!.onclick = (): void => {
     updateAudio();
 };
 document.getElementById('audio-not')!.onclick = (): void => {
-    writePattern(audioPatternEditor, readPattern(audioPatternEditor).map(a => ~a));
+    writePattern(audioPatternEditor, readPattern(audioPatternEditor).map((a: number): number => ~a));
     updateAudio();
 };
 
@@ -133,7 +133,7 @@ document.getElementById('audio-and')!.onclick = (): void => {
     writePattern(audioPatternEditor, zip(
         readPattern(audioPatternEditor),
         readPattern(audioBlendEditor),
-        (a, b) => a & b
+        (a: number, b: number): number => a & b
     ));
     updateAudio();
 };
@@ -141,7 +141,7 @@ document.getElementById('audio-or')!.onclick = (): void => {
     writePattern(audioPatternEditor, zip(
         readPattern(audioPatternEditor),
         readPattern(audioBlendEditor),
-        (a, b) => a | b
+        (a: number, b: number): number => a | b
     ));
     updateAudio();
 };
@@ -149,7 +149,7 @@ document.getElementById('audio-xor')!.onclick = (): void => {
     writePattern(audioPatternEditor, zip(
         readPattern(audioPatternEditor),
         readPattern(audioBlendEditor),
-        (a, b) => a ^ b
+        (a: number, b: number): number => a ^ b
     ));
     updateAudio();
 };

@@ -10,12 +10,15 @@ const spriteDraw = document.getElementById('sprite-draw') as HTMLCanvasElement; 
 const sprite16 = toggleButton(document.getElementById('sprite-16')!, false, changeSpriteSize); // TODO was 0 just being used for false?
 const spriteColor = toggleButton(document.getElementById('sprite-color')!, false, updateSpriteEditor); // TODO was 0 just being used for false?
 const spriteClear = document.getElementById('sprite-clear')!;
-const spritePalette = radioBar(document.getElementById('sprite-palette')!, 1, () => {});
+const spritePalette = radioBar(document.getElementById('sprite-palette')!, 1, (): void => {});
 const spriteEditor = textBox(document.getElementById('sprite-editor')!, false, '');
 
 spriteClear.onclick = (): void => { spritePixels = []; updateSpriteEditor(); };
-function spriteLength () { return (sprite16.getValue() ? 32 : 15) * (spriteColor.getValue() ? 2 : 1); }
-function spriteDim (big: boolean) { return big ? { rows: 16, cols: 16 } : { rows: 15, cols: 8 }; }
+function spriteLength (): number { return (sprite16.getValue() ? 32 : 15) * (spriteColor.getValue() ? 2 : 1); }
+function spriteDim (big: boolean): {
+    rows: number;
+    cols: number;
+} { return big ? { rows: 16, cols: 16 } : { rows: 15, cols: 8 }; }
 
 /**
 * Model:
@@ -68,7 +71,7 @@ function setSpritePixels (dim: {rows: number; cols: number }, pix: number[][]): 
     const c = spriteColor.getValue();
     range(dim.rows).forEach((row): void => {
         range(dim.cols).forEach((col): void => {
-            setSpritePixel(col, row, dim.cols == 16, c as any, (pix[row] || [])[col] || 0);// TODO value of c is ignored in function
+            setSpritePixel(col, row, dim.cols == 16, c as unknown as number, (pix[row] || [])[col] || 0);// TODO value of c is ignored in function
         });
     });
 }

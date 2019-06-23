@@ -29,7 +29,7 @@ export const editor: Editor & Doc = CodeMirror(document.getElementById('editor')
     value: 'loading...',
     gutters: ['breakpoints', 'CodeMirror-linenumbers'],
     extraKeys: {
-        'Shift-Enter': () => document.getElementById('main-run')!.click()
+        'Shift-Enter': (): void => document.getElementById('main-run')!.click()
     }
 }) as Editor & Doc; // TODO is this correct?
 
@@ -104,9 +104,9 @@ function accordion (initial: string): {
         };
         tools[panel]();
     }
-    document.querySelectorAll<HTMLElement>('.tool-header').forEach((x: HTMLElement): () => void => x.onclick = (): void => open(x.dataset.panel!));
+    document.querySelectorAll<HTMLElement>('.tool-header').forEach((x: HTMLElement): void => {x.onclick = (): void => open(x.dataset.panel!);});
     open(initial);
-    return { setValue: open, update: () => open(current!) };
+    return { setValue: open, update: (): void => open(current!) };
 }
 const toolboxAccordion = accordion('sprite');
 
@@ -254,9 +254,9 @@ export function compile (): RomData | null {
             true
         );
     } catch (error) {
-        if (c.pos != null) {
+        if (c.pos !== null) {//TODO null comparison strict ok?
             let line = 1; let ch = 0; const text = editor.getValue();
-            for (var x = 0; x < c.pos[1] as number - 1; x++) {
+            for (let x = 0; x < c.pos[1] as unknown as number - 1; x++) {
                 if (text[x] == '\n') { line++; ch = 0; } else { ch++; }
             }
             error = `line ${line}: ${error}`;
@@ -269,7 +269,7 @@ export function compile (): RomData | null {
         return null;
     }
     const visualBreakpoints = getVisualBreakpoints(c.dbginfo);
-    for (const k in visualBreakpoints) { c.breakpoints[k] = visualBreakpoints[k]; }
+    for (const k of Object.keys(visualBreakpoints)) { c.breakpoints[k as unknown as number] = visualBreakpoints[k as unknown as number]; }
     return {
         rom: c.rom,
         breakpoints: c.breakpoints,

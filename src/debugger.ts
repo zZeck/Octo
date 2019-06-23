@@ -19,12 +19,12 @@ export function cycleNumFormat (r: string): void {
 // TODO fix reg? seems to be used in const register below
 function getLabel (addr: number, _reg?: number, raw?: boolean): string {
     let n = 'hex-font'; let x = 0;
-    for (const k in emulator.metadata.labels) {
+    for (const k of Object.keys(emulator.metadata.labels)) {
         const v = emulator.metadata.labels[k];
         if (v > x && v <= addr) { n = k; x = v; }
     }
     if (raw) return n;
-    return '(' + n + (x == addr ? '' : ' + ' + (addr - x)) + ')';
+    return '(' + n + (x == addr ? '' : ` + ${addr - x}`) + ')';
 }
 
 function dumpRegisters (showV: boolean, name: string): string {
@@ -64,15 +64,16 @@ function dumpContext (): string {
     return (
         'context:<br><table class=\'debug-context\'>' +
 			row(false, 'addr', 'data', 'source') +
-			lines.filter((x: number): boolean => !dbg!.lines[x].match(/^\s*$/u)).map((x: number): string => {
-			    const here = dbg!.getLine(ind);
-			    return row(
-			        here == pcline,
-			        here != x ? '' : hexFormat(ind).slice(2),
-			        here != x ? '' : linebytes(x),
-			        dbg!.lines[x]
-			    );
-			}).join('') +
+            lines.filter((x: number): boolean => !dbg!.lines[x].match(/^\s*$/u))
+                .map((x: number): string => {
+                    const here = dbg!.getLine(ind);
+                    return row(
+                        here == pcline,
+                        here != x ? '' : hexFormat(ind).slice(2),
+                        here != x ? '' : linebytes(x),
+                        dbg!.lines[x]
+                    );
+                }).join('') +
 		'</table>'
     );
 }

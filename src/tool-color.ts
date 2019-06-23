@@ -40,7 +40,7 @@ enum PaletteFlags {
 // must use specify type parameter as PaletteFlags so more narrow string literal type of PaletteFlags.octo is not infered
 // TODO fix none hack for updateColor use of setValue
 const palettePresets = radioBar<PaletteFlags | 'none'>(document.getElementById('palette-presets')!, PaletteFlags.octo, (x: PaletteFlags | 'none'): void => {
-    zip(paletteKeys, palettes[x], (a: string, b: string) => emulator[a] = b);
+    zip(paletteKeys, palettes[x], (a: string, b: string): void => {emulator[a] = b;});//TODO zip that is not assigned?
     saveLocalOptions();
     updateColor();
 });

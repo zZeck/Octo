@@ -8,7 +8,7 @@ import { Emulator, EmulatorOptions } from './emulator';
 /// /////////////////////////////////
 
 let scaleFactor = 5;
-export const renderTarget = 'target';
+export let renderTarget = 'target';
 
 const optionFlags = [
     'tickrate',
@@ -70,11 +70,11 @@ export function setRenderTarget (scale: number, canvas: string): void {
     }
 }
 
-function getTransform (emulator: Emulator, g: CanvasRenderingContext2D): void {
+function getTransform (emulatorToTransform: Emulator, g: CanvasRenderingContext2D): void {
     g.setTransform(1, 0, 0, 1, 0, 0);
     const x = scaleFactor * 128;
     const y = scaleFactor * 64;
-    switch (emulator.screenRotation) {
+    switch (emulatorToTransform.screenRotation) {
         case 90:
             g.rotate(0.5 * Math.PI);
             g.translate(0, -y);
@@ -107,10 +107,10 @@ export function getColor (id: number): string {
         case 1: return emulator.fillColor;
         case 2: return emulator.fillColor2;
         case 3: return emulator.blendColor;
-    }
-    throw Error(`invalid color: ${id}`);
+        default: throw Error(`invalid color: ${id}`);
 }
 
+//used in embed.html and index.ts
 export function renderDisplay (emulator: Emulator): void {
     const c = document.getElementById(renderTarget) as CanvasWithLastFrame;
 

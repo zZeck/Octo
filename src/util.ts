@@ -38,7 +38,7 @@ export interface Payload {
     options: EmulatorOptions;
 }
 
-export function ajax (method: string, url: string, payload: Payload | null, then: (result: any, s?: any) => void): void {
+export function ajax<T>(method: string, url: string, payload: Payload | null, then: (result: T, s?: number) => void): void {
     const x = new XMLHttpRequest();
     x.open(method, url);
     x.onreadystatechange = (): void => {

@@ -107,7 +107,7 @@ export interface EmulatorOptions {
 
 export class Emulator implements EmulatorOptions {
     // TODO remove this and try to switch clients to property string enum types
-    //[key: string]: any
+    //
 
     // persistent configuration settings
     public tickrate = 20;
@@ -513,4 +513,5 @@ export class Emulator implements EmulatorOptions {
             default: haltBreakpoint(`unknown opcode ${o}`);
         }
     }
+    [key: string]: any;
 }
