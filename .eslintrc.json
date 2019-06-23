@@ -5,7 +5,9 @@
     },
     "extends": [
         "standard",
-        "plugin:@typescript-eslint/recommended"
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/eslint-recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -15,9 +17,44 @@
   "plugins": ["@typescript-eslint"],
     "parserOptions": {
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
     "rules": {
+        "no-await-in-loop": "error",
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-template-curly-in-string": "error",
+        "accessor-pairs": "error",
+        "array-callback-return": "error",
+        "block-scoped-var": "error",
+        "class-methods-use-this": "error",
+        "consistent-return": "error",
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/func-call-spacing": ["error"],
+        "@typescript-eslint/member-ordering": "error",
+        "@typescript-eslint/no-extra-parens": ["error"],
+        "@typescript-eslint/no-for-in-array": "error",
+        "@typescript-eslint/no-magic-numbers": ["error", { "ignoreNumericLiteralTypes": true }],
+        "@typescript-eslint/no-require-imports": "error",
+        "@typescript-eslint/no-this-alias": ["error"],
+        "@typescript-eslint/no-useless-constructor": "error",
+        "@typescript-eslint/prefer-for-of": "error",
+        "@typescript-eslint/prefer-function-type": "error",
+        "@typescript-eslint/prefer-includes": "error",
+        "@typescript-eslint/prefer-regexp-exec": "error",
+        "@typescript-eslint/prefer-string-starts-ends-with": "error",
+        "@typescript-eslint/promise-function-async": "error",
+        "@typescript-eslint/require-array-sort-compare": "error",
+        "@typescript-eslint/restrict-plus-operands": "error",
+        "@typescript-eslint/semi": ["error"],
+        "@typescript-eslint/unbound-method": [
+            "error",
+            {
+              "ignoreStatic": true
+            }
+          ],
+        "@typescript-eslint/unified-signatures": "error"
+
     }
     
 }
