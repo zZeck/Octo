@@ -46,7 +46,7 @@ export function formatInstruction (a: number, nn: number): string {
     const vx = 'v' + x.toString(16).toUpperCase();
     const vy = 'v' + y.toString(16).toUpperCase();
 
-    function name (map: {[address: number]: string}, nnn: number) { return nnn in map ? map[nnn] : hexFormat(nnn); }
+    function name (map: {[address: number]: string}, nnn: number): string { return nnn in map ? map[nnn] : hexFormat(nnn); }
 
     if (a == 0x00 && y == 0xC) { return 'scroll-down ' + numericFormat(n); } // schip
     if (a == 0x00 && y == 0xD) { return 'scroll-up ' + numericFormat(n); } // xo-chip
@@ -346,12 +346,12 @@ function apply (address: number): {
     function binary (binop: (x: number, y: number) => number): void {
         const r: {[key: number]: boolean} = {};
         if (x == y) {
-            for (var a in ret[x]) {
+            for (let a in ret[x]) {
                 const tmp = parseInt(a);
                 r[binop(tmp, tmp) & 0xFF] = true;
             }
         } else {
-            for (var a in ret[x]) {
+            for (let a in ret[x]) {
                 for (const b in ret[y]) {
                     r[binop(parseInt(a), parseInt(b)) & 0xFF] = true;
                 }
@@ -451,11 +451,11 @@ function apply (address: number): {
     if (o == 0x8 && n == 0x1) { binary(function (a, b): number { return a | b; }); } // vx |= vy
     if (o == 0x8 && n == 0x2) { binary(function (a, b): number { return a & b; }); } // vx &= vy
     if (o == 0x8 && n == 0x3) { binary(function (a, b): number { return a ^ b; }); } // vx ^= vy
-    if (o == 0x8 && n == 0x4) { bincarry(function (a, b): number { return [a + b, Number(a + b > 0xFF)]; }); } // TODO is this a bug?
-    if (o == 0x8 && n == 0x5) { bincarry(function (a, b): number { return [a - b, Number(a >= b)]; }); }
-    if (o == 0x8 && n == 0x6) { bincarry(function (_a, b): number { return [b >> 1, b & 1]; }); }// TODO fix _a?
-    if (o == 0x8 && n == 0x7) { bincarry(function (a, b): number { return [b - a, Number(b >= a)]; }); }
-    if (o == 0x8 && n == 0xE) { bincarry(function (_a, b): number { return [b << 1, b & 128]; }); }// TODO fix _a?
+    if (o == 0x8 && n == 0x4) { bincarry(function (a, b): number[] { return [a + b, Number(a + b > 0xFF)]; }); } // TODO is this a bug?
+    if (o == 0x8 && n == 0x5) { bincarry(function (a, b): number[] { return [a - b, Number(a >= b)]; }); }
+    if (o == 0x8 && n == 0x6) { bincarry(function (_a, b): number[] { return [b >> 1, b & 1]; }); }// TODO fix _a?
+    if (o == 0x8 && n == 0x7) { bincarry(function (a, b): number[] { return [b - a, Number(b >= a)]; }); }
+    if (o == 0x8 && n == 0xE) { bincarry(function (_a, b): number[] { return [b << 1, b & 128]; }); }// TODO fix _a?
     if (o == 0xA) { ret['i'] = isingle(nnn); } // i := nnn
     if (o == 0xC) { ret[x] = maskedrand(); } // vx := random nn
     if (o == 0xF && nn == 0x01) { ret['plane'] = single(x); } // plane n
@@ -502,16 +502,16 @@ function apply (address: number): {
     }
     if (o == 0x5 && n == 0x3) {
         // load vx - vy
-        var all = iota(0xFF);
+        const all = iota(0xFF);
         const dist = Math.abs(x - y);
-        if (x < y) { for (var z = 0; z <= dist; z++) { ret[x + z] = all; } } else { for (var z = 0; z <= dist; z++) { ret[x - z] = all; } }
+        if (x < y) { for (let z = 0; z <= dist; z++) { ret[x + z] = all; } } else { for (let z = 0; z <= dist; z++) { ret[x - z] = all; } }
         markRead(Math.abs(x - y), Math.min(x, y));
     }
 
     return ret;
 }
 
-function successors (address: number, prevret: {[key: number]: boolean}) {
+function successors (address: number, prevret: {[key: number]: boolean}): number[] {
     // produce a list of all possible successor addresses
     // of this one, honoring branches and dispatchers.
 
@@ -523,7 +523,7 @@ function successors (address: number, prevret: {[key: number]: boolean}) {
     const y = nn >> 4 & 0xF;
     const nnn = op & 0xFFF;
 
-    function preciseSkip (address: number, predicate: (x: number, y: number, z: number) => boolean) {
+    function preciseSkip (address: number, predicate: (x: number, y: number, z: number) => boolean): number[] {
         // decide which skip paths are possible based
         // on the reaching set to an address.
         let pass = false;
@@ -549,16 +549,16 @@ function successors (address: number, prevret: {[key: number]: boolean}) {
     // simple skips
     // TODO fix unused args?
     if (o == 0x3) {
-        return preciseSkip(address, function (x, _y, nn) { return x == nn; });
+        return preciseSkip(address, function (x, _y, nn): boolean { return x == nn; });
     }
     if (o == 0x4) {
-        return preciseSkip(address, function (x, _y, nn) { return x != nn; });
+        return preciseSkip(address, function (x, _y, nn): boolean { return x != nn; });
     }
     if (o == 0x5) {
-        return preciseSkip(address, function (x, y, _nn) { return x == y; });
+        return preciseSkip(address, function (x, y, _nn): boolean { return x == y; });
     }
     if (o == 0x9) {
-        return preciseSkip(address, function (x, y, _nn) { return x != y; });
+        return preciseSkip(address, function (x, y, _nn): boolean { return x != y; });
     }
 
     if ((a & 0xF0) == 0xE0 && (nn == 0x9E || nn == 0xA1)) {
@@ -567,7 +567,7 @@ function successors (address: number, prevret: {[key: number]: boolean}) {
     }
     if (op == 0x00EE) {
         // return - follow all valid source addrs.
-        var ret = [];
+        const ret = [];
         for (var v in prevret) {
             ret.push(parseInt(v));
         }
@@ -575,7 +575,7 @@ function successors (address: number, prevret: {[key: number]: boolean}) {
     }
     if (o == 0xB) {
         // jump0 - follow all possible targets.
-        var ret = [];
+        const ret = [];
         for (var v in reaching[address][0]) {
             ret.push(nnn + parseInt(v));
         }
@@ -586,7 +586,7 @@ function successors (address: number, prevret: {[key: number]: boolean}) {
     return [address + 2];
 }
 
-export function analyzeInit (rom: number[], quirks: {[quirk: string]: boolean}) {
+export function analyzeInit (rom: number[], quirks: {[quirk: string]: boolean}): void {
     program = [];
     reaching = {};
     type = {};
@@ -610,8 +610,8 @@ export function analyzeInit (rom: number[], quirks: {[quirk: string]: boolean}) 
     reaching[0x200]['plane'] = { 1: true };
     fringe = [0x200];
 
-    for (var x = 0; x < 4096 * 2; x++) { program[x] = 0x00; }
-    for (var x = 0; x < rom.length; x++) { program[x + 0x200] = rom[x]; }
+    for (let x = 0; x < 4096 * 2; x++) { program[x] = 0x00; }
+    for (let x = 0; x < rom.length; x++) { program[x + 0x200] = rom[x]; }
 }
 
 export function analyzeWork (): boolean {
@@ -668,7 +668,7 @@ export function analyzeWork (): boolean {
     return false;
 }
 
-export function analyzeFinish () {
+export function analyzeFinish (): void {
     // name all labels and subroutines by order of appearance:
     let lsize = 0;
     let ssize = 0;
@@ -678,20 +678,20 @@ export function analyzeFinish () {
     snames[0x200] = 'main';
     for (let x = 0; x < program.length; x++) {
         if (x == 0x200) { continue; }
-        if (x in labels) { lnames[x] = 'label-' + lsize++; }
-        if (x in subroutines) { snames[x] = 'sub-' + ssize++; }
-        if (x in natives) { nnames[x] = 'machine-' + nsize++; }
+        if (x in labels) { lnames[x] = `label-${lsize++}`; }
+        if (x in subroutines) { snames[x] = `sub-${ssize++}`; }
+        if (x in natives) { nnames[x] = `machine-${nsize++}`; }
     }
 }
 
 // TODO unused?
-export function analyze (rom: number[], quirks: {[quirk: string]: boolean}) {
+export function analyze (rom: number[], quirks: {[quirk: string]: boolean}): void {
     analyzeInit(rom, quirks);
     while (!analyzeWork()) {}
     analyzeFinish();
 }
 
-export function formatProgram (programSize: number) {
+export function formatProgram (programSize: number): string {
     let ret = '';
     if (SHIFT_QUIRKS) {
         ret += '# analyzed with shifts that modify vx in place and ignore vy.\n';
@@ -708,7 +708,7 @@ export function formatProgram (programSize: number) {
     // are converted into constants to avoid
     // introducing additional padding bytes
     // or lost label declarations.
-    function findOutside (source: {[key: number]: number[]}, dest: {[key: number]: boolean}, names: {[key: number]: string}) {
+    function findOutside (source: {[key: number]: number[]}, dest: {[key: number]: boolean}, names: {[key: number]: string}): void {
         for (const a in source) {
             const addr = parseInt(a);
             if (addr < 0x200 || addr >= 0x200 + programSize) {
@@ -723,7 +723,7 @@ export function formatProgram (programSize: number) {
     findOutside(natives, outside, nnames);
 
     // emit code/data
-    function tabs (n: number) {
+    function tabs (n: number): string {
         let r = '';
         while (n-- > 0) { r += '\t'; }
         return r;

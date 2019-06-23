@@ -70,6 +70,21 @@ function generateFrequency (frequency: number, cutoff: number): number[] {
     return r;
 }
 
+function updateAudioTone (): void {
+    writePattern(audioToneEditor, generateFrequency(
+        Number(audioFreq.value) || 0,
+        Number(audioCutoff.value) || 0
+    ));
+}
+
+export function updateAudio (): void {
+    audioPatternEditor.refresh();
+    audioBlendEditor.refresh();
+    audioToneEditor.refresh();
+    drawBytes(audioPatternCanvas, readPattern(audioPatternEditor));
+    updateAudioTone();
+}
+
 /**
 * Pattern panel
 **/
@@ -153,12 +168,7 @@ document.getElementById('audio-swap')!.onclick = (): void => {
 const audioFreq = document.getElementById('audio-freq') as HTMLInputElement;
 const audioCutoff = document.getElementById('audio-cutoff') as HTMLInputElement;
 
-function updateAudioTone (): void {
-    writePattern(audioToneEditor, generateFrequency(
-        Number(audioFreq.value) || 0,
-        Number(audioCutoff.value) || 0
-    ));
-}
+
 updateAudioTone();
 
 audioFreq.onchange = updateAudioTone;
@@ -166,13 +176,7 @@ audioFreq.onkeyup = updateAudioTone;
 audioCutoff.onchange = updateAudioTone;
 audioCutoff.onkeyup = updateAudioTone;
 
-export function updateAudio (): void {
-    audioPatternEditor.refresh();
-    audioBlendEditor.refresh();
-    audioToneEditor.refresh();
-    drawBytes(audioPatternCanvas, readPattern(audioPatternEditor));
-    updateAudioTone();
-}
+
 
 document.getElementById('audio-toblend')!.onclick = (): void => {
     writePattern(audioBlendEditor, readPattern(audioToneEditor));

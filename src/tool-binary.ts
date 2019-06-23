@@ -13,7 +13,7 @@ const binaryEditor = textBox(document.getElementById('binary-editor')!, false, '
 const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (_x: string) => {})!;// TODO unused x?
 radioBar(document.getElementById('decompiler-numbers')!, Formats.hex, (x: Formats) => emulator.numericFormatStr = x)!;
 
-function decompileRaw (rom: number[]) {
+function decompileRaw (rom: number[]): void {
     let r = '\n: main\n';
     for (let x = 0; x < rom.length; x += 2) {
         const a = rom[x ] | 0;
@@ -24,7 +24,7 @@ function decompileRaw (rom: number[]) {
     }
     editor.setValue('# decompiled program:\n' + r);
 }
-function decompileStatic (rom: number[]) {
+function decompileStatic (rom: number[]): void {
     const decompileCover = document.getElementById('decompile-cover')!;
     setVisible(decompileCover, true, 'flex');
     analyzeInit(rom, {
@@ -33,7 +33,7 @@ function decompileStatic (rom: number[]) {
         vfOrderQuirks: emulator.vfOrderQuirks,
         jumpQuirks: emulator.jumpQuirks
     });
-    const process = () => {
+    const process = (): void => {
         let finished = false;
         for (let z = 0; z < 100 && !finished; z++) { finished = analyzeWork(); }
         if (!finished) {
@@ -51,31 +51,31 @@ function decompileStatic (rom: number[]) {
 * UI Glue
 **/
 
-binaryInput.onchange = () => {
+binaryInput.onchange = (): void => {
     const reader = new FileReader();
     reader.onload = () => writeBytes(binaryEditor, null, new Uint8Array(reader.result as ArrayBuffer));
     reader.readAsArrayBuffer(binaryInput.files![0]);
 };
-document.getElementById('binary-decompile')!.onclick = () => {
+document.getElementById('binary-decompile')!.onclick = (): void => {
     (decompilerMode.getValue() == 'static' ? decompileStatic : decompileRaw)(readBytes(binaryEditor));
 };
-document.getElementById('binary-run')!.onclick = () => {
+document.getElementById('binary-run')!.onclick = (): void => {
     runRom({ rom: readBytes(binaryEditor), breakpoints: {}, aliases: {}, labels: {} });
 };
-document.getElementById('binary-open')!.onclick = () => {
+document.getElementById('binary-open')!.onclick = (): void => {
     binaryInput.click();
 };
-document.getElementById('binary-save-ch8')!.onclick = () => {
+document.getElementById('binary-save-ch8')!.onclick = (): void => {
     const prog = compile();
     if (prog == null) { return; }
     const name = (document.getElementById('binary-filename') as HTMLInputElement).value;
     saveAs(new Blob([new Uint8Array(prog.rom)], { type: 'application/octet-stream' }), name + '.ch8');
 };
-document.getElementById('binary-save-8o')!.onclick = () => {
+document.getElementById('binary-save-8o')!.onclick = (): void => {
     const name = (document.getElementById('binary-filename') as HTMLInputElement).value;
     saveAs(new Blob([editor.getValue()], { type: 'text/plain;charset=utf-8' }), name + '.8o');
 };
-document.getElementById('binary-save-cart')!.onclick = () => {
+document.getElementById('binary-save-cart')!.onclick = (): void => {
     const name = (document.getElementById('binary-filename') as HTMLInputElement).value;
     const label = name + '\n' + new Date().toISOString().replace('T', '\n');
     const cart = buildCartridge(label, preparePayload());
@@ -84,6 +84,6 @@ document.getElementById('binary-save-cart')!.onclick = () => {
 
 writeBytes(binaryEditor, null, [0xD0, 0x15, 0x70, 0x04, 0x40, 0x40, 0x71, 0x05, 0x40, 0x40, 0x60, 0x00, 0x12, 0x00]);
 
-export function updateBinary () {
+export function updateBinary (): void {
     binaryEditor.refresh();
 }

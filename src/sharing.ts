@@ -51,15 +51,19 @@ let lastLoadedKey: string | null = null;
 //TODO change this url
 const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/';
 
-export function share () {
-    ajax('POST', sharingBaseUrl, preparePayload(), (r, _s) => { // TODO unused s?
+export function share (): void {
+    ajax('POST', sharingBaseUrl, preparePayload(), (r, _s): void => { // TODO unused s?
         if (r.error) { setStatusMessage(r.error, false); return; }
-        const l = window.location.href.replace(/(index\.html|\?key=.*)*$/, 'index.html?key=' + r.key);
+        const l = window.location.href.replace(/(index\.html|\?key=.*)*$/u, 'index.html?key=' + r.key);
         window.location.href = l;
     });
 }
 
-export function preparePayload () {
+export function preparePayload (): {
+    key: string | null;
+    program: string;
+    options: EmulatorOptions;
+} {
     return {
         key: lastLoadedKey,
         program: editor.getValue(),
@@ -67,7 +71,7 @@ export function preparePayload () {
     };
 }
 
-export function openPayload (options: EmulatorOptions, program: string) {
+export function openPayload (options: EmulatorOptions, program: string): void {
     editor.setValue(program);
     speedMenu.setValue(options.tickrate);
     unpackOptions(emulator, options);
@@ -75,37 +79,37 @@ export function openPayload (options: EmulatorOptions, program: string) {
     saveLocalProgram();
 }
 
-export function runPayload (options: EmulatorOptions, program: string) {
+export function runPayload (options: EmulatorOptions, program: string): void {
     editor.setValue(program);
     speedMenu.setValue(options.tickrate);
     unpackOptions(emulator, options);
     document.getElementById('main-run')!.click();
 }
-function runShared (key: string) {
-    ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions; program: string }, _s?: never) => { // TODO unused s?
+function runShared (key: string): void {
+    ajax('GET', sharingBaseUrl + key, null, (result: {options: EmulatorOptions; program: string }, _s?: never): void => { // TODO unused s?
         lastLoadedKey = key;
         runPayload(result.options, result.program);
     });
 }
-function runGist (id: string) { // TODO type result better
-    ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, _s?: never) => { // TODO unused s?
+function runGist (id: string): void { // TODO type result better
+    ajax('GET', 'https://api.github.com/gists/' + id, null, (result: { files: { [key: string]: {content: string } }}, _s?: never): void => { // TODO unused s?
         runPayload(JSON.parse(result.files['options.json'].content), result.files['prog.ch8'].content);
     });
 }
 
-export function saveLocalOptions () { localStorage.setItem('octoOptions', JSON.stringify(packOptions(emulator))); }
-export function saveLocalProgram () { localStorage.setItem('octoProgram', JSON.stringify(editor.getValue())); }
+export function saveLocalOptions (): void { localStorage.setItem('octoOptions', JSON.stringify(packOptions(emulator))); }
+export function saveLocalProgram (): void { localStorage.setItem('octoProgram', JSON.stringify(editor.getValue())); }
 
-window.onload = () => {
+window.onload = (): void => {
     // load examples
-    ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, (result) => {
+    ajax('GET', 'https://api.github.com/repos/JohnEarnest/Octo/contents/examples', null, (result): void => {
         const target = document.querySelector<HTMLElement>('#main-examples ul')!;
         target.innerHTML = '';
-        result.forEach((x: {name: string; url: string}) => { // TODO type x better?
+        result.forEach((x: {name: string; url: string}): void => { // TODO type x better?
             const r = document.createElement('li');
             r.innerHTML = x.name;
-            r.onclick = () => ajax('GET', x.url, null, result => {
-                editor.setValue(window.atob(result.content.replace(/(?:\r\n|\r|\n)/g, '')));
+            r.onclick = (): void => ajax('GET', x.url, null, (clickRequestResult): void => {
+                editor.setValue(window.atob(clickRequestResult.content.replace(/(?:\r\n|\r|\n)/gu, '')));
                 setStatusMessage('loaded example program <tt>' + x.name + '</tt>', true);
             });
             target.appendChild(r);
@@ -226,19 +230,19 @@ const BASE_IMAGE = [
     0xCC, 0x36, 0xCB, 0x46, 0x02, 0x00, 0x3B
 ];
 
-function unLZW (minCodeSize: number, bytes: number[]) {
+function unLZW (minCodeSize: number, bytes: number[]): number[] {
     const prefix: number[] = []; const suffix: number[] = []; const clear = 1 << minCodeSize;
     let size: number; let mask: number; let next: number; let old!: number | null; let first: number; let i = 0; let b = 0; let d = 0;
     for (let x = 0; x < clear; x++) suffix[x] = x;
 
-    const symbol = () => {
+    const symbol = (): number => {
         while (b < size) d += bytes[i++] << b, b += 8;
         const r = d & mask; return d >>= size, b -= size, r;
     };
-    const cleartable = () => {
+    const cleartable = (): void => {
         size = minCodeSize + 1, mask = (1 << size) - 1, next = clear + 2, old = null;
     };
-    const unpack = (c: number, r: number[]) => {
+    const unpack = (c: number, r: number[]): void => {
         const t = [];
         if (c == next) t.push(first), c = old!;// TODO safe?
         while (c > clear) t.push(suffix[c]), c = prefix[c];
@@ -260,13 +264,20 @@ function unLZW (minCodeSize: number, bytes: number[]) {
     return r;
 }
 
-function gifDecode (bytes: Uint8Array) {
+function gifDecode (bytes: Uint8Array): {
+    width: number;
+    height: number;
+    frames: {
+        palette: number[] | null;
+        pixels: number[];
+    }[];
+} {
     let i = 6; // skip GIF89a
-    const b = () => bytes[i++] || 0;
-    const s = () => b() | b() << 8;
-    const l = (x: number) => { const r = []; for (let y = 0; y < x; y++)r.push(b()); return r; };
-    const cl = (x: number) => { const r = []; for (let y = 0; y < x; y++)r.push(b() << 16 | b() << 8 | b()); return r; };
-    const dl = () => { let r: number[] = []; while (1) { const s = b(); if (!s) break; r = r.concat(l(s)); } return r; };
+    const b = (): number => bytes[i++] || 0;
+    const s = (): number => b() | b() << 8;
+    const l = (x: number): number[] => { const r = []; for (let y = 0; y < x; y++)r.push(b()); return r; };
+    const cl = (x: number): number[] => { const r = []; for (let y = 0; y < x; y++)r.push(b() << 16 | b() << 8 | b()); return r; };
+    const dl = (): number[] => { let r: number[] = []; while (1) { const s = b(); if (!s) break; r = r.concat(l(s)); } return r; };
 
     const width = s();
     const height = s();
@@ -282,22 +293,22 @@ function gifDecode (bytes: Uint8Array) {
             // const left = s(), top = s() //TODO unused?
             const iw = s(); const ih = s(); const ip = b();
             const lct = ip & 0x80 ? cl(1 << (ip & 0x70) + 1) : null;
-            if (ip & 0x40) throw 'interlaced GIFs are not supported';
-            if (iw != width || ih != height) throw 'windowing is nyi!';
+            if (ip & 0x40) throw Error('interlaced GIFs are not supported');
+            if (iw != width || ih != height) throw Error('windowing is nyi!');
             frames.push({ palette: lct || gct, pixels: unLZW(b(), dl()) });
         } else if (here == 0x21) {
             const xt = b();
             if (xt in { 0x01: 1, 0xF9: 1, 0xFE: 1, 0xFF: 1 }) { dl(); } // text, gce, comment, app
-            else { throw 'unrecognized extension type ' + xt + '!'; }
-        } else { throw 'unrecognized block type ' + here + '!'; }
+            else { throw Error(`unrecognized extension type ${xt}!`); }
+        } else { throw Error(`unrecognized block type ${here}!`); }
     }
     return { width, height, frames };
 }
 
-function printLabel (dest: {w: number; h: number; buffer: Uint8Array}, pen: number, text: string) {
+function printLabel (dest: {w: number; h: number; buffer: Uint8Array}, pen: number, text: string): void {
     const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-';
     let cursorx = 16; let cursory = 32;
-    text.toUpperCase().replace(/[^A-Z0-9-.\n ]/g, '.').split('').forEach(c => {
+    text.toUpperCase().replace(/[^A-Z0-9-.\n ]/gu, '.').split('').forEach((c: string): void => {
         if (c == ' ') {
             cursorx += 6;
         } else if (c == '\n') {
@@ -326,9 +337,9 @@ export function buildCartridge (label: string, data: {
     key: null | string;
     options: EmulatorOptions;
     program: string;
-}) {
+}): number[] {
     const base = gifDecode(new Uint8Array(BASE_IMAGE)); // TODO correct construct?
-    const bytes = JSON.stringify(data).split('').map(x => x.charCodeAt(0));
+    const bytes = JSON.stringify(data).split('').map((x: string): number => x.charCodeAt(0));
     const payload = [
         bytes.length >> 24 & 0xFF,
         bytes.length >> 16 & 0xFF,
@@ -338,16 +349,16 @@ export function buildCartridge (label: string, data: {
     const w = base.width;
     const h = base.height;
     const PER_FRAME = w * h / 2;
-    const expand = (colors: number[]) => {
+    const expand = (colors: number[]): number[] => {
         const r: number[] = [];
-        colors.forEach(c => {
+        colors.forEach((c: number): void => {
             for (let x = 0; x < 16; x++) r.push(c & 0xFEFCFE | (x & 0x8) << 13 | (x & 0x6) << 7 | x & 1);
         });
         return r;
     };
-    const encode = (buffer: Uint8Array, data: number[]) => {
-        if (data.length > buffer.length / 2) throw 'data overflow!';
-        return buffer.map((x, i) => x * 16 + ((data[Math.floor(i / 2)] || 0) >> (i % 2 == 0 ? 4 : 0) & 0xF));
+    const encode = (buffer: Uint8Array, dataArray: number[]): Uint8Array => {
+        if (dataArray.length > buffer.length / 2) throw Error('data overflow!');
+        return buffer.map((x, i): number => x * 16 + ((dataArray[Math.floor(i / 2)] || 0) >> (i % 2 == 0 ? 4 : 0) & 0xF));
     };
     const g = gifBuilder(w, h, expand(base.frames[0].palette!));
     for (let x = 0; x < payload.length; x += PER_FRAME) {
@@ -358,7 +369,7 @@ export function buildCartridge (label: string, data: {
     return g.finish();
 }
 
-export function parseCartridge (image: Uint8Array) {
+export function parseCartridge (image: Uint8Array): any {
     const parts = gifDecode(image);
     const nybble = (x: number) => x >> 13 & 8 | x >> 7 & 6 | x & 1;
     const byte = (f: number, i: number) => nybble(parts.frames[f].palette![parts.frames[f].pixels[i ]]) << 4 |

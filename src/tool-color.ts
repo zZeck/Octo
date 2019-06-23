@@ -39,14 +39,14 @@ enum PaletteFlags {
 
 // must use specify type parameter as PaletteFlags so more narrow string literal type of PaletteFlags.octo is not infered
 // TODO fix none hack for updateColor use of setValue
-const palettePresets = radioBar<PaletteFlags | 'none'>(document.getElementById('palette-presets')!, PaletteFlags.octo, (x: PaletteFlags | 'none') => {
+const palettePresets = radioBar<PaletteFlags | 'none'>(document.getElementById('palette-presets')!, PaletteFlags.octo, (x: PaletteFlags | 'none'): void => {
     zip(paletteKeys, palettes[x], (a: string, b: string) => emulator[a] = b);
     saveLocalOptions();
     updateColor();
 });
 
-document.querySelectorAll<HTMLInputElement>('#color-table tr input').forEach((input, i) => {
-    function update () {
+document.querySelectorAll<HTMLInputElement>('#color-table tr input').forEach((input, i): void => {
+    function update (): void {
         emulator[paletteKeys[i]] = input.value;
         saveLocalOptions();
         updateColor();
@@ -55,14 +55,14 @@ document.querySelectorAll<HTMLInputElement>('#color-table tr input').forEach((in
     input.onchange = update;
 });
 
-export function updateColor () {
-    document.querySelectorAll('#color-table tr').forEach((row, i) => {
+export function updateColor (): void {
+    document.querySelectorAll('#color-table tr').forEach((row, i): void => {
         const v = emulator[paletteKeys[i]];
         row.querySelector<HTMLElement>('.swatch')!.style.background = v;
         row.querySelector('input')!.value = v;
     });
     palettePresets.setValue('none');
     for (const key in palettes) {
-        if (paletteKeys.every((x, i) => emulator[x] == palettes[key][i])) palettePresets.setValue(key as PaletteFlags);// TODO infer better type for key?
+        if (paletteKeys.every((x, i): boolean => emulator[x] == palettes[key][i])) palettePresets.setValue(key as PaletteFlags);// TODO infer better type for key?
     }
 }

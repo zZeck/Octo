@@ -33,9 +33,9 @@ export const editor: Editor & Doc = CodeMirror(document.getElementById('editor')
     }
 }) as Editor & Doc; // TODO is this correct?
 
-editor.on('change', () => saveLocalProgram());
-editor.on('gutterClick', function (cm, n) {
-    function makeMarker () {
+editor.on('change', (): void => saveLocalProgram());
+editor.on('gutterClick', function (cm, n): void {
+    function makeMarker (): HTMLDivElement {
         const marker = document.createElement('div');
         marker.classList.add('breakpoint');
         marker.dataset.line = String(n);
@@ -46,12 +46,14 @@ editor.on('gutterClick', function (cm, n) {
     cm.setGutterMarker(n, 'breakpoints', info.gutterMarkers ? null : makeMarker());
 });
 
-function getVisualBreakpoints (debuginfo: DebugInfo) {
+function getVisualBreakpoints (debuginfo: DebugInfo): {
+    [address: number]: string;
+} {
     const r: {[address: number]: string} = {};
-    document.querySelectorAll<HTMLElement>('#editor .breakpoint').forEach((x) => {
+    document.querySelectorAll<HTMLElement>('#editor .breakpoint').forEach((x: HTMLElement): void => {
         const line = Number(x.dataset.line!);
         const addr = debuginfo.getAddr(line);
-        if (addr) { r[addr] = 'source line ' + (line + 1); }
+        if (addr) { r[addr] = `source line ${line + 1}`; }
     });
     return r;
 }
@@ -62,7 +64,7 @@ const output = textBox(document.getElementById('output')!, true, 'no output');
 const statusBar = document.getElementById('status')!;
 const statusText = document.getElementById('status-text')!;
 
-function toggleOutput () {
+function toggleOutput (): void {
     const v = outputPanel.style.display == 'block';
     setVisible(outputPanel, !v);
     setVisible(expandOut, v);
@@ -71,7 +73,7 @@ function toggleOutput () {
 document.getElementById('output-header')!.onclick = toggleOutput;
 document.getElementById('status')!.onclick = toggleOutput;
 
-export function setStatusMessage (message: string, ok?: boolean) {
+export function setStatusMessage (message: string, ok?: boolean): void {
     statusBar.style.backgroundColor = ok ? 'black' : 'darkred';
     statusText.innerHTML = message;
 }
@@ -83,11 +85,14 @@ enum panelTypes {
     color = 'color',
     options = 'options'
 }
-function accordion (initial: string) {
+function accordion (initial: string): {
+    setValue: (panel: string) => void;
+    update: () => void;
+} {
     let current: string | null = null;
-    function open (panel: string) {
+    function open (panel: string): void {
         current = panel as panelTypes;
-        document.querySelectorAll<HTMLElement>('.tool-body').forEach(x => {
+        document.querySelectorAll<HTMLElement>('.tool-body').forEach((x: HTMLElement): void => {
             x.classList.toggle('selected', x.dataset.panel == panel);
         });
         const tools: {[key: string]: () => void} = {
@@ -99,7 +104,7 @@ function accordion (initial: string) {
         };
         tools[panel]();
     }
-    document.querySelectorAll<HTMLElement>('.tool-header').forEach(x => x.onclick = () => open(x.dataset.panel!));
+    document.querySelectorAll<HTMLElement>('.tool-header').forEach((x: HTMLElement): () => void => x.onclick = (): void => open(x.dataset.panel!));
     open(initial);
     return { setValue: open, update: () => open(current!) };
 }
@@ -110,20 +115,20 @@ const manual = document.getElementById('manual')!;
 const toolbox = document.getElementById('toolbox')!;
 const showToolbox = document.getElementById('show-toolbox')!;
 const showManual = document.getElementById('show-manual')!;
-export const speedMenu = menuChooser(document.getElementById('main-speed')!, emulator.tickrate, (x: number) => {
+export const speedMenu = menuChooser(document.getElementById('main-speed')!, emulator.tickrate, (x: number): void => {
     emulator.tickrate = Number(x);
     saveLocalOptions();
 });
 
-document.getElementById('main-run')!.onclick = () => runRom(compile()!);
-document.getElementById('main-open')!.onclick = () => mainInput.click();
-document.getElementById('main-save')!.onclick = () => share();
+document.getElementById('main-run')!.onclick = (): void => runRom(compile()!);
+document.getElementById('main-open')!.onclick = (): void => mainInput.click();
+document.getElementById('main-save')!.onclick = (): void => share();
 
 const dragon = document.getElementById('dragon')!;
-document.body.ondragover = () => setVisible(dragon, true, 'flex');
-dragon.ondragleave = () => setVisible(dragon, false);
-dragon.ondragover = () => event!.preventDefault();
-dragon.ondrop = event => {
+document.body.ondragover = (): void => setVisible(dragon, true, 'flex');
+dragon.ondragleave = (): void => setVisible(dragon, false);
+dragon.ondragover = (): void => event!.preventDefault();
+dragon.ondrop = (event: DragEvent): void => {
     setVisible(dragon, false);
     event.preventDefault();
     if (event.dataTransfer!.items && event.dataTransfer!.items[0].kind === 'file') {
@@ -131,10 +136,10 @@ dragon.ondrop = event => {
     }
 };
 
-function openFile (file: File, runCart: boolean) {
+function openFile (file: File, runCart: boolean): void {
     const reader = new FileReader();
     if (file.type == 'image/gif') {
-        reader.onload = () => {
+        reader.onload = (): void => {
             try {
                 const payload = parseCartridge(new Uint8Array(reader.result as ArrayBuffer));
                 if (runCart) runPayload(payload.options, payload.program);
@@ -151,13 +156,13 @@ function openFile (file: File, runCart: boolean) {
     }
 }
 
-mainInput.onchange = () => openFile(mainInput.files![0], false);
-showToolbox.onclick = () => {
+mainInput.onchange = (): void => openFile(mainInput.files![0], false);
+showToolbox.onclick = (): void => {
     showToolbox.classList.toggle('selected');
     setVisible(toolbox, showToolbox.classList.contains('selected'), 'flex');
     toolboxAccordion.update();
 };
-showManual.onclick = () => {
+showManual.onclick = (): void => {
     showManual.classList.toggle('selected');
     setVisible(manual, showManual.classList.contains('selected'), 'flex');
 };
@@ -166,9 +171,9 @@ showManual.onclick = () => {
 * Run mode:
 **/
 
-document.getElementById('run-close')!.onclick = () => stopRom();
-document.getElementById('run-continue')!.onclick = () => clearBreakpoint();
-document.getElementById('run-keypad')!.onclick = () => {
+document.getElementById('run-close')!.onclick = (): void => stopRom();
+document.getElementById('run-continue')!.onclick = (): void => clearBreakpoint();
+document.getElementById('run-keypad')!.onclick = (): void => {
     document.getElementById('run-keys')!.classList.toggle('invisible');
 };
 
@@ -178,10 +183,10 @@ if (window.innerWidth < window.innerHeight) {
     document.getElementById('run-keys')!.classList.remove('invisible');
 }
 
-function getVirtualKey (k: number) { return document.getElementById('0x' + k.toString(16).toUpperCase())!; }
-function setVirtualKey (k: number, v: boolean) { if (k) getVirtualKey(k).classList.toggle('active', v); }
+function getVirtualKey (k: number): HTMLElement { return document.getElementById('0x' + k.toString(16).toUpperCase())!; }
+function setVirtualKey (k: number, v: boolean): void { if (k) getVirtualKey(k).classList.toggle('active', v); }
 
-window.onkeydown = event => {
+window.onkeydown = (event: KeyboardEvent): void => {
     if (emulator.halted) return;
     if (!(event.keyCode in emulator.keys)) {
         emulator.keys[event.keyCode] = true;
@@ -190,7 +195,7 @@ window.onkeydown = event => {
     event.preventDefault();
 };
 
-window.onkeyup = event => {
+window.onkeyup = (event: KeyboardEvent): void => {
     if (emulator.halted) return;
     if (event.keyCode in emulator.keys) {
         delete emulator.keys[event.keyCode];
@@ -206,19 +211,19 @@ window.onkeyup = event => {
     if (event.key == 'p') { haltProfiler('profiler'); }
     if (emulator.breakpoint) {
         if (event.key == 'o') { emulator.tick(); renderDisplay(emulator); haltBreakpoint('single step'); }
-        if (event.key == 'u') { const l = emulator.r.length; if (l > 0) { emulator.stack_breakpoint = l - 1; clearBreakpoint(); } } // step out
+        if (event.key == 'u') { const l = emulator.r.length; if (l > 0) { emulator.stackBreakpoint = l - 1; clearBreakpoint(); } } // step out
         if (event.key == 'l') {
-            if ((emulator.m[emulator.pc] & 0xF0) == 0x20) { const l = emulator.r.length; if (l >= 0) { emulator.stack_breakpoint = l; clearBreakpoint(); } } else { emulator.tick(); renderDisplay(emulator); haltBreakpoint('stepping over'); }
+            if ((emulator.m[emulator.pc] & 0xF0) == 0x20) { const l = emulator.r.length; if (l >= 0) { emulator.stackBreakpoint = l; clearBreakpoint(); } } else { emulator.tick(); renderDisplay(emulator); haltBreakpoint('stepping over'); }
         }
     }
     event.preventDefault();
 };
 
-range(16).forEach(k => {
+range(16).forEach((k: number): void => {
     const m = keymap[k];
     const fake = { keyCode: m, preventDefault: () => {} };
-    const dn = () => window.onkeydown!(fake as KeyboardEvent);
-    const up = () => { if (m in emulator.keys) window.onkeyup!(fake as KeyboardEvent); };
+    const dn = (): any => window.onkeydown!(fake as KeyboardEvent);
+    const up = (): void => { if (m in emulator.keys) window.onkeyup!(fake as KeyboardEvent); };
     const b = getVirtualKey(k);
     b.onmousedown = dn;
     b.onmouseup = up;
@@ -254,7 +259,7 @@ export function compile (): RomData | null {
             for (var x = 0; x < c.pos[1] as number - 1; x++) {
                 if (text[x] == '\n') { line++; ch = 0; } else { ch++; }
             }
-            error = 'line ' + line + ': ' + error;
+            error = `line ${line}: ${error}`;
             editor.setSelection(
                 { line: line - 1, ch: ch },
                 { line: line - 1, ch: ch + (c.pos[2] as number - 1 - x) }
@@ -296,7 +301,7 @@ export function runRom (rom: RomData): void {
                 if (emulator.vBlankQuirks && (emulator.m[emulator.pc] & 0xF0) == 0xD0) { z = emulator.tickrate; }
                 emulator.tick();
                 if (emulator.pc in emulator.metadata.breakpoints) { haltBreakpoint(emulator.metadata.breakpoints[emulator.pc]); }
-                if (emulator.r.length == emulator.stack_breakpoint) { emulator.stack_breakpoint = -1; haltBreakpoint('step out'); }
+                if (emulator.r.length == emulator.stackBreakpoint) { emulator.stackBreakpoint = -1; haltBreakpoint('step out'); }
             }
         }
         if (!emulator.breakpoint) {

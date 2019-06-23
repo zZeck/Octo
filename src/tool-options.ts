@@ -46,10 +46,10 @@ type flagFunctions = {
         getValue: () => string | undefined;
         setValue: (v: number) => number;
         setVisible: (x: boolean) => 'flex' | 'none';
-    } : getSetValue
+    } : GetSetValue
 };
 
-interface getSetValue {
+interface GetSetValue {
     getValue: () => boolean;
     setValue: (x: any) => any;
 }
@@ -64,20 +64,20 @@ const compatibilityFlags: flagFunctions = {
     maxSize: radioBar<number>(document.getElementById('max-size')!, 3584, setOptions)
 };
 
-function setCompatibilityProfile (x: CompatibilityProfileFlags | 'none') {
+function setCompatibilityProfile (x: CompatibilityProfileFlags | 'none'): void {
     const p = compatibilityProfiles[x as CompatibilityProfileFlags];
     for (const key in compatibilityFlags) emulator[key] = p[key as CampatibilityFlags];
     saveLocalOptions();
     updateOptions();
 }
 // TODO edited loops to be const key. correct?
-function setOptions () {
+function setOptions (): void {
     for (const key in compatibilityFlags) emulator[key] = compatibilityFlags[key as CampatibilityFlags].getValue();
     saveLocalOptions();
     updateOptions();
 }
 // TODO edited loops to be const key. correct?
-export function updateOptions () {
+export function updateOptions (): void {
     for (const key in compatibilityFlags) compatibilityFlags[key as CampatibilityFlags].setValue(emulator[key]);
     screenRotation.setValue(emulator.screenRotation);
     compatProfile.setValue('none');// TODO fix?

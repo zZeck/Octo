@@ -2,7 +2,7 @@ import { haltBreakpoint } from './debugger';
 import { DebugInfo } from './compiler';
 import { Formats } from './util';
 
-export var keymap = [
+export const keymap = [
     // chip8    // keyboard
     /* 0 */ 88, // x
     /* 1 */ 49, // 1
@@ -22,7 +22,7 @@ export var keymap = [
     /* F */ 86 // v
 ];
 
-export var keymapInverse: number[] = [];
+export const keymapInverse: number[] = [];
 for (let i = 0, len = keymap.length; i < len; i++) {
     keymapInverse[keymap[i]] = i;
 }
@@ -71,7 +71,7 @@ const bigfont = [
 //
 /// /////////////////////////////////
 
-export interface breakPoints {
+export interface BreakPoints {
     [key: number]: string; // TODO string or number?
 }
 
@@ -107,7 +107,7 @@ export interface EmulatorOptions {
 
 export class Emulator implements EmulatorOptions {
     // TODO remove this and try to switch clients to property string enum types
-    [key: string]: any
+    //[key: string]: any
 
     // persistent configuration settings
     public tickrate = 20;
@@ -142,7 +142,7 @@ export class Emulator implements EmulatorOptions {
     public flags: number[] = []; // semi-persistent hp48 flag vars
     public pattern: number[] = []; // audio pattern buffer
     public plane = 1; // graphics plane
-    public profile_data: {[data: number]: number} = {};
+    public profileData: {[data: number]: number} = {};
 
     // control/debug state
     public keys: {[key: number]: boolean} = {}; // track keys which are pressed
@@ -152,29 +152,29 @@ export class Emulator implements EmulatorOptions {
     public breakpoint = false;
     public metadata: RomData = { labels: {}, breakpoints: {}, aliases: {}, rom: [] };
     public tickCounter = 0;
-    stack_breakpoint!: number;
+    public stackBreakpoint!: number;
 
     // external interface stubs
     // TODO note: these are assigned in htmlcode
-    public exitVector () {} // fired by 'exit'
-    public importFlags () { return [0, 0, 0, 0, 0, 0, 0, 0]; } // load persistent flags
-    public exportFlags (_flags: number[]) {} // save persistent flags
-    public buzzTrigger (_ticks: number, _remainingTicks: number) {} // fired when buzzer played //TODO unused?
+    public exitVector (): void {} // fired by 'exit'
+    public importFlags (): number[] { return [0, 0, 0, 0, 0, 0, 0, 0]; } // load persistent flags
+    public exportFlags (_flags: number[]): void {} // save persistent flags
+    public buzzTrigger (_ticks: number, _remainingTicks: number): void {} // fired when buzzer played //TODO unused?
 
-    public init (rom: RomData) {
+    public init (rom: RomData): void {
         // initialise memory with a new array to ensure that it is of the right size and is initiliased to 0
         this.m = this.enableXO ? new Uint8Array(0x10000) : new Uint8Array(0x1000);
 
         this.p = [[], []];
-        if (this.enableXO) { for (var z = 0; z < 64 * 128; z++) { this.p[0][z] = 0; this.p[1][z] = 0; } } else { for (var z = 0; z < 32 * 64; z++) { this.p[0][z] = 0; this.p[1][z] = 0; } }
+        if (this.enableXO) { for (let z = 0; z < 64 * 128; z++) { this.p[0][z] = 0; this.p[1][z] = 0; } } else { for (let z = 0; z < 32 * 64; z++) { this.p[0][z] = 0; this.p[1][z] = 0; } }
 
         // initialize memory
-        for (var z = 0; z < 32 * 64; z++) { this.p[0][z] = 0; this.p[1][z] = 0; }
-        for (var z = 0; z < font.length; z++) { this.m[z] = font[z]; }
-        for (var z = 0; z < bigfont.length; z++) { this.m[z + font.length] = bigfont[z]; }
-        for (var z = 0; z < rom.rom.length; z++) { this.m[0x200 + z] = rom.rom[z]; }
-        for (var z = 0; z < 16; z++) { this.v[z] = 0; }
-        for (var z = 0; z < 16; z++) { this.pattern[z] = 0; }
+        for (let z = 0; z < 32 * 64; z++) { this.p[0][z] = 0; this.p[1][z] = 0; }
+        for (let z = 0; z < font.length; z++) { this.m[z] = font[z]; }
+        for (let z = 0; z < bigfont.length; z++) { this.m[z + font.length] = bigfont[z]; }
+        for (let z = 0; z < rom.rom.length; z++) { this.m[0x200 + z] = rom.rom[z]; }
+        for (let z = 0; z < 16; z++) { this.v[z] = 0; }
+        for (let z = 0; z < 16; z++) { this.pattern[z] = 0; }
 
         // initialize interpreter state
         this.r = [];
@@ -191,13 +191,24 @@ export class Emulator implements EmulatorOptions {
         this.waitReg = -1;
         this.halted = false;
         this.breakpoint = false;
-        this.stack_breakpoint = -1;
+        this.stackBreakpoint = -1;
         this.metadata = rom;
         this.tickCounter = 0;
-        this.profile_data = {};
+        this.profileData = {};
     }
 
-    public writeCarry (dest: number, value: number, flag: number) {
+    public tick (): void {
+        if (this.halted) { return; }
+        this.tickCounter++;
+        try {
+            this.opcode();
+        } catch (err) {
+            console.log(`halted: ${err}`);
+            this.halted = true;
+        }
+    }
+
+    private writeCarry (dest: number, value: number, flag: number): void {
         this.v[dest] = value & 0xFF;
         this.v[0xF] = flag ? 1 : 0;
         if (this.vfOrderQuirks) {
@@ -205,7 +216,7 @@ export class Emulator implements EmulatorOptions {
         }
     }
 
-    public math (x: number, y: number, op: number) {
+    private math (x: number, y: number, op: number): void {
         // basic arithmetic opcodes
         let t: number;
         switch (op) {
@@ -236,18 +247,18 @@ export class Emulator implements EmulatorOptions {
                 this.writeCarry(x, t, this.v[y] >> 7 & 0x1);
                 break;
             default:
-                haltBreakpoint('unknown math opcode ' + op);
+                haltBreakpoint(`unknown math opcode ${op}`);
         }
     }
 
-    public misc (x: number, rest: number) {
+    private misc (x: number, rest: number): void {
         // miscellaneous opcodes
         switch (rest) {
             case 0x01:
                 this.plane = x & 0x3;
                 break;
             case 0x02:
-                for (var z = 0; z < 16; z++) {
+                for (let z = 0; z < 16; z++) {
                     this.pattern[z] = this.m[this.i + z];
                 }
                 break;
@@ -264,15 +275,15 @@ export class Emulator implements EmulatorOptions {
                 this.m[this.i + 2] = this.v[x] % 10;
                 break;
             case 0x55:
-                for (var z = 0; z <= x; z++) { this.m[this.i + z] = this.v[z]; }
+                for (let z = 0; z <= x; z++) { this.m[this.i + z] = this.v[z]; }
                 if (!this.loadStoreQuirks) { this.i = this.i + x + 1 & 0xFFFF; }
                 break;
             case 0x65:
-                for (var z = 0; z <= x; z++) { this.v[z] = this.m[this.i + z]; }
+                for (let z = 0; z <= x; z++) { this.v[z] = this.m[this.i + z]; }
                 if (!this.loadStoreQuirks) { this.i = this.i + x + 1 & 0xFFFF; }
                 break;
             case 0x75:
-                for (var z = 0; z <= x; z++) { this.flags[z] = this.v[z]; }
+                for (let z = 0; z <= x; z++) { this.flags[z] = this.v[z]; }
                 this.exportFlags(this.flags);
                 break;
             case 0x85:
@@ -280,14 +291,14 @@ export class Emulator implements EmulatorOptions {
                 if (typeof this.flags === 'undefined' || this.flags == null) {
                     this.flags = [0, 0, 0, 0, 0, 0, 0, 0];
                 }
-                for (var z = 0; z <= x; z++) { this.v[z] = this.flags[z]; }
+                for (let z = 0; z <= x; z++) { this.v[z] = this.flags[z]; }
                 break;
             default:
-                haltBreakpoint('unknown misc opcode ' + rest);
+                haltBreakpoint(`unknown misc opcode ${rest}`);
         }
     }
 
-    public sprite (x: number, y: number, len: number) {
+    private sprite (x: number, y: number, len: number): void {
         this.v[0xF] = 0x0;
         const rowSize = this.hires ? 128 : 64;
         const colSize = this.hires ? 64 : 32;
@@ -296,10 +307,10 @@ export class Emulator implements EmulatorOptions {
             if ((this.plane & layer + 1) == 0) { continue; }
             if (len == 0) {
                 // draw a SuperChip 16x16 sprite
-                for (var a = 0; a < 16; a++) {
-                    for (var b = 0; b < 16; b++) {
-                        var target = (x + b) % rowSize + (y + a) % colSize * rowSize;
-                        var source = (this.m[i + a * 2 + (b > 7 ? 1 : 0)] >> 7 - b % 8 & 0x1) != 0;
+                for (let a = 0; a < 16; a++) {
+                    for (let b = 0; b < 16; b++) {
+                        const target = (x + b) % rowSize + (y + a) % colSize * rowSize;
+                        let source = (this.m[i + a * 2 + (b > 7 ? 1 : 0)] >> 7 - b % 8 & 0x1) != 0;
                         if (this.clipQuirks) {
                             if (x % rowSize + b >= rowSize || y % colSize + a >= colSize) { source = false; }
                         }
@@ -310,10 +321,10 @@ export class Emulator implements EmulatorOptions {
                 i += 32;
             } else {
                 // draw a Chip8 8xN sprite
-                for (var a = 0; a < len; a++) {
-                    for (var b = 0; b < 8; b++) {
-                        var target = (x + b) % rowSize + (y + a) % colSize * rowSize;
-                        var source = (this.m[i + a] >> 7 - b & 0x1) != 0;
+                for (let a = 0; a < len; a++) {
+                    for (let b = 0; b < 8; b++) {
+                        const target = (x + b) % rowSize + (y + a) % colSize * rowSize;
+                        let source = (this.m[i + a] >> 7 - b & 0x1) != 0;
                         if (this.clipQuirks) {
                             if (x % rowSize + b >= rowSize || y % colSize + a >= colSize) { source = false; }
                         }
@@ -326,7 +337,7 @@ export class Emulator implements EmulatorOptions {
         }
     }
 
-    public call (nnn: number) {
+    private call (nnn: number): void {
         if (this.r.length >= 12) {
             haltBreakpoint('call stack overflow.');
         }
@@ -334,28 +345,28 @@ export class Emulator implements EmulatorOptions {
         this.pc = nnn;
     }
 
-    public jump0 (nnn: number) {
+    private jump0 (nnn: number): void {
         if (this.jumpQuirks) { this.pc = nnn + this.v[nnn >> 8 & 0xF]; } else { this.pc = nnn + this.v[0]; }
     }
 
-    public machine (nnn: number) {
+    private machine (nnn: number): void {
         if (nnn == 0x000) { this.halted = true; return; }
         haltBreakpoint('machine code is not supported.');
     }
 
-    public skip () {
-        const op = this.m[this.pc ] << 8 | this.m[this.pc + 1];
+    private skip (): void {
+        const op = this.m[this.pc] << 8 | this.m[this.pc + 1];
         this.pc += op == 0xF000 ? 4 : 2;
     }
 
-    public opcode () {
+    private opcode (): void {
         // Increment profilining data
-        this.profile_data[this.pc] = (this.profile_data[this.pc] || 0) + 1;
+        this.profileData[this.pc] = (this.profileData[this.pc] || 0) + 1;
 
         // decode the current opcode
-        const op = this.m[this.pc ] << 8 | this.m[this.pc + 1];
-        const o = this.m[this.pc ] >> 4 & 0x00F;
-        const x = this.m[this.pc ] & 0x00F;
+        const op = this.m[this.pc] << 8 | this.m[this.pc + 1];
+        const o = this.m[this.pc] >> 4 & 0x00F;
+        const x = this.m[this.pc] & 0x00F;
         const y = this.m[this.pc + 1] >> 4 & 0x00F;
         const n = this.m[this.pc + 1] & 0x00F;
         const nn = this.m[this.pc + 1] & 0x0FF;
@@ -365,9 +376,9 @@ export class Emulator implements EmulatorOptions {
         // execute a simple opcode
         if (op == 0x00E0) {
             // clear
-            for (var layer = 0; layer < 2; layer++) {
+            for (let layer = 0; layer < 2; layer++) {
                 if ((this.plane & layer + 1) == 0) { continue; }
-                for (var z = 0; z < this.p[layer].length; z++) {
+                for (let z = 0; z < this.p[layer].length; z++) {
                     this.p[layer][z] = 0;
                 }
             }
@@ -390,10 +401,10 @@ export class Emulator implements EmulatorOptions {
         }
         if ((op & 0xFFF0) == 0x00C0) {
             // scroll down n pixels
-            var rowSize = this.hires ? 128 : 64;
-            for (var layer = 0; layer < 2; layer++) {
+            const rowSize = this.hires ? 128 : 64;
+            for (let layer = 0; layer < 2; layer++) {
                 if ((this.plane & layer + 1) == 0) { continue; }
-                for (var z = this.p[layer].length - 1; z >= 0; z--) {
+                for (let z = this.p[layer].length - 1; z >= 0; z--) {
                     this.p[layer][z] = z >= rowSize * n ? this.p[layer][z - rowSize * n] : 0;
                 }
             }
@@ -401,10 +412,10 @@ export class Emulator implements EmulatorOptions {
         }
         if ((op & 0xFFF0) == 0x00D0) {
             // scroll up n pixels
-            var rowSize = this.hires ? 128 : 64;
-            for (var layer = 0; layer < 2; layer++) {
+            const rowSize = this.hires ? 128 : 64;
+            for (let layer = 0; layer < 2; layer++) {
                 if ((this.plane & layer + 1) == 0) { continue; }
-                for (var z = 0; z < this.p[layer].length; z++) {
+                for (let z = 0; z < this.p[layer].length; z++) {
                     this.p[layer][z] = z < this.p[layer].length - rowSize * n ? this.p[layer][z + rowSize * n] : 0;
                 }
             }
@@ -412,11 +423,11 @@ export class Emulator implements EmulatorOptions {
         }
         if (op == 0x00FB) {
             // scroll right 4 pixels
-            var rowSize = this.hires ? 128 : 64;
-            for (var layer = 0; layer < 2; layer++) {
+            const rowSize = this.hires ? 128 : 64;
+            for (let layer = 0; layer < 2; layer++) {
                 if ((this.plane & layer + 1) == 0) { continue; }
-                for (var a = 0; a < this.p[layer].length; a += rowSize) {
-                    for (var b = rowSize - 1; b >= 0; b--) {
+                for (let a = 0; a < this.p[layer].length; a += rowSize) {
+                    for (let b = rowSize - 1; b >= 0; b--) {
                         this.p[layer][a + b] = b > 3 ? this.p[layer][a + b - 4] : 0;
                     }
                 }
@@ -425,11 +436,11 @@ export class Emulator implements EmulatorOptions {
         }
         if (op == 0x00FC) {
             // scroll left 4 pixels
-            var rowSize = this.hires ? 128 : 64;
-            for (var layer = 0; layer < 2; layer++) {
+            const rowSize = this.hires ? 128 : 64;
+            for (let layer = 0; layer < 2; layer++) {
                 if ((this.plane & layer + 1) == 0) { continue; }
-                for (var a = 0; a < this.p[layer].length; a += rowSize) {
-                    for (var b = 0; b < rowSize; b++) {
+                for (let a = 0; a < this.p[layer].length; a += rowSize) {
+                    for (let b = 0; b < rowSize; b++) {
                         this.p[layer][a + b] = b < rowSize - 4 ? this.p[layer][a + b + 4] : 0;
                     }
                 }
@@ -446,14 +457,14 @@ export class Emulator implements EmulatorOptions {
             // lores
             this.hires = false;
             this.p = [[], []];
-            for (var z = 0; z < 32 * 64; z++) { this.p[0][z] = 0; this.p[1][z] = 0; }
+            for (let z = 0; z < 32 * 64; z++) { this.p[0][z] = 0; this.p[1][z] = 0; }
             return;
         }
         if (op == 0x00FF) {
             // hires
             this.hires = true;
             this.p = [[], []];
-            for (var z = 0; z < 64 * 128; z++) { this.p[0][z] = 0; this.p[1][z] = 0; }
+            for (let z = 0; z < 64 * 128; z++) { this.p[0][z] = 0; this.p[1][z] = 0; }
             return;
         }
         if (op == 0xF000) {
@@ -466,20 +477,20 @@ export class Emulator implements EmulatorOptions {
         if (o == 0x5 && n != 0) {
             if (n == 2) {
                 // save range
-                var dist = Math.abs(x - y);
-                if (x < y) { for (var z = 0; z <= dist; z++) { this.m[this.i + z] = this.v[x + z]; } } else { for (var z = 0; z <= dist; z++) { this.m[this.i + z] = this.v[x - z]; } }
+                const dist = Math.abs(x - y);
+                if (x < y) { for (let z = 0; z <= dist; z++) { this.m[this.i + z] = this.v[x + z]; } } else { for (let z = 0; z <= dist; z++) { this.m[this.i + z] = this.v[x - z]; } }
                 return;
             } else if (n == 3) {
                 // load range
-                var dist = Math.abs(x - y);
-                if (x < y) { for (var z = 0; z <= dist; z++) { this.v[x + z] = this.m[this.i + z]; } } else { for (var z = 0; z <= dist; z++) { this.v[x - z] = this.m[this.i + z]; } }
+                const dist = Math.abs(x - y);
+                if (x < y) { for (let z = 0; z <= dist; z++) { this.v[x + z] = this.m[this.i + z]; } } else { for (let z = 0; z <= dist; z++) { this.v[x - z] = this.m[this.i + z]; } }
                 return;
             } 
-            haltBreakpoint('unknown opcode ' + op);
+            haltBreakpoint(`unknown opcode ${op}`);
             
         }
         if (o == 0x9 && n != 0) {
-            haltBreakpoint('unknown opcode ' + op);
+            haltBreakpoint(`unknown opcode ${op}`);
         }
 
         // dispatch complex opcodes
@@ -499,18 +510,7 @@ export class Emulator implements EmulatorOptions {
             case 0xC: this.v[x] = Math.random() * 256 & nn; break;
             case 0xD: this.sprite(this.v[x], this.v[y], n); break;
             case 0xF: this.misc(x, nn); break;
-            default: haltBreakpoint('unknown opcode ' + o);
-        }
-    }
-
-    public tick () {
-        if (this.halted) { return; }
-        this.tickCounter++;
-        try {
-            this.opcode();
-        } catch (err) {
-            console.log('halted: ' + err);
-            this.halted = true;
+            default: haltBreakpoint(`unknown opcode ${o}`);
         }
     }
 }

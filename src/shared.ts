@@ -8,7 +8,7 @@ import { Emulator, EmulatorOptions } from './emulator';
 /// /////////////////////////////////
 
 let scaleFactor = 5;
-export var renderTarget = 'target';
+export const renderTarget = 'target';
 
 const optionFlags = [
     'tickrate',
@@ -27,11 +27,11 @@ const optionFlags = [
     'screenRotation',
     'maxSize'
 ];
-export function unpackOptions (emulator: Emulator, options: EmulatorOptions) {
+export function unpackOptions (emulator: Emulator, options: EmulatorOptions): void {
     optionFlags.forEach(x => { if (x in options) emulator[x] = options[x]; });
     if (options['enableXO']) emulator.maxSize = 65024; // legacy option
 }
-export function packOptions (emulator: Emulator) {
+export function packOptions (emulator: Emulator): EmulatorOptions {
     const r: EmulatorOptions = {} as EmulatorOptions;
     optionFlags.forEach(x => r[x] = emulator[x]);
     return r;
@@ -47,7 +47,7 @@ interface Frame {
     hires: boolean;
 }
 
-export function setRenderTarget (scale: number, canvas: string) {
+export function setRenderTarget (scale: number, canvas: string): void {
     scaleFactor = scale;
     renderTarget = canvas;
     const c = document.getElementById(canvas) as CanvasWithLastFrame;
@@ -70,7 +70,7 @@ export function setRenderTarget (scale: number, canvas: string) {
     }
 }
 
-function getTransform (emulator: Emulator, g: CanvasRenderingContext2D) {
+function getTransform (emulator: Emulator, g: CanvasRenderingContext2D): void {
     g.setTransform(1, 0, 0, 1, 0, 0);
     const x = scaleFactor * 128;
     const y = scaleFactor * 64;
@@ -92,7 +92,7 @@ function getTransform (emulator: Emulator, g: CanvasRenderingContext2D) {
     }
 }
 
-export function arrayEqual<T> (a: T[], b: T[]) {
+export function arrayEqual<T> (a: T[], b: T[]): boolean {
     const length = a.length;
     if (length !== b.length) { return false; }
     for (let i = 0; i < length; i++) {
@@ -101,17 +101,17 @@ export function arrayEqual<T> (a: T[], b: T[]) {
     return true;
 }
 
-export function getColor (id: number) {
+export function getColor (id: number): string {
     switch (id) {
         case 0: return emulator.backgroundColor;
         case 1: return emulator.fillColor;
         case 2: return emulator.fillColor2;
         case 3: return emulator.blendColor;
     }
-    throw 'invalid color: ' + id;
+    throw Error(`invalid color: ${id}`);
 }
 
-export function renderDisplay (emulator: Emulator) {
+export function renderDisplay (emulator: Emulator): void {
     const c = document.getElementById(renderTarget) as CanvasWithLastFrame;
 
     // Canvas rendering can be expensive. Exit out early if nothing has changed.
@@ -168,7 +168,7 @@ class AudioBuffer {
     duration: number;
 
     // TODO this constructor may be wrong
-    constructor (buffer: number[], duration: number) {
+    public constructor (buffer: number[], duration: number) {
         /* if (!(this instanceof AudioBuffer)) {
 		//TODO how does this interact with void
 		return new AudioBuffer(buffer, duration);
@@ -179,7 +179,7 @@ class AudioBuffer {
         this.duration = duration;
     }
 
-    write (buffer: number[], index: number, size: number) {
+    public write (buffer: number[], index: number, size: number): number {
         size = Math.max(0, Math.min(size, this.duration));
         if (!size) { return size; }
 
@@ -195,7 +195,7 @@ class AudioBuffer {
         return size;
     }
 
-    dequeue (duration: number) {
+    public dequeue (duration: number): void {
         this.duration -= duration;
     }
 }
@@ -204,7 +204,7 @@ const TIMER_FREQ = 60;
 const SAMPLES = 16;
 const BUFFER_SIZE = SAMPLES * 8;
 
-export function audioSetup () {
+export function audioSetup (): boolean {
     if (!audio) {
         if (typeof AudioContext !== 'undefined') {
             audio = new AudioContext();
@@ -217,7 +217,7 @@ export function audioSetup () {
     if (audio && !audioNode) {
         // TODO createScriptProcessor is deprecated
         audioNode = audio.createScriptProcessor(4096, 1, 1);
-        audioNode.onaudioprocess = function (audioProcessingEvent) {
+        audioNode.onaudioprocess = function (audioProcessingEvent: AudioProcessingEvent): void {
             const outputBuffer = audioProcessingEvent.outputBuffer;
             const outputData = outputBuffer.getChannelData(0);
             const samples_n = outputBuffer.length;
@@ -254,7 +254,7 @@ export function audioSetup () {
     return false;
 }
 
-export function stopAudio () {
+export function stopAudio (): void {
     if (!audio) { return; }
     if (audioNode) {
         audioNode.disconnect();
@@ -265,7 +265,7 @@ export function stopAudio () {
 
 const VOLUME = 0.25;
 
-export function playPattern (soundLength: number, buffer: number[], remainingTicks?: number) {
+export function playPattern (soundLength: number, buffer: number[], remainingTicks?: number): void {
     if (!audio) { return; }
 
     const samples = Math.floor(BUFFER_SIZE * audio.sampleRate / FREQ);
@@ -283,7 +283,7 @@ export function playPattern (soundLength: number, buffer: number[], remainingTic
     audioData.push(new AudioBuffer(audioBuffer, Math.floor(soundLength * audio.sampleRate / TIMER_FREQ)));
 }
 
-export function escapeHtml (str: string) {
+export function escapeHtml (str: string): string {
     const div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
