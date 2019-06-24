@@ -13,8 +13,8 @@ let LOAD_STORE_QUIRKS = false; // ignore i increment with loads
 let SHIFT_QUIRKS = false; // shift vx in place, ignore vy
 let VF_ORDER_QUIRKS = false; // arithmetic results write to vf after status flag
 
-const regNames = [
-    '0x0', '0x1', '0x2', '0x3', '0x4', '0x5', '0x6', '0x7', '0x8', '0x9', '0xA', '0xB', '0xC', '0xD', '0xE', '0xF',
+const regNames = [//TODO clean this up. Probably should not be array at this point.
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
     'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'i', 'rets', 'plane'
 ];
 
@@ -339,7 +339,7 @@ function apply (address: number): {
         [key: number]: boolean;
     } {
         const r: {[key: number]: boolean} = {};
-        for (const retAddr of Object.keys(ret[x])) {
+        for (const retAddr of Object.keys(ret[x.toString(16)])) {
             r[unop(parseInt(retAddr)) & 0xFF] = true;
         }
         return r;
