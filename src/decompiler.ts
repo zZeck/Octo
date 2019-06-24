@@ -46,7 +46,7 @@ export function formatInstruction (a: number, nn: number): string {
     const vx = 'v' + x.toString(16).toUpperCase();
     const vy = 'v' + y.toString(16).toUpperCase();
 
-    function name (map: {[address: number]: string}, nnn: number): string { return nnn in map ? map[nnn] : hexFormat(nnn); }
+    function name (map: {[address: number]: string}, nibbles: number): string { return nibbles in map ? map[nibbles] : hexFormat(nibbles); }
 
     if (a == 0x00 && y == 0xC) { return 'scroll-down ' + numericFormat(n); } // schip
     if (a == 0x00 && y == 0xD) { return 'scroll-up ' + numericFormat(n); } // xo-chip
@@ -105,8 +105,9 @@ export function formatInstruction (a: number, nn: number): string {
     return hexFormat(a) + ' ' + hexFormat(nn) + ' # bad opcode?';
 }
 
-function formatNative (addr: number, prefix: string): (string | number)[] {
+function formatNative (address: number, prefix: string): (string | number)[] {
     let r = '';
+    let addr = address;
     const start = addr;
 
     while (true) {
@@ -156,8 +157,8 @@ function formatNative (addr: number, prefix: string): (string | number)[] {
         if (o == 0x4) { addr += 1; r += h1 + 'LDA  ' + hr; } // load and advance
         if (o == 0x5) { addr += 1; r += h1 + 'STR  ' + hr; } // store through r
         if (op == 0x60) { addr += 1; r += h1 + 'IRX'; } // increment r(x)
-        if (o == 0x6 && x > 0 && x < 8) { addr += 1; r += h1 + 'OUT  ' + or; } // output r
-        if (o == 0x6 && x > 7) { addr += 1; r += h1 + 'INP  ' + ir; } // input r
+        if (o == 0x6 && x > 0 && x < 8) { addr += 1; r += `${h1}OUT  ${or}`; } // output r
+        if (o == 0x6 && x > 7) { addr += 1; r += `${h1}INP  ${ir}`; } // input r
         if (op == 0x70) { addr += 1; r += h1 + 'RET'; } // return
         if (op == 0x71) { addr += 1; r += h1 + 'DIS'; } // disable interrupts
         if (op == 0x72) { addr += 1; r += h1 + 'LDXA'; } // load via r(x)++
@@ -338,22 +339,22 @@ function apply (address: number): {
         [key: number]: boolean;
     } {
         const r: {[key: number]: boolean} = {};
-        for (const a of Object.keys(ret[x])) {
-            r[unop(parseInt(a)) & 0xFF] = true;
+        for (const retAddr of Object.keys(ret[x])) {
+            r[unop(parseInt(retAddr)) & 0xFF] = true;
         }
         return r;
     }
     function binary (binop: (x: number, y: number) => number): void {
         const r: {[key: number]: boolean} = {};
         if (x == y) {
-            for (const a of Object.keys(ret[x])) {
-                const tmp = parseInt(a);
+            for (const retAddr of Object.keys(ret[x])) {
+                const tmp = parseInt(retAddr);
                 r[binop(tmp, tmp) & 0xFF] = true;
             }
         } else {
-            for (const a of Object.keys(ret[x])) {
+            for (const retAddr of Object.keys(ret[x])) {
                 for (const b of Object.keys(ret[y])) {
-                    r[binop(parseInt(a), parseInt(b)) & 0xFF] = true;
+                    r[binop(parseInt(retAddr), parseInt(b)) & 0xFF] = true;
                 }
             }
         }
@@ -365,25 +366,25 @@ function apply (address: number): {
     function ioffset (delta: number): void {
         if (LOAD_STORE_QUIRKS) { return; }
         const s: {[key: number]: boolean} = {};
-        for (const a of Object.keys(ret['i'])) {
-            s[capi(parseInt(a) + delta)] = true;
+        for (const retAddrI of Object.keys(ret['i'])) {
+            s[capi(parseInt(retAddrI) + delta)] = true;
         }
         ret['i'] = s;
     }
     function isingle (value: number): {
         [key: number]: boolean;
     } {
-        value = capi(value);
-        const s: {[key: number]: boolean} = {}; s[value] = true;
+        const valueNormalized = capi(value);
+        const s: {[key: number]: boolean} = {}; s[valueNormalized] = true;
         return s;
     }
     function ioffsets (): {
         [key: number]: boolean;
     } {
         const s: {[key: number]: boolean} = {};
-        for (const a of Object.keys(ret['i'])) {
+        for (const retAddrI of Object.keys(ret['i'])) {
             for (const b of Object.keys(ret[x])) {
-                s[capi(parseInt(a) + parseInt(b))] = true;
+                s[capi(parseInt(retAddrI) + parseInt(b))] = true;
             }
         }
         return s;
@@ -392,16 +393,16 @@ function apply (address: number): {
         const r: {[key: number]: boolean} = {};
         const c: {[key: number]: boolean} = {};
         if (x == y) {
-            for (const a of Object.keys( ret[x])) {
-                const tmp = parseInt(a);
+            for (const retAddr of Object.keys( ret[x])) {
+                const tmp = parseInt(retAddr);
                 const v = binop(tmp, tmp);
                 r[v[0] & 0xFF] = true;
                 c[v[1] ? 1 : 0] = true;
             }
         } else {
-            for (const a of Object.keys(ret[x])) {
+            for (const retAddr of Object.keys(ret[x])) {
                 for (const b of Object.keys(ret[y])) {
-                    const v = binop(parseInt(a), parseInt(b));
+                    const v = binop(parseInt(retAddr), parseInt(b));
                     r[v[0] & 0xFF] = true;
                     c[v[1] ? 1 : 0] = true;
                 }
@@ -427,9 +428,10 @@ function apply (address: number): {
         return destinations;
     }
     function markRead (size: number, offset?: number): void {
-        if (!offset) { offset = 0; }
+        let realOffset = offset;
+        if (!realOffset) { realOffset = 0; }
         for (const w of Object.keys(ret['i'])) {
-            const addr = parseInt(w) + offset;
+            const addr = parseInt(w) + realOffset;
             for (let z = 0; z <= size; z++) {
                 setType(addr + z, 'data');
             }
@@ -446,15 +448,15 @@ function apply (address: number): {
     if (op == 0x00EE) { ret['rets'] = chaseReturns(); } // return
     if (o == 0x2) { ret['rets'] = single(address + 2); } // call
     if (o == 0x6) { ret[x] = single(nn); } // vx := nn
-    if (o == 0x7) { ret[x] = unary(function (a): number { return a + nn; }); } // vx += nn
+    if (o == 0x7) { ret[x] = unary(function (addr): number { return addr + nn; }); } // vx += nn
     if (o == 0x8 && n == 0x0) { binary(function (_a, b): number { return b; }); } // vx := vy //TODO fix _a?
-    if (o == 0x8 && n == 0x1) { binary(function (a, b): number { return a | b; }); } // vx |= vy
-    if (o == 0x8 && n == 0x2) { binary(function (a, b): number { return a & b; }); } // vx &= vy
-    if (o == 0x8 && n == 0x3) { binary(function (a, b): number { return a ^ b; }); } // vx ^= vy
-    if (o == 0x8 && n == 0x4) { bincarry(function (a, b): number[] { return [a + b, Number(a + b > 0xFF)]; }); } // TODO is this a bug?
-    if (o == 0x8 && n == 0x5) { bincarry(function (a, b): number[] { return [a - b, Number(a >= b)]; }); }
+    if (o == 0x8 && n == 0x1) { binary(function (addr, b): number { return addr | b; }); } // vx |= vy
+    if (o == 0x8 && n == 0x2) { binary(function (addr, b): number { return addr & b; }); } // vx &= vy
+    if (o == 0x8 && n == 0x3) { binary(function (addr, b): number { return addr ^ b; }); } // vx ^= vy
+    if (o == 0x8 && n == 0x4) { bincarry(function (addr, b): number[] { return [addr + b, Number(addr + b > 0xFF)]; }); } // TODO is this a bug?
+    if (o == 0x8 && n == 0x5) { bincarry(function (addr, b): number[] { return [addr - b, Number(addr >= b)]; }); }
     if (o == 0x8 && n == 0x6) { bincarry(function (_a, b): number[] { return [b >> 1, b & 1]; }); }// TODO fix _a?
-    if (o == 0x8 && n == 0x7) { bincarry(function (a, b): number[] { return [b - a, Number(b >= a)]; }); }
+    if (o == 0x8 && n == 0x7) { bincarry(function (addr, b): number[] { return [b - addr, Number(b >= addr)]; }); }
     if (o == 0x8 && n == 0xE) { bincarry(function (_a, b): number[] { return [b << 1, b & 128]; }); }// TODO fix _a?
     if (o == 0xA) { ret['i'] = isingle(nnn); } // i := nnn
     if (o == 0xC) { ret[x] = maskedrand(); } // vx := random nn
@@ -462,8 +464,8 @@ function apply (address: number): {
     if (o == 0xF && nn == 0x07) { ret[x] = iota(0xFF); } // vx := delay
     if (o == 0xF && nn == 0x0A) { ret[x] = iota(0xF); } // vx := key
     if (o == 0xF && nn == 0x1E) { ret['i'] = ioffsets(); } // i += vx
-    if (o == 0xF && nn == 0x29) { ret['i'] = unary(function (a): number { return 5 * a; }); }
-    if (o == 0xF && nn == 0x30) { ret['i'] = unary(function (a): number { return 10 * a + 16 * 5; }); }
+    if (o == 0xF && nn == 0x29) { ret['i'] = unary(function (addr): number { return 5 * addr; }); }
+    if (o == 0xF && nn == 0x30) { ret['i'] = unary(function (addr): number { return 10 * addr + 16 * 5; }); }
     if (o == 0xF && nn == 0x75) { for (let z = 0; z <= x; z++) { ret[`f${z}`] = ret[z]; } }
     if (o == 0xF && nn == 0x85) { for (let z = 0; z <= x; z++) { ret[z] = ret[`f${z}`]; } }
 
@@ -523,20 +525,20 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
     const y = nn >> 4 & 0xF;
     const nnn = op & 0xFFF;
 
-    function preciseSkip (address: number, predicate: (x: number, y: number, z: number) => boolean): number[] {
+    function preciseSkip (addr: number, predicate: (x: number, y: number, z: number) => boolean): number[] {
         // decide which skip paths are possible based
         // on the reaching set to an address.
         let pass = false;
         let skip = false;
-        for (const vx of Object.keys(reaching[address][x])) {
+        for (const vx of Object.keys(reaching[addr][x])) {
             if (pass && skip) { break; }
-            for (const vy of Object.keys(reaching[address][y])) {
+            for (const vy of Object.keys(reaching[addr][y])) {
                 if (predicate(parseInt(vx), parseInt(vy), nn)) { skip = true; } else { pass = true; }
             }
         }
         const ret = [];
-        if (pass) { ret.push(address + 2); }
-        if (skip) { ret.push(address + 4); }
+        if (pass) { ret.push(addr + 2); }
+        if (skip) { ret.push(addr + 4); }
         return ret;
     }
 
@@ -549,16 +551,16 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
     // simple skips
     // TODO fix unused args?
     if (o == 0x3) {
-        return preciseSkip(address, function (x, _y, nn): boolean { return x == nn; });
+        return preciseSkip(address, function (xVal, _y, byte): boolean { return xVal == byte; });
     }
     if (o == 0x4) {
-        return preciseSkip(address, function (x, _y, nn): boolean { return x != nn; });
+        return preciseSkip(address, function (xVal, _y, byte): boolean { return xVal != byte; });
     }
     if (o == 0x5) {
-        return preciseSkip(address, function (x, y, _nn): boolean { return x == y; });
+        return preciseSkip(address, function (xVal, yVal, _nn): boolean { return xVal == yVal; });
     }
     if (o == 0x9) {
-        return preciseSkip(address, function (x, y, _nn): boolean { return x != y; });
+        return preciseSkip(address, function (xVal, yVal, _nn): boolean { return xVal != yVal; });
     }
 
     if ((a & 0xF0) == 0xE0 && (nn == 0x9E || nn == 0xA1)) {
@@ -723,7 +725,8 @@ export function formatProgram (programSize: number): string {
     // emit code/data
     function tabs (n: number): string {
         let r = '';
-        while (n-- > 0) { r += '\t'; }
+        let decrementingNumber = n;
+        while (decrementingNumber-- > 0) { r += '\t'; }
         return r;
     }
     const pendingAgain = [];

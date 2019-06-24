@@ -151,7 +151,7 @@ function openFile (file: File, runCart: boolean): void {
         };
         reader.readAsArrayBuffer(file);
     } else {
-        reader.onload = () => editor.setValue(reader.result as string);
+        reader.onload = (): void => editor.setValue(reader.result as string);
         reader.readAsText(file);
     }
 }
@@ -221,7 +221,7 @@ window.onkeyup = (event: KeyboardEvent): void => {
 
 range(16).forEach((k: number): void => {
     const m = keymap[k];
-    const fake = { keyCode: m, preventDefault: () => {} };
+    const fake = { keyCode: m, preventDefault: (): void => {} };
     const dn = (): any => window.onkeydown!(fake as KeyboardEvent);
     const up = (): void => { if (m in emulator.keys) window.onkeyup!(fake as KeyboardEvent); };
     const b = getVirtualKey(k);
@@ -286,9 +286,9 @@ export function runRom (rom: RomData): void {
     if (rom === null) return;
     if (intervalHandle != null) stopRom();
     emulator.exitVector = stopRom;
-    emulator.importFlags = () => JSON.parse(localStorage.getItem('octoFlagRegisters')!);
-    emulator.exportFlags = f => localStorage.setItem('octoFlagRegisters', JSON.stringify(f));
-    emulator.buzzTrigger = (ticks, remainingTicks) => playPattern(ticks, emulator.pattern, remainingTicks);
+    emulator.importFlags = (): number[] => JSON.parse(localStorage.getItem('octoFlagRegisters')!);
+    emulator.exportFlags = (f: number[]): void => localStorage.setItem('octoFlagRegisters', JSON.stringify(f));
+    emulator.buzzTrigger = (ticks, remainingTicks): void => playPattern(ticks, emulator.pattern, remainingTicks);
     emulator.init(rom);
     clearBreakpoint();
     audioSetup();
