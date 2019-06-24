@@ -139,7 +139,7 @@ export class Emulator implements EmulatorOptions {
     public dt = 0; // delay timer
     public st = 0; // sound timer
     public hires = false; // are we in SuperChip high res mode?
-    public flags: number[] = []; // semi-persistent hp48 flag vars
+    public flags: number[] = []; // semi-persistent hp48 flag vars //TODO can be null? is null checked elsewhere
     public pattern: number[] = []; // audio pattern buffer
     public plane = 1; // graphics plane
     public profileData: {[data: number]: number} = {};
@@ -156,10 +156,10 @@ export class Emulator implements EmulatorOptions {
 
     // external interface stubs
     // TODO note: these are assigned in htmlcode
-    public exitVector (): void {} // fired by 'exit'
-    public importFlags (): number[] { return [0, 0, 0, 0, 0, 0, 0, 0]; } // load persistent flags
-    public exportFlags (_flags: number[]): void {} // save persistent flags
-    public buzzTrigger (_ticks: number, _remainingTicks: number): void {} // fired when buzzer played //TODO unused?
+    public exitVector: () => void = (): void => {}; // fired by 'exit'
+    public importFlags: () => number[] = (): number[] => { return [0, 0, 0, 0, 0, 0, 0, 0]; }; // load persistent flags
+    public exportFlags: (flags: number[]) => void = (): void => {}; // save persistent flags
+    public buzzTrigger: (_ticks: number, _remainingTicks: number) => void = (): void => {}; // fired when buzzer played //TODO unused?
 
     public init (rom: RomData): void {
         // initialise memory with a new array to ensure that it is of the right size and is initiliased to 0
@@ -216,9 +216,10 @@ export class Emulator implements EmulatorOptions {
         }
     }
 
-    private math (x: number, y: number, op: number): void {
+    private math (x: number, originalY: number, op: number): void {
         // basic arithmetic opcodes
         let t: number;
+        let y = originalY;
         switch (op) {
             case 0x0: this.v[x] = this.v[y]; break;
             case 0x1: this.v[x] |= this.v[y]; break;
@@ -288,7 +289,7 @@ export class Emulator implements EmulatorOptions {
                 break;
             case 0x85:
                 this.flags = this.importFlags();
-                if (typeof this.flags === 'undefined' || this.flags == null) {
+                if (typeof this.flags === 'undefined' || this.flags === null) {
                     this.flags = [0, 0, 0, 0, 0, 0, 0, 0];
                 }
                 for (let z = 0; z <= x; z++) { this.v[z] = this.flags[z]; }

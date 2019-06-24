@@ -64,7 +64,7 @@ function dumpContext (): string {
     return (
         'context:<br><table class=\'debug-context\'>' +
 			row(false, 'addr', 'data', 'source') +
-            lines.filter((x: number): boolean => !dbg!.lines[x].match(/^\s*$/u))
+            lines.filter((x: number): boolean => !/^\s*$/u.exec(dbg!.lines[x]))
                 .map((x: number): string => {
                     const here = dbg!.getLine(ind);
                     return row(

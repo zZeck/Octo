@@ -31,10 +31,10 @@ export function unpackOptions (emulatorToUnpack: Emulator, options: EmulatorOpti
     optionFlags.forEach((x: string): void => { if (x in options) emulatorToUnpack[x] = options[x]; });
     if (options['enableXO']) emulatorToUnpack.maxSize = 65024; // legacy option
 }
-export function packOptions (emulator: Emulator): EmulatorOptions {
-    const r: EmulatorOptions = {} as EmulatorOptions;
-    optionFlags.forEach((x: string): void => {r[x] = emulator[x];});
-    return r;
+export function packOptions (emulatorToPack: Emulator): EmulatorOptions {
+    const r: {[x: string]: any} = {};
+    optionFlags.forEach((x: string): void => {r[x] = emulatorToPack[x];});
+    return r as EmulatorOptions;
 }
 
 export interface CanvasWithLastFrame extends HTMLCanvasElement {
@@ -182,7 +182,8 @@ class AudioBuffer {
         this.duration = duration;
     }
 
-    public write (buffer: number[], index: number, size: number): number {
+    public write (buffer: number[], index: number, originalSize: number): number {
+        let size = originalSize;
         size = Math.max(0, Math.min(size, this.duration));
         if (!size) { return size; }
 

@@ -54,7 +54,7 @@ const sharingBaseUrl = 'https://vectorland.nfshost.com/storage/octo/';
 export function share (): void {
     ajax<{error: string; key: string}>('POST', sharingBaseUrl, preparePayload(), (r): void => { // TODO unused s?
         if (r.error) { setStatusMessage(r.error, false); return; }
-        const l = window.location.href.replace(/(index\.html|\?key=.*)*$/u, 'index.html?key=' + r.key);
+        const l = window.location.href.replace(/(?<link>index\.html|\?key=.*)*$/u, 'index.html?key=' + r.key);
         window.location.href = l;
     });
 }
@@ -117,9 +117,9 @@ window.onload = (): void => {
     });
 
     // load a shared program, if specified
-    const key = location.search.match(/key=([a-zA-Z0-9-_]+)/u);
+    const key = /key=(?<keyParam>[a-zA-Z0-9-_]+)/u.exec(location.search);
     if (key) { runShared(key[1]); return; }
-    const gistId = location.search.match(/gist=(\w+)/u);
+    const gistId = /gist=(?<gistParam>\w+)/u.exec(location.search);
     if (gistId) { runGist(gistId[1]); return; }
 
     // restore the local data, if available

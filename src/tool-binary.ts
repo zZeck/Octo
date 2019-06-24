@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 
 const binaryInput = document.getElementById('fileinput') as HTMLInputElement;
 const binaryEditor = textBox(document.getElementById('binary-editor')!, false, '')!;
-const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (_x: string): void => {})!;// TODO unused x?
+const decompilerMode = radioBar(document.getElementById('decompiler-mode')!, 'static', (): void => {})!;// TODO unused x?
 radioBar(document.getElementById('decompiler-numbers')!, Formats.hex, (x: Formats): void => {emulator.numericFormatStr = x;});
 
 function decompileRaw (rom: number[]): void {

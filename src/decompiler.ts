@@ -525,7 +525,7 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
     const y = nn >> 4 & 0xF;
     const nnn = op & 0xFFF;
 
-    function preciseSkip (addr: number, predicate: (x: number, y: number, z: number) => boolean): number[] {
+    function preciseSkip (addr: number, predicate: (x: number, y: number, z?: number) => boolean): number[] {
         // decide which skip paths are possible based
         // on the reaching set to an address.
         let pass = false;
@@ -557,10 +557,10 @@ function successors (address: number, prevret: {[key: number]: boolean}): number
         return preciseSkip(address, function (xVal, _y, byte): boolean { return xVal != byte; });
     }
     if (o == 0x5) {
-        return preciseSkip(address, function (xVal, yVal, _nn): boolean { return xVal == yVal; });
+        return preciseSkip(address, function (xVal, yVal): boolean { return xVal == yVal; });
     }
     if (o == 0x9) {
-        return preciseSkip(address, function (xVal, yVal, _nn): boolean { return xVal != yVal; });
+        return preciseSkip(address, function (xVal, yVal): boolean { return xVal != yVal; });
     }
 
     if ((a & 0xF0) == 0xE0 && (nn == 0x9E || nn == 0xA1)) {
@@ -687,7 +687,10 @@ export function analyzeFinish (): void {
 // TODO unused?
 export function analyze (rom: number[], quirks: {[quirk: string]: boolean}): void {
     analyzeInit(rom, quirks);
-    while (!analyzeWork()) {}
+    let isAnalysisDone = false;
+    while (!isAnalysisDone) {
+        isAnalysisDone = analyzeWork();
+    }
     analyzeFinish();
 }
 

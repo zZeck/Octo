@@ -22,7 +22,6 @@
     },
     "rules": {
         "no-await-in-loop": "error",
-        "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-template-curly-in-string": "error",
         "accessor-pairs": "error",
         "array-callback-return": "error",
@@ -69,7 +68,6 @@
         "no-void": "error",
         "prefer-promise-reject-errors": "error",
         "prefer-named-capture-group": "error",
-        "radix": "error",
         "require-await": "error",
         "require-unicode-regexp": "error",
         "wrap-iife": ["error", "any"],
@@ -77,15 +75,12 @@
         "no-label-var": "error",
         "no-shadow": "error",
         "no-undef-init": "error",
-
         "no-var": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/func-call-spacing": ["error"],
         "@typescript-eslint/member-ordering": "error",
         "@typescript-eslint/no-extra-parens": ["error"],
         "@typescript-eslint/no-for-in-array": "error",
-        
-        "@typescript-eslint/no-require-imports": "error",
         "@typescript-eslint/no-this-alias": ["error"],
         "@typescript-eslint/no-useless-constructor": "error",
         "@typescript-eslint/prefer-for-of": "error",
@@ -97,16 +92,11 @@
         "@typescript-eslint/require-array-sort-compare": "error",
         "@typescript-eslint/restrict-plus-operands": "error",
         "@typescript-eslint/semi": ["error"],
-        "@typescript-eslint/unbound-method": [
-            "error",
-            {
-              "ignoreStatic": true
-            }
-          ],
         "@typescript-eslint/unified-signatures": "error",
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-use-before-define": "off"
-
+        "@typescript-eslint/no-use-before-define": "off",
+        "no-console": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     }
-    
 }

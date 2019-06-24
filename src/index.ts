@@ -222,7 +222,7 @@ window.onkeyup = (event: KeyboardEvent): void => {
 range(16).forEach((k: number): void => {
     const m = keymap[k];
     const fake = { keyCode: m, preventDefault: (): void => {} };
-    const dn = (): any => window.onkeydown!(fake as KeyboardEvent);
+    const dn = (): void => window.onkeydown!(fake as KeyboardEvent);
     const up = (): void => { if (m in emulator.keys) window.onkeyup!(fake as KeyboardEvent); };
     const b = getVirtualKey(k);
     b.onmousedown = dn;
@@ -254,18 +254,20 @@ export function compile (): RomData | null {
             true
         );
     } catch (error) {
+        let tempError = error;
         if (c.pos !== null) {//TODO null comparison strict ok?
             let line = 1; let ch = 0; const text = editor.getValue();
-            for (let x = 0; x < c.pos[1] as unknown as number - 1; x++) {
+            let x: number;
+            for (x = 0; x < c.pos[1] as unknown as number - 1; x++) {
                 if (text[x] == '\n') { line++; ch = 0; } else { ch++; }
             }
-            error = `line ${line}: ${error}`;
+            tempError = `line ${line}: ${tempError}`;
             editor.setSelection(
                 { line: line - 1, ch: ch },
-                { line: line - 1, ch: ch + (c.pos[2] as number - 1 - x) }
+                { line: line - 1, ch: ch + (c.pos[2] as number - 1 - x) }//TODO fix this reference to x
             );
         }
-        setStatusMessage(error, false);
+        setStatusMessage(tempError, false);
         return null;
     }
     const visualBreakpoints = getVisualBreakpoints(c.dbginfo);
@@ -284,7 +286,7 @@ let intervalHandle: number | null = null;
 
 export function runRom (rom: RomData): void {
     if (rom === null) return;
-    if (intervalHandle != null) stopRom();
+    if (intervalHandle !== null) stopRom();
     emulator.exitVector = stopRom;
     emulator.importFlags = (): number[] => JSON.parse(localStorage.getItem('octoFlagRegisters')!);
     emulator.exportFlags = (f: number[]): void => localStorage.setItem('octoFlagRegisters', JSON.stringify(f));
