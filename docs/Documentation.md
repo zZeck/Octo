@@ -14,6 +14,8 @@ https://massung.github.io/CHIP-8/ notes on quirks
 https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set notes on quirks
 https://github.com/wernsey/chip8 notes on quirks
 
+VIPER magazing pdfs and more
+https://github.com/trapexit/chip-8_documentation
 
 TODO double check
 Documentation Errors:
