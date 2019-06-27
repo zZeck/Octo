@@ -306,6 +306,46 @@ WIPEOFF.ch8  41D64F82DC3C457E4F8543E081AE8E85 D666688A8FCE468A7D88B536BC1EF5F35B
 SGAMES.zip 4561A423ED70797EA28529696A4797A1 482ED70FA254AF00B50FFBD632515D7C0BECD0D4
 
 
+ftp://ftp.funet.fi/pub/misc/hp48sx/chip/
+asteroids text file is post from comp.sys.handhelds
+Google Groups archive https://groups.google.com/d/msg/comp.sys.handhelds/ptjlDvPdfDU/INFPEDTvhroJ
+contains Field! [Al Roland, 1993] (alt) 905572A1742827B6F9DFB18A2144971B 12D3BF6C28EBF07B49524F38D6436F814749D4C0
+in ASC format. Convert with asc2bin, and trim the first 13 bytes to remove the HP header
+
+blinky.lzh
+7zip can view content but fails to extract
+this utility could extract
+https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/repositories/latest/pkg-html/lha.html
+blinky.doc is post from comp.sys.handhelds.
+Could not find in google groups archive.
+blinky is Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
+after removal of 13 byte hp header
+
+blinky2_1
+post from comp.sources.hp48
+could not find in google groups
+The asc and uuencoded versions match after header removal
+Blinky [Hans Christian Egeberg, 1991] FB3284205C90D80C3B17AEEA2EEDF0E4 5B733A60E7208F6AA0D15C99390CE4F670B2B886
+
+brix.bin
+remove HP 13 byte header
+D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC //Brix [Andreas Gustafsson, 1990]
+
+chipper.zip
+BLINKY
+remove HP 13 byte header
+Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
+
+hpiper
+post from x?
+2 versions of piper
+first is in asc only
+second is in asc or uuencode, is superchip edit of first game. Both encodings are the same.
+first 09F94E31B9052969D0802273752B65BC 03D2E32B9E206504F49FA28A0303E05B478459D4
+google groups archive link https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ
+
+second 1351B2A3D7BD5B7571F09FDF090F5435 E5CB559ECA5B97F745B8C709A46BDC40E60A0DD5
+
 octo examples
 
 octo chip8 archive
@@ -329,21 +369,45 @@ https://github.com/AfBu/haxe-chip-8-emulator/tree/master/assets/roms
 hpcalc chip8. may be a source of author information in the megapack
 https://www.hpcalc.org/hp48/games/chip/
 
+
+
+-------
+Information related to extracting chip8 roms from old sources
+
 information useful for extracting chip8 roms from HP format?
 http://www.faqs.org/faqs/hp/hp48-faq/part3/
 https://www.hpcalc.org/hp48/docs/faq/48faq-6.html
 http://cd.textfiles.com/blackphiles/PHILES/HP48HOR1/FAQ.DOC
 
+
 hp asc to bin tools
 https://www.hpcalc.org/hp48/pc/misc/
-ftp://ftp.funet.fi/pub/misc/hp48sx/chip/
+
 
 use dosbox
 asc2bin < infile > outfile
 trim 00-0C from outfile. hp header info
+
+use uudecode from gnu sharutils to decode uuencoded files. Available for cygwin.
 
 TODO track source files and readme texts as well
 citations for origin of program
 
 https://www.pcorner.com/list/C/BRIK.ZIP/BRIK.DOC/
 brik was crc program
+
+HP LIB utilities
+https://www.hpcalc.org/hp.php
+https://www.hpcalc.org/hp48/programming/libs/
+
+ASCII to Binary Converter 2.0   (details) text mentions
+"One limitation is that upon saving a string, Emu48 puts a 13-byte HPHP48-W or HPHP49-W header at the beginning"
+corresponds with needing to remove 00-0C (13) bytes from the output of uudecoder or asc2bin
+https://www.hpcalc.org/hp48/pc/emulators/
+
+
+-----
+Author links
+http://benryves.com/bin/vinegar/ "hap - large font is from his Fish 'N' Chips emulator, the ROMs are also the ones bundled with said emulator."
+http://benryves.com/bin/vinegar/Documents/SPACEFIG.txt
+
