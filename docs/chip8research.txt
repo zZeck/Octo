@@ -1,0 +1,183 @@
+schip discussions took place on newsgroups
+comp.sys.handhelds
+comp.sys.hp48
+
+bulletin board systems
+hpbbs
+
+HPCVBBS
+Hewlett Packard Corvallis Bulletin Board System, a dial-up system allowing users to discuss HP calculators and download HP48 software.
+This was later available by telnet over the Internet, and has since shut down in favor of a web site only (and the BBS is now only Lynx pointed to the HP calculator website).
+
+discussion of newsgroups for hp and where backups are
+https://hpmuseum.org/forum/thread-8876-post-77645.html
+
+
+VIPER magazine, RCA manuals, questdata
+https://github.com/trapexit/chip-8_documentation
+
+RCA COSMAC VIP Game Manaul
+http://bitsavers.trailing-edge.com/components/rca/cosmac/VP-710_RCA_COSMAC_VIP_Game_Manual_Dec78.pdf
+
+RCA COSMAC Game Manual II (cover only)
+https://sarnoff.omeka.net/items/show/111
+
+http://dla.library.upenn.edu/cocoon/dla/pacscl/ead.html?start=25&sort=date_added_sort%20desc&id=PACSCL_HML_246477&
+
+https://www.hagley.org/librarynews/david-sarnoff-library-collection-weisbecker-papers
+
+
+joe weisbecker collection has extracted binaries
+https://digital.hagley.org/islandora/search/cosmac%20game%20manual?type=edismax&f%5B0%5D=-RELS_EXT_isMemberOfCollection_uri_ms%3A%28%22info%3Afedora/islandora%3Aead%22%29
+
+these are full cosmac memory dumps. Chip8 programs start at offsett 0x200
+https://digital.hagley.org/AUD_2464_09_B41_ID23_02?solr_nav%5Bid%5D=c393587566d25b9f3363&solr_nav%5Bpage%5D=1&solr_nav%5Boffset%5D=17 Private Eye Target Practice (CHIP 8) 4 Pages @0000 <- this is a wav file
+https://digital.hagley.org/BIN_2464_09_B41_ID23_02?solr_nav%5Bid%5D=8be452cc3ea487d266d3&solr_nav%5Bpage%5D=1&solr_nav%5Boffset%5D=0 Extracted Binary: Private Eye Target Practice (CHIP 8) 4 Pages @0000
+
+https://digital.hagley.org/AUD_2464_09_B41_ID23_01?solr_nav%5Bid%5D=c393587566d25b9f3363&solr_nav%5Bpage%5D=1&solr_nav%5Boffset%5D=18 Tic-Tac-Toe (CHIP 8) 4 Pages @0000 <- this is a wav file
+https://digital.hagley.org/BIN_2464_09_B41_ID23_01?solr_nav%5Bid%5D=91b925a81c59479b0499&solr_nav%5Bpage%5D=0&solr_nav%5Boffset%5D=20 Extracted Binary: Tic-Tac-Toe (CHIP 8) 4 Pages @0000
+
+
+https://digital.hagley.org/BIN_2464_09_B41_ID19_02?solr_nav%5Bid%5D=77172d575d831c40ece6&solr_nav%5Bpage%5D=0&solr_nav%5Boffset%5D=15 Extracted Binary: VIP Kaleidoscope Chip 8
+https://digital.hagley.org/BIN_2464_09_B41_ID19_01?solr_nav%5Bid%5D=77172d575d831c40ece6&solr_nav%5Bpage%5D=0&solr_nav%5Boffset%5D=17 Extracted Binary: Videodraw Chip 8
+
+
+interesting threads
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/-gY8V5AldrE/GoJ4JcE6Oj0J
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/VF7x-J8EwyY/uzGBnCUq_xIJ link to schip information
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/MQXo_kcBZGE/Xlple30u63MJ multiple versions of ant mentioned
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/kZzkZy8HDlQ/m83e-Htsd9MJ documentation for schip interpreter
+
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/ibJJgF4E8ak/NCRYFNgncPQJ David Winter releasing Space Invaders 10/3/96. also has link to chip8 site.
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/G-mq0RNCxPE/oGkM2fkrf84J David Winter releasing Space Invaders in different newsgroup
+
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/2NK6wWXIFjU/zLlMd11PLrEJ links to hp48 archive
+
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/4UhLN6S_H6M/KFnmbGpzh_EJ
+"I figured it must be 'cause mine
+is only an SX, but upon connecting to the hpcvbbs.etc I found the the
+joust23 file (game) is under the "48s/sx" directory, and _not_ under
+"48g/gx"!"
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/WtHronFkt30/CX2v3yJj3N0J ant hack
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/BWhbYbzflac/ruiHT7XOscUJ link to hps old ftp site
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ExJo9GYAhyI/NRgOlzR5FRsJ
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/5H2RKp8P4rI/fPTZIrexzx0J
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ic3Kr6i9dbA/3vMuU3pzbI0J Erin S Catto (Zoom) releasing joust v2.3
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/VeeyX5sBu9A/WxAVoM6wmK0J Erin S Catto (Zoom) releasing joust v2.2
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust|sort:date/comp.sys.handhelds/2InhIaCuQHA/dyjn-fy1VdwJ source for joust 2.1
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust|sort:date/comp.sys.handhelds/e9u6ecl7d98/zyyxc33MP_4J source for joust 2.0
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust|sort:date/comp.sys.handhelds/-IhNT5byCuE/Te_91EOMEi0J chipper and blinky 1.01 source
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/JAh6_dwb_7E/UUk6hRczaAEJ erik bryntse release and source for race car demo
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/Pc7LvYVoacg/-RDvR21d6OQJ chipper and blinky version info
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust|sort:date/comp.sys.handhelds/0-WiUqr10lw/Own_ZcfHkEcJ erin s catto talking about super chip collision changes in interpreter
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/aHYs4RHR1xk/5avzHBo3TBsJ
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ptjlDvPdfDU/INFPEDTvhroJ Field! release from hpbbs
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/2Ye0apuA2GM/1BHw69dmgU0J Super Chip 1.1 ASC encoded
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/sDY9zFb6KUo/JcYBK2_yerMJ Super Chip 1.1 release by Erik Bryntse
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/di3VaLlM_A8/mHlzd0ddSD4J Test program for Schip by Erik Bryntse
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/w0MGERhZ3FY/jM4S6YWCONoJ mentions several chip8 interpreters
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/Vo8HMvdTbc4/NUn1wlH-7JoJ 15 puzzle rerelease by original author Roger Ivie
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/Hec1ZYwdvyA/kAfaX1yVHk8J 15 puzzle release by Roger Ivie. has source
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/4FsHimn3Gis/iEONlcKb9PkJ Roger Ivie chip8 macros
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust$201.0|sort:date/comp.sys.handhelds/vUSV4KIfSfU/62ahmFkWXmgJ seems the hp "goodies" disks may have chip8 games
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ piper release (this is in the hpiper file in the zip as the unmodified game)
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/v5Q91koXfKg/MWF2kgYKGDYJ piper 1.1 release
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/xe3mBJutLHM/gYIn7udXx3EJ piper 1.2 release
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/oaRhZ2kQAaI/HebRSHdiMr4J piper 1.2 source
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/J1S_5jcKEB0/gem0yFxOvZEJ piper 2.0 source
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/SYZYGY|sort:date/comp.sys.handhelds/xwcHh_YgNkc/AiHBOT30evIJ syzygy 0.1 source code. also mentions shift opcodes not working as documented
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/4HM4Rz31oNs/1KY1JyNIrIcJ chipper and schip documentation
+
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/yJKdl84Jf-Y/iIGs3hNbsv4J h piper utilty. mentions score utility
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/w0MGERhZ3FY/jM4S6YWCONoJ
+.asc   HP 48 ASCII string.  Download to your 48 and use ASC-> to convert to
+       48 program
+.lib   HP 48 library file
+.uue   A uuencoded file.  type: uudecode file.uue to generate file, which may
+       be any other format requiring further processing.  uudecode is native
+       on unix systems and available for most other systems.
+
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/SYZYGY|sort:date/comp.sys.handhelds/HcxdZL-LHrM/dyxxPZ-Q4w0J bob martin lol
+------
+
+Extracting text program listings:
+feed through OCR software
+Do a find and replace on the result for
+R to A
+O to 0
+l to 1
+I to 1
+Manually cleanup issues
+Remove spaces and newlines etc and paste into hex editor
+
+-----
+VIPER MAGAZINE
+Volume 1 Issue 05
+"For those of you who have expressed an interest, here's a pre-
+view look at the games prograns published in the new RCA Games Manual"
+PINBALL
+BINGO
+SLIDE
+BOWTING
+ANIMAL RACE
+SUM FUN
+BIORHYTHM
+LUNAR LANDER
+MESSAGE CENTER
+BLACKJACK
+REVERSI
+DEFLECTION
+MOST DANGEROUS GAME
+SEQUENCE SHOOT
+PROGRAMMABIE SPACEFIGHTERS
+BREAK-THROUGH
+
+
+
+Volume 1 Issue 06
+"Six VIP Games by Carmelo Cortez"
+Breakout
+Submarine
+Coin Flipping
+----
+RCA publications
+RCA COSMAC VIP Instruction manual for VP-111
+Section VII page 26
+Kaleidoscope - appears to be the Kaleidoscope game from the megapack. Has the 0000 at the end unlike the zophar version. data? or 0000 system call instruction?
+
+RCA COSMAC VIP CDP18S711 Instruction Manual
+Appendix A.
+page 40
+Kaleidoscope - appears to be the Kaleidoscope game from the megapack. Has the 0000 at the end unlike the zophar version. data? or 0000 system call instruction?
+
+---
+Other rca information
+https://github.com/ajavamind/rca-studio2/blob/master/README.md
+
+cosmac emu
+https://www.emma02.hobby-site.com/vip.html

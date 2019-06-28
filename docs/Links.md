@@ -361,7 +361,11 @@ https://www.theoldcomputer.com/roms/index.php?folder=Chip-8
 chip8 test rom
 https://github.com/Emu-Docs/Emu-Docs/tree/master/Chip-8/test_roms/sctest_12
 
+fish n chips interperter site. Source for Emutest, BMP viewer, and Fishie
+http://members.chello.nl/~s.morsink/
 
+david winter's site. interpreter download has source for several games. loopz.zip has source for loopz
+http://www.pong-story.com/chip8/
 
 haxe chip8 roms
 https://github.com/AfBu/haxe-chip-8-emulator/tree/master/assets/roms
