@@ -373,7 +373,8 @@ https://github.com/AfBu/haxe-chip-8-emulator/tree/master/assets/roms
 hpcalc chip8. may be a source of author information in the megapack
 https://www.hpcalc.org/hp48/games/chip/
 
-
+documentation links
+http://mattmik.com/retro.html
 
 -------
 Information related to extracting chip8 roms from old sources

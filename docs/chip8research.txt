@@ -164,6 +164,15 @@ Volume 1 Issue 06
 Breakout
 Submarine
 Coin Flipping
+------
+quest data
+vol 2 issue 04 mentions
+"Programs for the cosmac elf: interpreters" by Paul C. Moews. Source listing of chip 8 interpreter
+
+----
+https://archive.org/details/kilobaudmagazine-1981-09/page/n197
+questdata and chip 8 interpreter ad
+
 ----
 RCA publications
 RCA COSMAC VIP Instruction manual for VP-111
@@ -181,3 +190,14 @@ https://github.com/ajavamind/rca-studio2/blob/master/README.md
 
 cosmac emu
 https://www.emma02.hobby-site.com/vip.html
+-----
+DREAM6800 information
+http://mjbauer.biz/DREAM6800.htm
+
+http://www.thebackshed.com/forum/forum_posts.asp?TID=4390
+
+https://www.reddit.com/r/retrobattlestations/comments/7npigb/dream_6800_build/ds3o6gp?utm_source=share&utm_medium=web2x
+"I remember when Electronics Today International magazine used to publish type-in games for their own CHIP-8 computer, the ETI-660."
+-----
+https://archive.org/stream/ETIA1981/ETI%201981-11%20November#page/n113/mode/2up electronics today international "Programming in chip-8 - a crash course"
+has 3 programs and instruction set description.
