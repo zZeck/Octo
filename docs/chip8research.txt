@@ -12,6 +12,8 @@ This was later available by telnet over the Internet, and has since shut down in
 discussion of newsgroups for hp and where backups are
 https://hpmuseum.org/forum/thread-8876-post-77645.html
 
+cosmac yahoo group
+https://groups.yahoo.com/neo/groups/rcacosmac/info
 
 VIPER magazine, RCA manuals, questdata
 https://github.com/trapexit/chip-8_documentation
@@ -161,7 +163,7 @@ BREAK-THROUGH
 
 Volume 1 Issue 06
 "Six VIP Games by Carmelo Cortez"
-Breakout
+Breakout -- this is the Breakout [Carmelo Cortez, 1979] 1D2A47947D6D46B1CEB41CF38B8CFC7E 193915DCDE1365AE054C4EAA21A35BAA27CD3356
 Submarine
 Coin Flipping
 ------
@@ -183,6 +185,26 @@ RCA COSMAC VIP CDP18S711 Instruction Manual
 Appendix A.
 page 40
 Kaleidoscope - appears to be the Kaleidoscope game from the megapack. Has the 0000 at the end unlike the zophar version. data? or 0000 system call instruction?
+
+
+RCA Game Manual II
+VIP Match The Hidden Number by Phil Ruhl page 5
+VIP Miniature Golf by R. G. Marchessault page 8
+VIP Dogfight by Jeff Winsor page 11
+VIP Soccer is not chip 8
+VIP Scramble by Bob Thompson page 19
+VIP Knockout (chip-8X game, probably hybrid program also?) by Steven Houk page 21
+VIP Craps by Robert Rupp page 23
+VIP Blackjack II (hybrid or chip-8x? has color) by Andrew Modla page 26
+VIP Video Animation by Rick Peterson page 30
+VIP Swordfighters is not chip 8
+VIP Round Up is not chip 8
+VIP Backgammon by Robert Rupp page 41
+VIP X-Ray by Rand Miller page 51
+VIP Voice Memory Game is not chip 8
+VIP Galaxy Patrol by Gilbert Bertrand page 63
+VIP Speech Synthesizer (describes how to call from chip 8)
+Appendix A chip-8X interpreter extension for color and sound page 77
 
 ---
 Other rca information
