@@ -1,0 +1,2 @@
+the menu text graphics in hidden number seem to have bugs
+logic seems to be fine for displaying indicators and detecting win

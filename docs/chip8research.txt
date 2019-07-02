@@ -134,8 +134,16 @@ R to A
 O to 0
 l to 1
 I to 1
+S to 5
+€ to E
 Manually cleanup issues
 Remove spaces and newlines etc and paste into hex editor
+
+rotate to be level
+sharpen
+radius 1.3
+amount 9.5
+threshold 0.5
 
 -----
 VIPER MAGAZINE
