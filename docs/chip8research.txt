@@ -200,12 +200,12 @@ Kaleidoscope - appears to be the Kaleidoscope game from the megapack. Has the 00
 RCA Game Manual II
 VIP Match The Hidden Number by Phil Ruhl page 5
 VIP Miniature Golf by R. G. Marchessault page 8
-VIP Dogfight by Jeff Winsor page 11
+VIP Dogfight by Jeff Winsor page 11 //seems to be VIP Dogfight in EMMA 02 collection
 VIP Soccer is not chip 8
 VIP Scramble by Bob Thompson page 19
 VIP Knockout (chip-8X game, probably hybrid program also?) by Steven Houk page 21
 VIP Craps by Robert Rupp page 23
-VIP Blackjack II (hybrid or chip-8x? has color) by Andrew Modla page 26
+VIP Blackjack II (hybrid or chip-8x? has color) by Andrew Modla page 26 //not the blackjack [Andrew Modla] (hybrid) or TCNJ S.572.3
 VIP Video Animation by Rick Peterson page 30
 VIP Swordfighters is not chip 8
 VIP Round Up is not chip 8

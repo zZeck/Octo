@@ -1,3 +1,6 @@
+Match The Hidden Number:
 the menu text graphics in hidden number seem to have bugs //fixed after looking again
 logic seems to be fine for displaying indicators and detecting win
 pressing a number outside the valid input range simultaneously with a number inside the range will garble the display //interpreter bug? seens to happen if valid key is pressed slighly before invalid
+//happens on Emma 02 COSMAC VIP emulation as well
+//press legit key and hold, press out of range key and hold, release legit key. Will go off edge.
