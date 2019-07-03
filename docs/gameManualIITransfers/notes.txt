@@ -1,2 +1,3 @@
-the menu text graphics in hidden number seem to have bugs
+the menu text graphics in hidden number seem to have bugs //fixed after looking again
 logic seems to be fine for displaying indicators and detecting win
+pressing a number outside the valid input range simultaneously with a number inside the range will garble the display //interpreter bug? seens to happen if valid key is pressed slighly before invalid

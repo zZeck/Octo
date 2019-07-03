@@ -28,6 +28,8 @@ http://dla.library.upenn.edu/cocoon/dla/pacscl/ead.html?start=25&sort=date_added
 
 https://www.hagley.org/librarynews/david-sarnoff-library-collection-weisbecker-papers
 
+COSMAC tape archives
+http://www.retrotechnology.com/memship/sarnoff_tapes.html
 
 joe weisbecker collection has extracted binaries
 https://digital.hagley.org/islandora/search/cosmac%20game%20manual?type=edismax&f%5B0%5D=-RELS_EXT_isMemberOfCollection_uri_ms%3A%28%22info%3Afedora/islandora%3Aead%22%29
