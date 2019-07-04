@@ -323,6 +323,10 @@ Could not find in google groups archive.
 blinky is Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
 after removal of 13 byte hp header
 
+blinky.txt
+asc and uu encode are the same
+Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
+
 blinky2_1
 post from comp.sources.hp48
 could not find in google groups
@@ -339,10 +343,17 @@ remove HP 13 byte header
 Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
 
 chip8.sun
+post from 
 has three programs uu encoded
 Brix [Andreas Gustafsson, 1990] D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
 Pong (says Paul Vervalin version. Not known variant) 147F9631D5C249AB67AF425DEABD1164 FFAB632766F98D15EE2EF18DD0DB562465E299DB
 Syzygy [Roy Trevino, 1990] 9440BF0CDA416B3ECF568CFAA349D4FC 1BDB4DDAA7049266FA3226851F28855A365CFD12
+
+chip48
+post from comp.sys.handhelds
+can't find in google archive
+asc encoded
+Brix [Andreas Gustafsson, 1990] D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
 
 hpiper
 first part of file is from this comp.sys.handhelds post
@@ -433,6 +444,10 @@ asc2bin < infile > outfile
 trim 00-0C from outfile. hp header info
 
 use uudecode from gnu sharutils to decode uuencoded files. Available for cygwin.
+make sure file end with newline.
+seems to be issue with file creation sometimes if -o is not provided.
+uudecode -o outFile .\blkuu.txt
+trim 00-0C from outfile. hp header info
 
 TODO track source files and readme texts as well
 citations for origin of program
