@@ -337,7 +337,8 @@ remove HP 13 byte header
 Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
 
 hpiper
-post from x?
+first part of file is from this comp.sys.handhelds
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ
 2 versions of piper
 first is in asc only
 second is in asc or uuencode, is superchip edit of first game. Both encodings are the same.

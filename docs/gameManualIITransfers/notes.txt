@@ -7,7 +7,7 @@ pressing a number outside the valid input range simultaneously with a number ins
 
 VIP Miniature Golf:
 Displays nothing until 1, 2, 3, or 4 is pressed.
-O and L may have graphical error. Check lising again
+O and L may have graphical error. Check listing again //fixed
 
 
 //TODO transcribe original text description.

@@ -47,7 +47,7 @@ https://digital.hagley.org/BIN_2464_09_B41_ID19_01?solr_nav%5Bid%5D=77172d575d83
 
 
 interesting threads
-https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/-gY8V5AldrE/GoJ4JcE6Oj0J
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/-gY8V5AldrE/GoJ4JcE6Oj0J and and joust discussion
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/VF7x-J8EwyY/uzGBnCUq_xIJ link to schip information
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/MQXo_kcBZGE/Xlple30u63MJ multiple versions of ant mentioned
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/kZzkZy8HDlQ/m83e-Htsd9MJ documentation for schip interpreter
@@ -63,13 +63,15 @@ is only an SX, but upon connecting to the hpcvbbs.etc I found the the
 joust23 file (game) is under the "48s/sx" directory, and _not_ under
 "48g/gx"!"
 
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/lamuxOawLAM/znbR_V0gkR0J c port of chipper
+
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/WtHronFkt30/CX2v3yJj3N0J ant hack
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/BWhbYbzflac/ruiHT7XOscUJ link to hps old ftp site
 
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ExJo9GYAhyI/NRgOlzR5FRsJ
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ExJo9GYAhyI/NRgOlzR5FRsJ new games and suggestion
 
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/5H2RKp8P4rI/fPTZIrexzx0J
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/5H2RKp8P4rI/fPTZIrexzx0J vaders bug
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ic3Kr6i9dbA/3vMuU3pzbI0J Erin S Catto (Zoom) releasing joust v2.3
 
@@ -87,7 +89,7 @@ https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|s
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust|sort:date/comp.sys.handhelds/0-WiUqr10lw/Own_ZcfHkEcJ erin s catto talking about super chip collision changes in interpreter
 
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/aHYs4RHR1xk/5avzHBo3TBsJ
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/aHYs4RHR1xk/5avzHBo3TBsJ schip ideas erin
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ptjlDvPdfDU/INFPEDTvhroJ Field! release from hpbbs
 
@@ -105,17 +107,24 @@ https://groups.google.com/forum/#!searchin/comp.sys.handhelds/joust$201.0|sort:d
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ piper release (this is in the hpiper file in the zip as the unmodified game)
 
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ pipe original release? this is the first part of the hpiper file from hp48 site
+
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/v5Q91koXfKg/MWF2kgYKGDYJ piper 1.1 release
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/xe3mBJutLHM/gYIn7udXx3EJ piper 1.2 release
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/oaRhZ2kQAaI/HebRSHdiMr4J piper 1.2 source
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/J1S_5jcKEB0/gem0yFxOvZEJ piper 2.0 source
+horn's goodies 3 disk piper.doc has the post for the release of piper 2.0
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/SYZYGY|sort:date/comp.sys.handhelds/xwcHh_YgNkc/AiHBOT30evIJ syzygy 0.1 source code. also mentions shift opcodes not working as documented
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/4HM4Rz31oNs/1KY1JyNIrIcJ chipper and schip documentation
 
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/yJKdl84Jf-Y/iIGs3hNbsv4J h piper utilty. mentions score utility
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/vUSV4KIfSfU/62ahmFkWXmgJ goodies disk 3 contents list. Some games have source and binary. Some chip 8 stuff.
+
+https://www.hpcalc.org/hp48/compilations/horn/ archives of the disks. Some have post archives.
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/w0MGERhZ3FY/jM4S6YWCONoJ
 .asc   HP 48 ASCII string.  Download to your 48 and use ASC-> to convert to
@@ -127,6 +136,49 @@ https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|s
 
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/SYZYGY|sort:date/comp.sys.handhelds/HcxdZL-LHrM/dyxxPZ-Q4w0J bob martin lol
+
+
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/Lutz$20V.$20posted$20from$20the$20Amiga%7Csort:date/comp.sys.hp48/eKdWisxs-_Q/r7uwdrqQOT0J New chip game! Ufo, lutz v.
+The cassette that was bundled with the Telmac 1800 contains more than
+a dozen CHIP-8 programs.  If someone could convince me that these
+programs are indeed freely redistributable, the other programs could
+also be posted.  Otherwise, perhaps this one shouldn't have been.
+-- 
+Andreas Gustafsson (author of CHIP-48)
+Hmmm - since I found these 3 Chip8-games on a PD-Disk from the Fish-Series
+I supposed (and suppose) them to be not prohibited from copying.
+
+But here are the important parts of the Amiga-Chip8-Document from
+the Fish-Disk:
+>  Michael J Bauer for the DREAM 6800 computer (May, June, July, & August
+> 1979 issues of Electronics Australia).
+>  Hugh Anderson & Graeme Teesdale for the ETI-660 computer (Mainly the
+> November 1981 issue of Electronics Today International)
+>  Whoever designed the RCA COSMAC VIP computer.
+
+https://groups.google.com/forum/#!msg/braunschweig.newfiles/2F67XIUNaUs/e2n_Ui-LGrgJ mentions copy of fieldv11.zip
+
+https://www.hpcalc.org/details/841 alien game and author
+https://www.hpcalc.org/details/5396 cd directory list. some chip8
+
+http://area48central.tripod.com/
+
+http://warensemble.com/?page=002-files.xjs&dir=xphiles1hp48_2 seems to have some chip8 stuff. some links do not work
+
+http://cd.textfiles.com/blackphilesii/PHILES/HP48_1/
+http://cd.textfiles.com/blackphiles/PHILES/HP48_2/
+
+http://cd.textfiles.com/hhot/FILENAME.TXT field.zip fieldv11.zip
+
+http://cd.textfiles.com/hhot/00GLOBAL.TXT fieldv11.zip of interest?
+
+ftp://ftp.hs-niederrhein.de/pub/hp48/hp48g
+
+http://ftp.mirrorservice.org/sites/ftp.cdrom.com/pub/cdrom/cdroms/math/file.txt
+http://ftp.mirrorservice.org/sites/ftp.cdrom.com/pub/cdrom/cdroms/math/global.txt 
+
+http://www.archefire.org/files.php?file=files.programmersheaven.com.txt do a search for hp48.  alien49.zip of interest?
+
 ------
 
 Extracting text program listings:
@@ -140,6 +192,7 @@ S to 5
 € to E
 Q to 0
 G to 0
+? to 9
 Manually cleanup issues
 Remove spaces and newlines etc and paste into hex editor
 
@@ -202,7 +255,7 @@ Kaleidoscope - appears to be the Kaleidoscope game from the megapack. Has the 00
 RCA Game Manual II
 VIP Match The Hidden Number by Phil Ruhl page 5
 VIP Miniature Golf by R. G. Marchessault page 8
-VIP Dogfight by Jeff Winsor page 11 //seems to be VIP Dogfight in EMMA 02 collection
+VIP Dogfight by Jeff Winsor page 11 //first page of this is in EMMA 02 as VIP dogfight. second page is missing in that ROM.
 VIP Soccer is not chip 8
 VIP Scramble by Bob Thompson page 19
 VIP Knockout (chip-8X game, probably hybrid program also?) by Steven Houk page 21
