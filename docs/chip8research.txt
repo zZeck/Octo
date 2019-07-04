@@ -138,6 +138,8 @@ l to 1
 I to 1
 S to 5
 € to E
+Q to 0
+G to 0
 Manually cleanup issues
 Remove spaces and newlines etc and paste into hex editor
 
