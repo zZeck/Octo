@@ -304,97 +304,41 @@ WALL.ch8     8EF214BF9BCF8D038702AF3DCCB60A01 09CE01C54DDDDDA42CA5CD171F1FFCFD47
 WIPEOFF.ch8  41D64F82DC3C457E4F8543E081AE8E85 D666688A8FCE468A7D88B536BC1EF5F35BA12031 //Wipe Off [Joseph Weisbecker]
 
 SGAMES.zip 4561A423ED70797EA28529696A4797A1 482ED70FA254AF00B50FFBD632515D7C0BECD0D4
-
+Name         MD5                                                                      SHA1
+----         ---                                                                      ----
+ALIEN.ch8    578B1AEA3D51AFBBB84079B0DD3F2C53                                         BC5FAF54F04DA3F4DBDE50D3B31CCFC2BF8B9E06
+ANT.ch8      EC7856F9DB5917EB6CA14ADF1F8D0DF2                                         A56C09537DF0F32E2D49FB68CB2BA8216B38F632
+BLINKY.ch8   FB3284205C90D80C3B17AEEA2EEDF0E4                                         5B733A60E7208F6AA0D15C99390CE4F670B2B886
+CAR.ch8      C497BB692EA4B32A4A7B11B1373EF92F                                         2CD26A9A84ED2BE6AAA6916D49B2E5C503196400
+DRAGON1.ch8  FE8CEB6F01450079B54936E5E3C6887B                                         D6CBD3AF85B4C55B83C4E01F3A17C66FCEBE9CCC
+DRAGON2.ch8  433D7AF3AE7EF71AD7CB52038620BFF9                                         6B6502B03183E492F8170172308DF9876C29D1D9
+FIELD.ch8    1D4E9674949B37DAA51F442F82736515                                         31FE380556D65600EF293D99AABD3B6BB119AA01
+HPIPER.ch8   E74DA57E9FCE8DF2E7F6B286E6200348                                         01FFE488EFBE14CA63DE1C23053806533E329F3F
+JOUST23.ch8  214E7C967243CC8FD9E51CCEBE248113                                         6D677BB44500A5EE4754B3A75516CFD9E73947FC
+LASER.ch8    4321AAD62B5D9097EC626DD70046E49F                                         F31A8912FFB8A2920EB7AD5D645AA65A413B6AE9
+MATCHES.ch8  4C80151AA597BFC8C976EB3E8F2FAEA1                                         24FD50A95B84E3A42E336A06567A9752F17B9979
+MAZE.ch8     524050E432BF64E2575020544A490069                                         E6D910B7C9F9680DF462662CE16336EBCB0EAB1E
+MINES.ch8    3CCA7C0B301256D0930232468A68C378                                         6D4514AE3A43C307763648B0BDD485FB77BCF20D
+RACE.ch8     5F0667852B375B4FD2AE47AE7F900A8B                                         E6D4A8598999B3D95047BABF67B529D83EAA9554
+SPACEFIG.ch8 F99D0E82A489B8AFF1C7203D90F740C3                                         A05844DF3305738E4030512F0063DB2FE4F3BD11
+SQUARE.ch8   6E307D93B8ECDB7D20360B097BD52D3A                                         E4EF6FFF9813C43BD7AD2ECAF02D1A3135D68418
+UBOAT.ch8    5A02E443ECBD44D909A9B743C0D12146                                         7321E1BBE885A749B2CA875D1F49FB6C01F54F91
+WORM3.ch8    09FDB4BA93108621AB03116F8E65C45E                                         F8008875A4B35DC7188EECA2A05535116371EAF0
+TEST directory
+    Name          MD5                              SHA1
+    ----          ---                              ----
+    BMPviewer.ch8 123FA805122AB63E851E96E15F04DF16 EBA3B6AC5539452D1DD0C7C045D69E6096C457DD //BMP Viewer - Kyori (SC example) [Hap, 2005].ch8
+    Emutest.ch8   C04CDD3A4E8D96F4A7356E75F6BEDCFC E8477FAD78863714C508C046D2419248C5F89690
+    HEX_MIXT.ch8  742C7E996ACB8D3FFC9B3868574ADA40 D9389D564BACED03192503A58AD930110BB0FE03
+    LINEDEMO.ch8  68F420096D69855675BC67AA00CD258E A9BF29597674C39B4E11D964B352B1E52C4EBB2F
+    ROBOT.ch8     E2CD0812B43FB46E4B8ABBB3A8D30F4B DD6EF80CADEF1E7B42F71AD99573B1AF2299E27D
+    SCR_TEST.ch8  969C597D889B851664F109F3850FAC5F 9B7FAAC49C44C1194A3283C2EF89EABFCA76FE38
+    TEST.ch8      F4EF21C988B5B80EB95C8BFA3B1BFE27 A1EC824285A593CD1CA84DC6C732C61B0FE96330
+    TEST_128.ch8  9E6973E5D9DD08C04C8CCD76825C18A7 C1B605040E29CCE2A6FC52334FB09B0985340314
+    WORMS.ch8     4A66DBE355DC74AFF60D9D9442A7D16B 709328365147967F434D1BF78430E9EC160CC24F
 
 ftp://ftp.funet.fi/pub/misc/hp48sx/chip/
-ant is some hp48 lib. probably has ant in it. need to extract with hp emulator
-
-asteroids text file is post from comp.sys.handhelds
-Google Groups archive https://groups.google.com/d/msg/comp.sys.handhelds/ptjlDvPdfDU/INFPEDTvhroJ
-contains Field! [Al Roland, 1993] (alt) 905572A1742827B6F9DFB18A2144971B 12D3BF6C28EBF07B49524F38D6436F814749D4C0
-in ASC format. Convert with asc2bin, and trim the first 13 bytes to remove the HP header
-
-blinky.lzh
-7zip can view content but fails to extract
-this utility could extract
-https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/repositories/latest/pkg-html/lha.html
-blinky.doc is post from comp.sys.handhelds.
-Could not find in google groups archive.
-blinky is Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
-after removal of 13 byte hp header
-
-blinky.txt
-asc and uu encode are the same
-Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
-
-blinky2_1
-post from comp.sources.hp48
-could not find in google groups
-The asc and uuencoded versions match after header removal
-Blinky [Hans Christian Egeberg, 1991] FB3284205C90D80C3B17AEEA2EEDF0E4 5B733A60E7208F6AA0D15C99390CE4F670B2B886
-
-brix.bin
-remove HP 13 byte header
-D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC //Brix [Andreas Gustafsson, 1990]
-
-chipper.zip
-BLINKY
-remove HP 13 byte header
-Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
-
-chip8.sun
-post from 
-has three programs uu encoded
-Brix [Andreas Gustafsson, 1990] D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
-Pong (says Paul Vervalin version. Not known variant) 147F9631D5C249AB67AF425DEABD1164 FFAB632766F98D15EE2EF18DD0DB562465E299DB
-Syzygy [Roy Trevino, 1990] 9440BF0CDA416B3ECF568CFAA349D4FC 1BDB4DDAA7049266FA3226851F28855A365CFD12
-
-chip48
-post from comp.sys.handhelds
-can't find in google archive
-asc encoded
-Brix [Andreas Gustafsson, 1990] D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
-
-hpiper
-first part of file is from this comp.sys.handhelds post
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ
-2 versions of piper
-first is in asc only
-second is in asc or uuencode, is superchip edit of first game. Both encodings are the same.
-first 09F94E31B9052969D0802273752B65BC 03D2E32B9E206504F49FA28A0303E05B478459D4
-google groups archive link https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ
-
-second 1351B2A3D7BD5B7571F09FDF090F5435 E5CB559ECA5B97F745B8C709A46BDC40E60A0DD5
-
-joust
-ASC encoded joust
-initial version? compare with joust from google archives
-3F9A79E8441CB54162EF2273C1CA3D5B 30E6CD2B70234D3CE470D845BEAAAEA47ED25CA5 //broken?
-
-joust2.3
-post from comp.sys.handhelds
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ic3Kr6i9dbA/3vMuU3pzbI0J
-asc encoded joust
-Joust [Erin S. Catto, 1993] 214E7C967243CC8FD9E51CCEBE248113 6D677BB44500A5EE4754B3A75516CFD9E73947FC
-
-pong.chip
-post from comp.sys.handhelds
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/OK$20folks$20here$20it$20is!$20$20PONG$20for$20the$20HP48SX%7Csort:date/comp.sys.handhelds/4ygxRxUs-ek/-cF6JUMksDMJ
-asc encoded Pong Paul Vervalin
-D46ED06792A87BCAD213B09697D9776D D6C03C4570B43A90A3A50CD6EFAB52F65B593D0A
-has source code. mentions taking code from Brix
-
-puzzle.chip48
-two posts from comp.sys.handhelds combined
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/Vo8HMvdTbc4/NUn1wlH-7JoJ release uuencode
-https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/Hec1ZYwdvyA/kAfaX1yVHk8J source
-15 Puzzle [Roger Ivie] AAF7C09C7F5F952D0F0C326F9E01B5C0 EA9AF3C09B0D9E265FCD92BCC5D51A2939FDF27A
-
-syzygy.chip
-post from comp.sys.handhelds
-can't find in google archive. Source code post is in google archive.
-asc and uu encoded versions are the same
-Syzygy [Roy Trevino, 1990] 9440BF0CDA416B3ECF568CFAA349D4FC 1BDB4DDAA7049266FA3226851F28855A365CFD12
+see directory for information about content
 
 octo examples
 

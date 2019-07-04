@@ -1,0 +1,88 @@
+ant is some hp48 lib. probably has ant in it. need to extract with hp emulator
+
+asteroids text file is post from comp.sys.handhelds
+Google Groups archive https://groups.google.com/d/msg/comp.sys.handhelds/ptjlDvPdfDU/INFPEDTvhroJ
+contains Field! [Al Roland, 1993] (alt) 905572A1742827B6F9DFB18A2144971B 12D3BF6C28EBF07B49524F38D6436F814749D4C0
+in ASC format. Convert with asc2bin, and trim the first 13 bytes to remove the HP header
+
+blinky.lzh
+7zip can view content but fails to extract
+this utility could extract
+https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/repositories/latest/pkg-html/lha.html
+blinky.doc is post from comp.sys.handhelds.
+Could not find in google groups archive.
+blinky is Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
+after removal of 13 byte hp header
+
+blinky.txt
+asc and uu encode are the same
+Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
+
+blinky2_1
+post from comp.sources.hp48
+could not find in google groups
+The asc and uuencoded versions match after header removal
+Blinky [Hans Christian Egeberg, 1991] FB3284205C90D80C3B17AEEA2EEDF0E4 5B733A60E7208F6AA0D15C99390CE4F670B2B886
+
+brix.bin
+remove HP 13 byte header
+D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC //Brix [Andreas Gustafsson, 1990]
+
+chipper.zip
+BLINKY
+remove HP 13 byte header
+Blinky [Hans Christian Egeberg] (alt) 86D5472509CF68C68EA9C2728F4A7FF3 F4169141735D8D60E51409CA7E73F4ADEDCEFEF2
+
+chip8.sun
+post from 
+has three programs uu encoded
+Brix [Andreas Gustafsson, 1990] D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
+Pong (says Paul Vervalin version. Not known variant) 147F9631D5C249AB67AF425DEABD1164 FFAB632766F98D15EE2EF18DD0DB562465E299DB
+Syzygy [Roy Trevino, 1990] 9440BF0CDA416B3ECF568CFAA349D4FC 1BDB4DDAA7049266FA3226851F28855A365CFD12
+
+chip48
+post from comp.sys.handhelds
+can't find in google archive
+asc encoded
+Brix [Andreas Gustafsson, 1990] D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
+
+hpiper
+first part of file is from this comp.sys.handhelds post
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ
+2 versions of piper
+first is in asc only
+second is in asc or uuencode, is superchip edit of first game. Both encodings are the same.
+first 09F94E31B9052969D0802273752B65BC 03D2E32B9E206504F49FA28A0303E05B478459D4
+google groups archive link https://groups.google.com/forum/#!searchin/comp.sys.handhelds/h$20piper|sort:date/comp.sys.handhelds/CMpXQPefw2c/HZP0j1E1J1gJ
+
+second 1351B2A3D7BD5B7571F09FDF090F5435 E5CB559ECA5B97F745B8C709A46BDC40E60A0DD5
+
+joust
+ASC encoded joust
+initial version? compare with joust from google archives
+3F9A79E8441CB54162EF2273C1CA3D5B 30E6CD2B70234D3CE470D845BEAAAEA47ED25CA5 //broken? redid extraction, same result. Try in hp48 emulator with old chip48?
+
+joust2.3
+post from comp.sys.handhelds
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/schip|sort:date/comp.sys.handhelds/ic3Kr6i9dbA/3vMuU3pzbI0J
+asc encoded joust
+Joust [Erin S. Catto, 1993] 214E7C967243CC8FD9E51CCEBE248113 6D677BB44500A5EE4754B3A75516CFD9E73947FC
+
+pong.chip
+post from comp.sys.handhelds
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/OK$20folks$20here$20it$20is!$20$20PONG$20for$20the$20HP48SX%7Csort:date/comp.sys.handhelds/4ygxRxUs-ek/-cF6JUMksDMJ
+asc encoded Pong Paul Vervalin
+D46ED06792A87BCAD213B09697D9776D D6C03C4570B43A90A3A50CD6EFAB52F65B593D0A
+has source code. mentions taking code from Brix
+
+puzzle.chip48
+two posts from comp.sys.handhelds combined
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/Vo8HMvdTbc4/NUn1wlH-7JoJ release uuencode
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chip8|sort:date/comp.sys.handhelds/Hec1ZYwdvyA/kAfaX1yVHk8J source
+15 Puzzle [Roger Ivie] AAF7C09C7F5F952D0F0C326F9E01B5C0 EA9AF3C09B0D9E265FCD92BCC5D51A2939FDF27A
+
+syzygy.chip
+post from comp.sys.handhelds
+can't find in google archive. Source code post is in google archive.
+asc and uu encoded versions are the same
+Syzygy [Roy Trevino, 1990] 9440BF0CDA416B3ECF568CFAA349D4FC 1BDB4DDAA7049266FA3226851F28855A365CFD12
