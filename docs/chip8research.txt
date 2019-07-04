@@ -47,7 +47,7 @@ https://digital.hagley.org/BIN_2464_09_B41_ID19_01?solr_nav%5Bid%5D=77172d575d83
 
 
 interesting threads
-https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/-gY8V5AldrE/GoJ4JcE6Oj0J and and joust discussion
+https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/-gY8V5AldrE/GoJ4JcE6Oj0J ant and joust discussion
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/VF7x-J8EwyY/uzGBnCUq_xIJ link to schip information
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/MQXo_kcBZGE/Xlple30u63MJ multiple versions of ant mentioned
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/kZzkZy8HDlQ/m83e-Htsd9MJ documentation for schip interpreter
@@ -62,6 +62,8 @@ https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sy
 is only an SX, but upon connecting to the hpcvbbs.etc I found the the
 joust23 file (game) is under the "48s/sx" directory, and _not_ under
 "48g/gx"!"
+
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/OK$20folks$20here$20it$20is!$20$20PONG$20for$20the$20HP48SX%7Csort:date/comp.sys.handhelds/4ygxRxUs-ek/-cF6JUMksDMJ pong for hp48sx chip48
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/lamuxOawLAM/znbR_V0gkR0J c port of chipper
 
@@ -204,7 +206,7 @@ http://www.nic.funet.fi/pub/amiga/fish/501-600/ff537/ open the CHIP8.lha with 7z
 
 run in winuae high compatibility on common amiga 500 config. Others may not work.
 f12, host-> misc. save state, selet ram dump file option
-do a search for the run length encoded file, the decompressed program will be a ways above it. seems to vary
+do a search for the run length encoded file, the decompressed program will be a ways above it. seems to vary. I think this is because some start at 0x600 actually.
 
 TankBattle6.c8: looks very similar to tank ROM from collection. game seems to be the same when played. does not run in octo.
 UfoIntercept2.c8: matches Ufo from collection

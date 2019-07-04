@@ -2,9 +2,16 @@ Find as many old interpreter distributions as possible. Most come with roms.
 Find the AMIGA CHIP 8 INTERPRETER & DREAM MON V1.1
 Look at the warensemble bbs files.
 Catalog the stuff that comes with David Winter's emulator.
+emma 02 rom collection checksums
+Frédéric Devernay page has games SGAMES.zip
 Finish looking through hp48 site info
 Look through all Horn's goodie disks for post archives and more
 Compile all programs from source. Note checksums of compiler versions used.
 Get checksums of source. Normalize by converting to unix line endings, removing all trailing whitespace and any starting or ending newlines. Tabs to spaces also?
     Remove all whitespace and compare? Both?
 Find all variations of built in font, their original source, and which versions different emulators use.
+Set up hp48 emulator and extract ant from hp48sx ftp dump
+Catalog source code
+Catalog assemblers
+Catalog interpreter versions
+Download files from yahoo group. List sources
