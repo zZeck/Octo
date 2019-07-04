@@ -1,0 +1,4 @@
+octo font does not match this font.
+
+Crashes with:
+15puzzle2.c8 after shuffling board

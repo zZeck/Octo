@@ -180,12 +180,39 @@ http://ftp.mirrorservice.org/sites/ftp.cdrom.com/pub/cdrom/cdroms/math/global.tx
 http://www.archefire.org/files.php?file=files.programmersheaven.com.txt do a search for hp48.  alien49.zip of interest?
 
 
+pack of games collected by hap
+http://www.emutalk.net/threads/19894-Chip-8?p=313299#post313299
+https://web.archive.org/web/20090927043332/http://hap.samor.nl/
+
+Going by the history text in the emutalk post, this is the origin of the pack that was later extended on chip8.com and later extended in EMMA 02
+
+hap talking to david and mentioning new home page
+http://www.emutalk.net/threads/19894-Chip-8?p=440255#post440255
+
+hap's current site
+http://members.chello.nl/~s.morsink/
+
+david winter post mentioning hex dumps for cosmac and source code for emulator
+http://www.emutalk.net/threads/19894-Chip-8?p=438850&viewfull=1#post438850
+
 http://tech.g1.xrea.com/chip8.htm list of chip8 interpreters
 
 amiga chip8 interpreter is probably on one of the "fish disks"
 https://philreichert.org/read/0069.html
 http://www.nic.funet.fi/pub/amiga/fish/Contents-910 search "Paul Hayter" disk 537
 http://www.nic.funet.fi/pub/amiga/fish/501-600/ff537/ open the CHIP8.lha with 7zip or similar
+
+run in winuae high compatibility on common amiga 500 config. Others may not work.
+f12, host-> misc. save state, selet ram dump file option
+do a search for the run length encoded file, the decompressed program will be a ways above it. seems to vary
+
+TankBattle6.c8: looks very similar to tank ROM from collection. game seems to be the same when played. does not run in octo.
+UfoIntercept2.c8: matches Ufo from collection
+15Puzzle2.c8: does not match other 15 puzzle programs. Cannot slide piece in octo. Crashes emma02
+ExampleA2.c8: new
+ExampleB2.c8: new. Looks different in octo. Font difference?
+Kaleidescope6.c8: very similar to kaleidescope. Similar situation as tank. both also have 6 appended in name. does not run in octo
+WipeOff2.c8: same as joe weisbecker, but perhaps overdumped.
 ------
 
 Extracting text program listings:
