@@ -179,6 +179,13 @@ http://ftp.mirrorservice.org/sites/ftp.cdrom.com/pub/cdrom/cdroms/math/global.tx
 
 http://www.archefire.org/files.php?file=files.programmersheaven.com.txt do a search for hp48.  alien49.zip of interest?
 
+
+http://tech.g1.xrea.com/chip8.htm list of chip8 interpreters
+
+amiga chip8 interpreter is probably on one of the "fish disks"
+https://philreichert.org/read/0069.html
+http://www.nic.funet.fi/pub/amiga/fish/Contents-910 search "Paul Hayter" disk 537
+http://www.nic.funet.fi/pub/amiga/fish/501-600/ff537/ open the CHIP8.lha with 7zip or similar
 ------
 
 Extracting text program listings:
