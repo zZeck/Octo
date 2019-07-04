@@ -1,0 +1,23 @@
+https://philreichert.org/read/0069.html
+http://www.nic.funet.fi/pub/amiga/fish/Contents-910 search "Paul Hayter" disk 537
+http://www.nic.funet.fi/pub/amiga/fish/501-600/ff537/ open the CHIP8.lha with 7zip or similar
+
+run in winuae high compatibility on common amiga 500 config. Others may not work.
+f12, host-> misc. save state, selet ram dump file option
+do a search for the run length encoded file, the decompressed program will be a ways above it. seems to vary
+
+TankBattle6.c8: looks very similar to tank ROM from collection. game seems to be the same when played. does not run in octo.
+UfoIntercept2.c8: matches Ufo from collection
+15Puzzle2.c8: does not match other 15 puzzle programs. Cannot slide piece in octo. Crashes emma02
+ExampleA2.c8: new
+ExampleB2.c8: new. Looks different in octo. Font difference?
+Kaleidescope6.c8: very similar to kaleidescope. Similar situation as tank. both also have 6 appended in name. does not run in octo
+WipeOff2.c8: same as joe weisbecker, but perhaps overdumped.
+
+From the doc included:
+"Note that some end in 2.c8  and others end
+in  6.c8  .The ones ending in 2.c8 MUST be executed (pressing G) at
+address 0200. Conversely the ones ending in 6.c8 must be executed at 0600"
+
+example2b.c8 looks different in octo and dream mon. Incorrect font data? Did Dream have different font data?
+15puzzle2.c8 font also looks different.

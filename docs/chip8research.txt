@@ -213,6 +213,35 @@ ExampleA2.c8: new
 ExampleB2.c8: new. Looks different in octo. Font difference?
 Kaleidescope6.c8: very similar to kaleidescope. Similar situation as tank. both also have 6 appended in name. does not run in octo
 WipeOff2.c8: same as joe weisbecker, but perhaps overdumped.
+
+http://www.mjbauer.biz/DREAM6800.htm
+Original E/A published articles...
+Part 1 - May 1979 (PDF ~ 3.7MB)
+Part 2 - June 1979 (PDF ~ 3.8MB)
+Part 3 - July 1979 (PDF ~ 3.2MB)
+Part 4 - Aug. 1979 (PDF ~ 2.3MB)
+
+http://www.vcfed.org/forum/showthread.php?61240-D-R-E-A-M-6800-Build&s=bfa2f6eb2f45925ed25ba7375946a6a8&p=553400#post553400
+"My first microcomputer was the COSMAC ELF - which I solder-wrapped in 1976 from the Popular Electronics article by Joe Weisbecker."
+
+dream 6800 articles
+https://microbee-mspp.org.au/forum/viewtopic.php?f=31&t=495
+
+http://messui.polygonal-moogle.com/comp/d6800.pdf
+"This computer first saw the light of day as a series of articles that featured in
+the May, June, July and August 1979 issues of the now-defunct magazine Electronics
+Australia and it reappeared in a follow-up booklet entitled Microprocessors and
+Personal Computers, published in 1980.
+The DREAM 6800 (Domestic Recreational Educational and Adaptive
+Microcomputer incorporating the Motorola 6800 microprocessor) was designed by
+Michael J Bauer from Brisbane's Deakin University. It is not particularly
+sophisticated but at the time offered those handy with a soldering iron the opportunity
+to build a simple computer that would be a lot of fun to use. It offered programming
+in two languages: native 6800 machine code and a strange but quite powerful
+language called CHIP-8 (Comprehensive Hexadecimal Intetpretive Programming- 8
+bit)"
+
+MESS emulates dream 6800.
 ------
 
 Extracting text program listings:

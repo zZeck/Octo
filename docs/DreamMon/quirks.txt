@@ -1,2 +1,0 @@
-example2b.c8 looks different in octo and dream mon. Incorrect font data? Did Dream have different font data?
-15puzzle2.c8 font also looks different.

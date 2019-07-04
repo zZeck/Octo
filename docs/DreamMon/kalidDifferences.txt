@@ -1,0 +1,15 @@
+     amiga   original
+0x08 2632     2232 //Call 632 instead of 323
+0x0A A600     A200 //Load I 600 instead of 200
+0x14 161C     121C //Jump to 61C instead of 21C
+0x1A 1608     1208 //Jump to 608 instead of 208
+0x1E A600     A200 //Load I 600 instead of 200
+0x26 161C     121C //Jump to 61C instead of 21C
+0x2C 161C     121C //Jump to 61C instead of 21C
+0x2E 2632     2232 //Call 632 instead of 323
+0x30 161E     121E //Jump to 61E instead of 21E
+0x42 A677     A277 //Load I 677 instead of 277
+
+"Note that some end in 2.c8  and others end
+in  6.c8  .The ones ending in 2.c8 MUST be executed (pressing G) at
+address 0200. Conversely the ones ending in 6.c8 must be executed at 0600"
