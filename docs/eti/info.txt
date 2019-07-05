@@ -1,0 +1,55 @@
+https://www.microbee-mspp.org.au/forum/viewtopic.php?f=31&t=532
+eti_660_part_1_eti_81_05.pdf
+eti_660_part_2_eti_81_06.pdf
+eti_660_part_3_eti_81_10.pdf
+eti_660_part_4_eti_81_11.pdf
+
+660_addition_eti_82_03.pdf
+660_block_move_tank_battle_eti_83_06.pdf
+660_catch_colour_routines_eti_82_08.pdf
+660_character_generator_eti_83_03.pdf
+660_colour_paternmaker_eti_82_07.pdf
+660_dice_greeblie_catcher_eti_82_09.pdf
+660_drawing_eti_82_05.pdf
+660_get_64_x_64_display_eti_84_02.pdf
+660_how_to_score_eti_82_04.pdf
+660_invaders_paternmaker_eti_82_02.pdf
+660_joystick_block_extermination_eti_84_01.pdf
+660_mastermind_eti_82_01.pdf
+660_o&x_asteroids_polaris_squash_eti_83_04.pdf
+660_one_handed_pong_eti_82_04.pdf
+660_patches_colour_select_eti_83_02.pdf
+660_polaris_2_plus_5_games_et_83_11.pdf
+660_print_routine_guessing_game_eti_83_05.pdf
+660_sequencer_table_tenis_gobble_et_83_08.pdf
+660_space_dogfight_eti_82_06.pdf
+660_touchdown_carrace_asteroids_nasties_eti_83_12.pdf
+660_tv_message_maker_eti_83_07.pdf
+660_wipeout_space_invaders_eti_82_10.pdf
+660_word_plus_4_games_eti_82_11.pdf
+
+chip8_amazing_mastermind_eti_84_09.pdf
+chip8_asteroids_eti_82_06.pdf
+chip8_kong_loop_the_block_3dmaze_eti_84_07.pdf
+chip8_mazegazing_warbler_eti_84_05.pdf
+chip8_monitor_correction_eti_82_07.pdf
+chip8_submarine_defence_eti_84_10.pdf
+
+bill_edges_advert_eti_81_11.pdf
+fault_finding_the eti660_eti_83_01.pdf
+jr_components_advert_eti_81_11.pdf
+kit_parts_advert_eti_81_10.pdf
+kit_parts_advert_eti_81_11.pdf
+programming_in_chip8_eti_81_11.pdf
+programming_the_660_in_colour_eti_82_04.pdf
+
+chip8_programming_and_rocket_game_byte_78_12.pdf
+
+analogue_joystick_for_eti660_eti_84_10.pdf
+
+660_pacman_eti.pdf
+
+https://archive.org/stream/ETIA1983/ETI%201983-06%20June#page/n55/mode/2up/search/tank
+Tank battle is the $600 offset start version of tank it seems.
+This is the one bundled with the amiga interpreter.
+Someone converted it to a $200 entry game at some point. Tank.ch8.

@@ -184,9 +184,218 @@ http://www.archefire.org/files.php?file=files.programmersheaven.com.txt do a sea
 
 pack of games collected by hap
 http://www.emutalk.net/threads/19894-Chip-8?p=313299#post313299
+"*** history ***
+
+started Jan 7th 2006 (83 entries)
+
+Feb 15th 2006:
+- added Chip8 emulator Logo [Garstyciuks].c8
+- added Keypad Test [hap].c8
+- added Scroll Test (modified) [Garstyciuks].sc
+
+Feb 17th 2006:
+- added Loopz (with difficulty select) [hap].sc
+
+Apr 1st 2006:
+- removed version numbers from filenames
+- Boot-128: removed note from filename that start address=$100
+- Vers is by JMN
+- Worm is by RB
+- Brix is by Andreas Gustafsson
+- switched Space Invaders a1 and normal (a1=older version now)
+- switched Guess a1 and normal (a1=older version now)
+- renamed SYZYGY to Syzygy
+- renamed Race to Car Race Demo [Erik Bryntse]
+- added Brick (Brix hack).c8
+- added Blinky [Hans Christian Egeberg] (a1).c8 (older version)
+- added Field! [Al Roland] (a1).sc (older version)
+- added Joust [Erin S. Catto] (a1).sc (older version)
+- deleted X-Mirror.c8, looks like a garbage file to me
+
+Apr 8th 2006:
+- added Sokoban [hap].sc
+
+Apr 9th 2006:
+- added (correct) X-Mirror.c8
+
+Apr 11th 2006:
+- added Addition Problems [Paul C. Moews].c8 (from a 1979 article about CHIP-8
+  on the COSMAC ELF)
+- renamed Kaleid to Kaleidoscope
+- updated Sokoban (and a1=older version)
+
+Jun 8th 2006:
+- Kaleidoscope is by Joseph Weisbecker
+- Wipe Off is by Joseph Weisbecker
+- added Video Display Drawing Game [Joseph Weisbecker] (hybrid).c8 (all the
+  non-CHIP-8 code does is saving the drawing into memory, so it works fine)
+- added several games from the RCA COSMAC VIP Game manual (probably from the
+  late 70s), courtesy of Josh Bensadon:
+  * Animal Race [Brian Astle].c8
+  * Bingo [Andrew Modla] (hybrid).c8
+  * Biorhythm [Jef Winsor].c8
+  * Blackjack [Andrew Modla] (hybrid).c8
+  * Blockout [Steve Houk].c8x
+  * Bowling [Gooitzen van der Wal].c8
+  * Deflection [John Fort].c8
+  * Lunar Lander.c8
+  * Message Center [Andrew Modla] (hybrid).c8
+  * Most Dangerous Game [Peter Maruhnic].c8
+  * Pinball [Andrew Modla] (hybrid).c8
+  * Programmable Spacefighters [Jef Winsor].c8
+  * Reversi [Philip Baltzer].c8
+  * Sequence Shoot [Joyce Weisbecker].c8
+  * Slide [Joyce Weisbecker].c8
+  * Sum Fun [Joyce Weisbecker].c8
+- renamed all "a1" to "alt"
+- Boot-128 is a hybrid program
+
+Dec 27th 2006:
+- added Rush Hour [hap].c8
+
+Jul 29th 2007:
+- added SCHIP Test [IQ_132].sc
+
+Aug 9th 2007:
+- added BMP Viewer [IQ_132].sc
+- added BMP Viewer (Google) [IQ_132].sc
+- added BMP Viewer (16x16 tiles) [IQ_132].sc (for this to be useful, you'll need
+  a converter available at http://neosource.1emu.net/forums/index.php?topic=713.0 )
+- added BMP Viewer (16x16 tiles) (MAME) [IQ_132].sc
+
+Feb 8th 2008:
+- added Bounce [Les Harris].sc
+- updated Rush Hour (and alt=older version)
+
+
+*** complete list ***
+
+15 Puzzle [Roger Ivie] (alt).c8
+15 Puzzle [Roger Ivie].c8
+Addition Problems [Paul C. Moews].c8
+Airplane.c8
+Alien [Jonas Lindstedt].sc
+Animal Race [Brian Astle].c8
+Ant - In Search of Coke [Erin S. Catto].sc
+Bingo [Andrew Modla] (hybrid).c8
+Biorhythm [Jef Winsor].c8
+Blackjack [Andrew Modla] (hybrid).c8
+Blinky [Hans Christian Egeberg] (alt).c8
+Blinky [Hans Christian Egeberg].c8
+Blinky [Hans Christian Egeberg].sc
+Blitz [David Winter].c8
+Blockout [Steve Houk].c8x
+BMP Viewer - Flip-8 logo [newsdee].sc
+BMP Viewer - Hello (C8 example) [hap].c8
+BMP Viewer - Kyori (SC example) [hap].sc
+BMP Viewer - Let's Chip-8! [Koppepan].sc
+BMP Viewer (16x16 tiles) (MAME) [IQ_132].sc
+BMP Viewer (16x16 tiles) [IQ_132].sc
+BMP Viewer (Google) [IQ_132].sc
+BMP Viewer [hap].sc
+BMP Viewer [IQ_132].sc
+Boot-128 (hybrid).c8
+Bounce [Les Harris].sc
+Bowling [Gooitzen van der Wal].c8
+Breakout (Brix hack) [David Winter].c8
+Brick (Brix hack).c8
+Brix [Andreas Gustafsson].c8
+Car [Klaus von Sengbusch].sc
+Car Race Demo [Erik Bryntse].sc
+Cave.c8
+Chip8 emulator Logo [Garstyciuks].c8
+Chip8 Picture.c8
+Connect 4 [David Winter].c8
+Deflection [John Fort].c8
+Emutest [hap].sc
+Field! [Al Roland] (alt).sc
+Field! [Al Roland].sc
+Figures.c8
+Filter.c8
+Fishie [hap].c8
+Font Test [newsdee].sc
+Guess [David Winter] (alt).c8
+Guess [David Winter].c8
+H. Piper [Paul Raines].sc
+Hex Mixt.sc
+Hidden [David Winter].c8
+IBM Logo.c8
+Joust [Erin S. Catto] (alt).sc
+Joust [Erin S. Catto].sc
+Kaleidoscope [Joseph Weisbecker].c8
+Keypad Test [hap].c8
+Landing.c8
+Laser.sc
+Line Demo.sc
+Loopz (with difficulty select) [hap].sc
+Loopz [Andreas Daumann].sc
+Lunar Lander.c8
+Magic Square [David Winter].sc
+Matches.sc
+Maze [David Winter] (alt).c8
+Maze [David Winter].c8
+Maze [David Winter].sc
+Merlin [David Winter].c8
+Message Center [Andrew Modla] (hybrid).c8
+Mines! - The minehunter [David Winter].sc
+Missile [David Winter].c8
+Most Dangerous Game [Peter Maruhnic].c8
+Paddles.c8
+Pinball [Andrew Modla] (hybrid).c8
+Pong (1 player).c8
+Pong [Paul Vervalin] (alt).c8
+Pong [Paul Vervalin].c8
+Pong 2 (Pong hack) [David Winter].c8
+Programmable Spacefighters [Jef Winsor].c8
+Puzzle.c8
+Reversi [Philip Baltzer].c8
+Robot.sc
+Rocket Launch [Jonas Lindstedt].c8
+Rocket.c8
+Rush Hour [hap] (alt).c8
+Rush Hour [hap].c8
+SCHIP Test [IQ_132].sc
+Scroll Test (modified) [Garstyciuks].sc
+Scroll Test.sc
+Sequence Shoot [Joyce Weisbecker].c8
+Single Dragon (Bomber Section) [David Nurser].sc
+Single Dragon (Stages 1-2) [David Nurser].sc
+Slide [Joyce Weisbecker].c8
+Soccer.c8
+Sokoban [hap] (alt).sc
+Sokoban [hap].sc
+Space Flight.c8
+Space Invaders [David Winter] (alt).c8
+Space Invaders [David Winter].c8
+Spacefight 2091 [Carsten Soerensen].sc
+Squash [David Winter].c8
+Sum Fun [Joyce Weisbecker].c8
+Syzygy [Roy Trevino].c8
+Tank.c8
+Tapeworm [JDR].c8
+Test 128.sc
+Test.sc
+Tetris [Fran Dachille].c8
+Tic-Tac-Toe [David Winter].c8
+Timebomb.c8
+Tron.c8
+U-Boat [Michael Kemper].sc
+UFO.c8
+Vers [JMN].c8
+Vertical Brix [Paul Robson].c8
+Video Display Drawing Game [Joseph Weisbecker] (hybrid).c8
+Wall [David Winter].c8
+Wipe Off [Joseph Weisbecker].c8
+Worm [RB].sc
+Worms.sc
+X-Mirror.c8
+
+total: 119"
 https://web.archive.org/web/20090927043332/http://hap.samor.nl/
 
 Going by the history text in the emutalk post, this is the origin of the pack that was later extended on chip8.com and later extended in EMMA 02
+
+Frédéric Devernay GAMES and SGAMES may have been source for hap's collection.
 
 hap talking to david and mentioning new home page
 http://www.emutalk.net/threads/19894-Chip-8?p=440255#post440255
@@ -199,10 +408,32 @@ http://www.emutalk.net/threads/19894-Chip-8?p=438850&viewfull=1#post438850
 
 http://tech.g1.xrea.com/chip8.htm list of chip8 interpreters
 
+http://faqs.cs.uu.nl/na-dir/emulators-faq/part2.html 1997 chip emulator information
+
+http://benryves.com/bin/vinegar/ mentions chip8boot program that must load at 000
+
+http://www.thebackshed.com/forum/forum_posts.asp?TID=10580&PN=1 eti-660 sources
+"The 660 was covered in May 81, June 81, Oct 81 and Nov 81
+
+The Oct 81 edition has schematics for the PCB. "
+
+https://www.classic-computers.org.nz/forums/viewtopic.php?f=4&t=987&start=0&st=0&sk=t&sd=a#p6471 mentions scans to dream 6800 being on chip8.com. might be worth looking through wayback machine
+
+https://www.microbee-mspp.org.au/forum/viewtopic.php?f=31&t=532 eti-660 references
+"The initial articles were published in Electronics Today International (ETI) May 1981 and followed by 3 further parts in June, October & November 1981.
+ETI then produced a '660 Software column almost monthly for next 2+ years with mostly game listings. It then converted to just a Chip-8 Column.
+These Chip-8 listings can work not only on the ETI-660 but also the Dream 6800 and the Microbee with Chip8 ROM installed."
+
+https://www.americanradiohistory.com/ETI_Magazine.htm eti magazine archive //uk not useful.
+
+https://en.wikipedia.org/wiki/Electronics_Today_International links to the internet archive page for each year
+
 amiga chip8 interpreter is probably on one of the "fish disks"
 https://philreichert.org/read/0069.html
 http://www.nic.funet.fi/pub/amiga/fish/Contents-910 search "Paul Hayter" disk 537
 http://www.nic.funet.fi/pub/amiga/fish/501-600/ff537/ open the CHIP8.lha with 7zip or similar
+
+http://www.cs.cmu.edu/afs/cs/Web/Groups/AI/areas/doc/bib/langs.txt mentions the fish disk
 
 run in winuae high compatibility on common amiga 500 config. Others may not work.
 f12, host-> misc. save state, selet ram dump file option
