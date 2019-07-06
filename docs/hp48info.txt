@@ -1,0 +1,8 @@
+emu48 needs hp rom
+also needs kml file which controls display
+
+load chip48
+
+load super chip
+
+load chip8 programs
