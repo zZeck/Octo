@@ -1,0 +1,68 @@
+http://www.mjbauer.biz/DREAM6800.htm designer's site
+Original E/A published articles...
+Part 1 - May 1979 (PDF ~ 3.7MB)
+Part 2 - June 1979 (PDF ~ 3.8MB)
+Part 3 - July 1979 (PDF ~ 3.2MB)
+Part 4 - Aug. 1979 (PDF ~ 2.3MB)
+4KB RAM Expansion Board - E/A Dec. 1980 (PDF ~ 1.2MB)
+
+Dream6800_CHIPOS_code.zip has Dream6800Rom.bin with sha1 60F26E57A058262B30BEFCECEAB4363A5D65D877
+
+
+https://github.com/mamedev/mame/commit/d806137587451b091918e5c11e10b21362ec601e
+
+MAME expects a different ROM now.
+
+probably the one seen here
+https://www.microbee-mspp.org.au/forum/viewtopic.php?f=31&t=2591
+dreamsoft2m.bin
+That file is probably the expansion rom.
+
+https://archive.org/stream/EA1982/EA%201982-02%20February_djvu.txt
+"Another interesting development has 
+been the release of a resident software 
+package on a 2716 EPROM by the 
+DREAMSOFT organisation"
+"This EPROM is sold as the "DREAM¬ 
+SOFT No. 1 Package" and is intended to 
+reside at addresses 1800-1FFF."
+"FOOTNOTE: The DREAM 6800 Users' 
+Group publishes a monthly newsletter 
+and can be contacted by writing to 27 
+Georgina Ave, Keiraville, NSW 2500. " --did this survive? might have chip8
+
+https://www.thebackshed.com/forum/forum_posts.asp?TID=4390#43603
+"I had the DREAMSOFT expansion ROM #1 and #2, which included an extra PCB with more RAM and two PIA chips."
+
+Electronics Australia project list with issues
+http://www.siliconchip.com.au/Static/EA%20Projects
+2/CC/67   DREAMSOFT Expansion Board                                   Feb 82
+8/M/52    More Programs For The DREAM                                 Jun 81
+2/CC/61   DREAM 6800 Tape System                            81dt5     May 81
+2/CC/58   DREAM 6800 - RTTY Display                                   Jan 81
+2/CC/57   4K RAM Expansion DREAM 6800                       80ram12   Dec 80
+8/M/47    3 Programs For DREAM 6800                                   Apr 80 https://archive.org/stream/EA1979/EA%201979-08%20August#page/n85/mode/2up/search/6800
+2/CC/43   DREAM 5800 Chip 8 Programming                               Aug 79
+2/CC/42   DREAM 6800 Video Computer - 3                               Jul 79
+2/CC/39   DREAM 6800 - 2                                              Jun 79
+2/CC/40   DREAM 6800 Power Supply                           79ups6    Jun 79
+2/CC/38   DREAM 6800 Video Computer                                   May 79
+may be columns of letters related to dream or chip 8. This is list of projects only
+
+GO at address 0xC000 to execute dream's chip8 interpreter
+see first article on dream to learn what FN commands do
+
+mame source explains control mapping for dream
+https://github.com/mamedev/mame/blob/master/src/mame/drivers/d6800.cpp
+left shift = FN (function)
+left alt = RST (reset)
+numbers and letters match for entering hex
+
+how to put program into memory?
+probably use mame debugger load command
+https://docs.mamedev.org/debugger/memory.html#debugger-command-load
+
+.\mame64.exe d6800 -debug
+
+load pathToFile,StartAddress,Length
+load C:\path\to\file15puzzleamiga.ch8,200,110
