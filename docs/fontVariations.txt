@@ -1,0 +1,4 @@
+cosmac vip and telmac 1800 use same font
+dream uses its own. DreamMon uses this font.
+eti uses its own
+super chip uses its own
