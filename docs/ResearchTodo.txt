@@ -23,3 +23,10 @@ Reverse engineer random number creation of common interpreters
 
 Look for variants of the cosmac VIP chip8 interpreter
 was telmac 1800 font really the same as cosmac? Or was it like what is seen in chip48. The author mentions having a telmac. Variant?
+
+create dat file for chip 8 programs https://github.com/retropie/RetroPie-Setup/wiki/Validating,-Rebuilding,-and-Filtering-ROM-Collections#dat-files-the-cornerstone
+look at no intro and tosec
+https://www.tosecdev.org/browse-resources/12-guides/137-creating-dat-sets-with-multiple-files-for
+http://www.logiqx.com/
+http://www.logiqx.com/DatFAQs/DatCreation.php
+http://wiki.romcenter.com/wiki/doku.php?id=getstart:menu

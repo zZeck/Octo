@@ -590,6 +590,13 @@ has 3 programs and instruction set description.
 
 video of cosmac vip running octo jam game
 https://www.youtube.com/watch?v=wDoVBMSYfPw
+"The Telmac 1800 was a set of electronics for computer enthusiasts (Telecras), which was released in 1977.
+The basic model had 2 kilobytes of central memory, an interface to a cassette station, and the ability to connect the device to a television.
+The keypads were mostly hexadecimal system numbers 0-F.
+Telmac 1800 was manufactured in 2000 and sold in Sweden, in addition to Finland.
+The first Finnish commercial computer game was released for the Telmac TMC-1800.
+Raimo Suonio wrote a chess game called Chesmac on 1979, published by computer company Topdata Oy. The game sold 104 cartridges for 68 mark.
+Jari Lehtinen launches Telmac in a demo session of the Technology Historical Society, and introduces the Chesmac game, which he has re-coded based on the files developed by Raimo Suonio, the developer of the game."
 
 telmac running. 4:39 font looks like known from cosmac vip chip8.ram with emma 02
 https://www.youtube.com/watch?v=HZ5t_Ot_6Ic
@@ -737,8 +744,50 @@ http://viznut.fi/texts-fi/suomalaiset_tietokoneet.html
 History of Nordic Computing
 mentions 1800 users' club
 
+https://books.google.com/books?id=T1tiCQAAQBAJ&pg=PA8&lpg=PA8&dq=Jari+Lehtinen+telmac&source=bl&ots=FLYu9n65fG&sig=ACfU3U2DSjf2qPlycZZOLs7x40ocAccqVw&hl=en&sa=X&ved=2ahUKEwjqjrKZtqPjAhULZc0KHR5LBCgQ6AEwBXoECAgQAQ#v=onepage&q=Jari%20Lehtinen%20telmac&f=false
+Jari Lehtinen telmac mentioned.
+Chesmac used chip8 for display and machine code for ai.
+Chesmac created by Raimo Suonio
+
+article on chesmac
+https://yle.fi/uutiset/3-7659391
+
+
+https://fi.wikipedia.org/wiki/Chesmac
+
+life was on the b side of the tape with chesmac
+https://www.v2.fi/artikkelit/pelit/1524/Ensimmainen-suomalainen-tietokonepeli/
+
+http://www.pelitutkimus.fi/vuosikirja2014/ptvk2014-07.pdf
+
+http://videogames.fi/vgfi/images/7/78/Ohjekirja2.jpg
+http://videogames.fi/vgfi/images/c/c9/Ohjekirja3.jpg
+
+https://www.hs.fi/ihmiset/art-2000002752248.html
+
+https://www.is.fi/digitoday/art-2000000846674.html
+
+manual and code and dump file. works with emma 02
+http://videogames.fi/vgfi/index.php?title=Chesmac
+
+https://www.youtube.com/watch?v=sMgWpz5V1qg
+"The Chesmac Chess game by Raimo Suonion for Telmac TMC-1800 in 1979, which Jari Lehtinen retrieved from the paper back to Telmac, a video on display in 2014. Video: Jari Lehtinen."
 
 https://archive.org/details/TietokoneidenHistoriaaKoettuna/page/n17?q=telmac+1800
 
 what is a cosmac? //also mentions telmac 1800
 https://archive.org/details/dr_dobbs_journal_vol_04_201803/page/n269?q=%22telmac+1800%22
+
+Jari Lehtinen speaks english
+https://www.youtube.com/watch?v=Ou7qxDZzUrM
+
+https://tuzepoito.pagesperso-orange.fr/frite8/
+Joseph Weisbecker for designing the original CHIP-8 system
+Andreas Gustafsson / gson (http://www.gson.org) for creating the CHIP-48 extension
+Erik Bryntse for creating SCHIP from the CHIP-48 extension opcodes
+Martijn Wenting / Revival Studios (http://revival-studios.com) for creating the MEGACHIP system
+Frédéric Devernay (http://devernay.free.fr/hacks/chip8/) and Wikipedia for documentation on the different CHIP-8 systems
+http://chip8.com for documentation on CHIP-8 as well as providing several CHIP-8 games for testing
+
+Andreas Gustafsson's site
+http://www.gson.org/
