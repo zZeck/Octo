@@ -19,3 +19,4 @@ Download files from yahoo group. List sources
 Vinegar included roms
 look through eti magazines
 Read E/A articles related to dream 6800
+Reverse engineer random number creation of common interpreters

@@ -1,8 +1,60 @@
 emu48 needs hp rom
 also needs kml file which controls display
 
-load chip48
+emu48 edit-> load object or paste stack
 
-load super chip
+emu48 binary header for loading objects information
+https://hp.giesselink.com/Emu48/EMU48.HTM#ss9.1
 
-load chip8 programs
+https://groups.google.com/forum/#!topic/comp.sys.hp48/ukKpV03RRk4
+
+asc encoding information
+https://www.hpcalc.org/hp48/docs/faq/48faq-9.html
+
+https://groups.google.com/forum/#!topic/comp.sys.hp48/wJsJKfozrTI
+
+hp48 assembly programs and book
+http://www.jadegame.com/games/hp48/
+
+hp48 chip8 information and interpreter binaries and source
+https://github.com/Chromatophore/HP48-Superchip
+
+
+using hp48
+http://www.engr.usask.ca/classes/EE/221/hpinfo/A&Rprograms.pdf
+
+https://mysite.du.edu/~jcalvert/tech/hp48com.htm#Stac
+
+port - place for memory or memory expansion
+https://www.drehersoft.com/managing-hp-48sx48gx-ports/
+
+hp48 gaur
+program is an object
+"to store or name a program
+1. enter a program on the stack
+2. Enter the variable name (with 'delimiters) and press STO
+"
+"to execute a program press VAR and then the menu key for the program name"
+Menu key will be F1 - F6
+make sure stack is setup correctly for the call to the program
+
+
+chip48
+"If an error is detected during execution, the
+address of the current CHIP-8 instruction is returned as a binary
+integer on level 1."
+
+video on transfering chip8 interpreter and programs from PC to real calculator
+https://www.youtube.com/watch?v=KvU92qStatw
+
+
+Only gchip from the chromatophore repo seems to work in emu48
+Load object and select the binary
+press the alpha key and number keys to enter a string
+press enter to put string on stack
+STO to store the gchar binary using name of string entered.
+Drag chip8 program onto emu48 or use load object to load chip8 program.
+Will show first few bytes as string on stack.
+VAR to show available programs
+press the F1-F6 key corresponding to gchip.
+gchip will run the program.
