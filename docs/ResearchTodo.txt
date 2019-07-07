@@ -11,7 +11,7 @@ Get checksums of source. Normalize by converting to unix line endings, removing 
     Remove all whitespace and compare? Both?
 Find all variations of built in font, their original source, and which versions different emulators use.
 Set up hp48 emulator and extract ant from hp48sx ftp dump
-Setup Dream 6800 emulation in MESS
+Setup Dream 6800 emulation in MESS //done
 Catalog source code
 Catalog assemblers
 Catalog interpreter versions
@@ -20,3 +20,6 @@ Vinegar included roms
 look through eti magazines
 Read E/A articles related to dream 6800
 Reverse engineer random number creation of common interpreters
+
+Look for variants of the cosmac VIP chip8 interpreter
+was telmac 1800 font really the same as cosmac? Or was it like what is seen in chip48. The author mentions having a telmac. Variant?

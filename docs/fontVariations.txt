@@ -4,3 +4,23 @@ eti uses its own
 chip48 uses its own. superchip also uses
 
 Original devices did not have displays with pixel aspect ratios of 1:1
+---------
+
+Cosmac VIP, ETI-660, Dream 6800, and Chip48 interpreters all have different font data.  This can effect program behavior because of pixel based collision.  Some programs have text that looks off center as well.
+
+Tested in Cosmac VIP and ETI-660 in Emma 02, Dream 6800 in MESS/MAME, and Chip48 in Emu48 for hp48sx.
+
+Used cosmac VIP chip8 ram sha1 8AA634C239004FF041C9ADBF9144BD315AB5FC77
+
+Used eti rom sha1 C0C4951E02F873F15560BDC3F35CDF3F99653922
+
+Used Dream 6800 with original CHIPOS ROM. sha1 60F26E57A058262B30BEFCECEAB4363A5D65D877
+
+Used chip48 2.25
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/2.25/comp.sys.handhelds/z8KoBcbCExQ/q4VsdUu-1ssJ
+which is sha1 16AB1BAC7D4861C26EFA4DF29E3AA3CE1BD8F7E5 after removing transfer dependent 13 byte hp header.
+
+I suspect there are variants of the chip8 ram used by the cosmac and telmac 1800.
+The author of chip48 had a telmac, but the font used by chip48 does not look exactly like that font seen in the chip8 ram used by Emma 02.
+(same chip8 ram data is used for cosmac and telmac)
+https://groups.google.com/d/msg/comp.sys.hp48/eKdWisxs-_Q/63e9bVZcOkgJ

@@ -46,6 +46,8 @@ https://digital.hagley.org/BIN_2464_09_B41_ID19_02?solr_nav%5Bid%5D=77172d575d83
 https://digital.hagley.org/BIN_2464_09_B41_ID19_01?solr_nav%5Bid%5D=77172d575d831c40ece6&solr_nav%5Bpage%5D=0&solr_nav%5Boffset%5D=17 Extracted Binary: Videodraw Chip 8
 
 
+https://groups.google.com/forum/#!searchin/comp.sys.handhelds/2.25/comp.sys.handhelds/z8KoBcbCExQ/q4VsdUu-1ssJ chip48 2.25
+
 interesting threads
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/-gY8V5AldrE/GoJ4JcE6Oj0J ant and joust discussion
 https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sys.hp48/VF7x-J8EwyY/uzGBnCUq_xIJ link to schip information
