@@ -62,6 +62,8 @@ how to put program into memory?
 probably use mame debugger load command
 https://docs.mamedev.org/debugger/memory.html#debugger-command-load
 
+mame name for this platform is d6800. Will expect d6800.zip in roms directory with roms needed
+
 .\mame64.exe d6800 -debug
 
 load pathToFile,StartAddress,Length

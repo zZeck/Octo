@@ -1,6 +1,6 @@
 cosmac vip and telmac 1800 use same font
 dream uses its own. DreamMon uses this font.
 eti uses its own
-super chip uses its own
+chip48 uses its own. superchip also uses
 
 Original devices did not have displays with pixel aspect ratios of 1:1

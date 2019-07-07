@@ -48,13 +48,17 @@ video on transfering chip8 interpreter and programs from PC to real calculator
 https://www.youtube.com/watch?v=KvU92qStatw
 
 
-Only gchip from the chromatophore repo seems to work in emu48
+Only gchip from the chromatophore repo seems to work in emu48 when emulating hp48g
+c48, super chip, only work when using hp48s
+ROM.48G for g
+ROM.48S for s
+
 Load object and select the binary
 press the alpha key and number keys to enter a string
 press enter to put string on stack
-STO to store the gchar binary using name of string entered.
+STO to store the chip interpreter binary using name of string entered.
 Drag chip8 program onto emu48 or use load object to load chip8 program.
 Will show first few bytes as string on stack.
 VAR to show available programs
 press the F1-F6 key corresponding to gchip.
-gchip will run the program.
+chip interpreter will run the program.
