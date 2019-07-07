@@ -586,3 +586,146 @@ https://www.reddit.com/r/retrobattlestations/comments/7npigb/dream_6800_build/ds
 -----
 https://archive.org/stream/ETIA1981/ETI%201981-11%20November#page/n113/mode/2up electronics today international "Programming in chip-8 - a crash course"
 has 3 programs and instruction set description.
+
+
+video of cosmac vip running octo jam game
+https://www.youtube.com/watch?v=wDoVBMSYfPw
+
+telmac running. 4:39 font looks like known from cosmac vip chip8.ram with emma 02
+https://www.youtube.com/watch?v=HZ5t_Ot_6Ic
+
+telmac running unknown chip8 game
+Hirviölabyrintti google translates to "Monster Maze"
+https://www.youtube.com/watch?v=5bVR5m_knWg
+"CHIP-8 game. Published on the 1800 User's Club Membership Pack 1980. Computer Telmac 1800."
+"Hey! Where can I get this game? I have searched everywhere and can not find it. I would be very grateful if I get this game, thank you!"
+"Sly DC. in what format would you like the game, do you have a cosmac vip or telmac and get a downloaded audio file? Or do you drive the game with an emulator?"
+"Hey again, sorry for the late reply. I would like it for Cosmac VIP and if possible in ch8 format. Thank you in advance! =)"
+
+telmac running
+Ufojahti, looks like ufo game commonly attributed to lutz
+https://www.youtube.com/watch?v=5cBDQ--UobU
+
+telmac running
+Ufohyökkäys, looks like tank battle game seen on eti.
+https://www.youtube.com/watch?v=ZlFgm8NuaAM
+
+telmac running
+Ampujaukko, look like Private Eye Target Practice
+https://www.youtube.com/watch?v=2_JHcgKm3sQ
+
+telmac running
+Koneansa / Snake
+https://www.youtube.com/watch?v=MmJKT5flTFI
+
+telmac running
+Maratoonari
+https://www.youtube.com/watch?v=kgAExv7r2ho
+
+article about telmac (finnish)
+https://www.maria-online.us/information/article.php?lg=fi&q=Telmac
+
+http://www.datasalen.se/Utstallning/Data/Telercas/telmac1800eng.htm
+""1800 User Club Association". In the club you could get help to build up your computer, to program it and obtain various accessories. They also gave out there own magazine - Tieturi."
+
+"Telmac 1800 was manufactured by Telercas Oy, which was also local distributor of RCA components."
+http://www.hobbylabs.org/telmac.htm
+"One of the first computer clubs in Finland, 1800 User's Club, was also established mainly around Telmac users.
+Telmac was programmed using machine language, CHIP-8 and M-2. Especially CHIP-8 became popular. A lot of nice games were made using CHIP-8, which is a very small interpreter (less than 512bytes),"
+
+Try to find 1800 User's Club information
+
+mentions 1800 users club
+https://link.springer.com/chapter/10.1007%2F0-387-24168-X_25
+
+http://www.hobbylabs.org/about.htm
+I got my first contact to computers in the late 70's via Finnish computer Club 1800 User's Club meetings
+
+https://digitaltmuseum.se/021026361877/datorbyggsats
+https://digitaltmuseum.se/021026361878/datorbyggsats
+
+mentions 1800 user's club
+http://www.kameli.net/demoresearch2/pioneerien_leluista.pdf
+
+Telmac 1800
+https://skrolli.fi/2014/06/60-vuotta-suomalaisia-tietokoneita/
+
+http://www.rigpix.com/vcomp/telmac_1800.htm
+
+http://www.sparetimelabs.com/memorylane/memorylane.php
+"Some time later, probably next year (1978), I read from a local (Finnish) magazine (EU= Electronics News)" //two images of magazine. Might be able to find.
+"As usual enthusiasm mounts and before you know user groups are popping up everywhere, only to die sooner rather than later.
+We had one in Finland and the Swedes had to have their own too.
+I have one good thing to say for the 1800UC and that is that I got to know Chrisse.
+I knew a Swedish guy from the 1800 Klubb: Göran (IRCC): drop me a line if you read this. "
+
+https://web.archive.org/web/20020628014156/http://www.pelikonepeijoonit.net/page.cgi?pkpcode=telmac
+
+https://archive.org/details/Kilobaud198211/page/n169
+"1800 User’s Club 
+
+The four-year-old 1800 
+User’s Club of Finland now in¬ 
+cludes more than 500 
+members. 
+
+The club’s activities involve 
+program cassettes, hardware 
+and software competitions, 
+monthly meetings in 
+Helsinki, Finland, and a 
+newsletter published ten 
+times per year. 
+
+For further information, 
+send a self-addressed en¬ 
+velope to Richard Eller, PO 
+Box 559, 00101 Helsinki 10, 
+Finland. "
+
+http://www.sparetimelabs.com/chip8/chip8.php
+"The first part of this week (some three hours) was spent debugging the emulator, 
+only to find out that actually the TANK game has a bug in it (the up/down keys are reversed and the target only moves sideways)! 
+IIRC (it was more that 20 years ago) there was a bug in the original TANK game listings, 
+so this file was probably typed in from those listing and never tested! 
+Shows you how popular the CHIP-8 games are these days, doesn'it!"
+
+
+IPSO FACTO
+(A publication of the Association of Computer
+Experimenters)
+TABLE OF CONTENTS
+Issue # 10
+February, 1979
+http://www.cosmacelf.com/publications/newsletters/ipso-facto/ipso-facto-10.pdf
+talks about chip 10 and talmac 1800
+
+https://sfnet.atk.laitteet.narkive.com/vJ0f37kL/telercas-telmac-tmc-600
+
+https://atariage.com/forums/profile/14624-videopac/
+"Mine was a second hand Telmac 1800"
+
+mentions 1800 users' club ry
+https://docplayer.fi/6116310-Juottelua-ja-heksakoodia-kerhotoiminnan-asemasta-ja-merkityksesta-suomalaisen-mikrotietokoneharrastuksen-varhaiskaudella.html
+
+chip48 author was in 1800 users' club
+https://groups.google.com/d/msg/alt.folklore.computers/2ODVXLf3114/MzjUHrJoNysJ
+"Here in Finland there was a very active 1802 users' group which had
+some 500 members.  It still exists but membership is now down to about
+40.  I also have a friend who still designs the 1802 into new
+equipment, because it's the processor he knows best...
+-- 
+Andreas Gustafsson (proud member of 1800 Users' Club ry.)"
+
+
+Mikrotietokoneharrastus Suomessa 1970-luvulta
+ 1990-luvun puoliväliin
+mentions 1800 users' club
+
+https://www.yumpu.com/fi/document/view/42274397/20141futuro/29
+
+http://viznut.fi/texts-fi/suomalaiset_tietokoneet.html
+
+
+History of Nordic Computing
+mentions 1800 users' club
