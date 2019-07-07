@@ -605,22 +605,29 @@ https://www.youtube.com/watch?v=5bVR5m_knWg
 telmac running
 Ufojahti, looks like ufo game commonly attributed to lutz
 https://www.youtube.com/watch?v=5cBDQ--UobU
+"CHIP-8 game. Published on 1977 with the Telmac-1800 software cassette included with your computer. Computer Telmac 1800."
 
 telmac running
 Ufohyökkäys, looks like tank battle game seen on eti.
 https://www.youtube.com/watch?v=ZlFgm8NuaAM
+"CHIP-8 game. Published on 1977 with the Telmac-1800 software cassette included with your computer. Computer Telmac 1800."
 
 telmac running
 Ampujaukko, look like Private Eye Target Practice
 https://www.youtube.com/watch?v=2_JHcgKm3sQ
+"CHIP-8 game. Published on 1977 with the Telmac-1800 software cassette included with your computer. Computer Telmac 1800."
 
 telmac running
 Koneansa / Snake
 https://www.youtube.com/watch?v=MmJKT5flTFI
+"CHIP-8 game. Published in 1800 User's Club's 1984 Membership Set.
+The game also includes a two-player version of the trap game, which was released in 1978.
+Here's the second computer. Nokia Matrix Prefix. Computer Telmac 1800."
 
 telmac running
 Maratoonari
 https://www.youtube.com/watch?v=kgAExv7r2ho
+"CHIP-8 game. Published in 1800 User's Club's 1984 Membership Set. Computer Telmac 1800."
 
 article about telmac (finnish)
 https://www.maria-online.us/information/article.php?lg=fi&q=Telmac
@@ -729,3 +736,9 @@ http://viznut.fi/texts-fi/suomalaiset_tietokoneet.html
 
 History of Nordic Computing
 mentions 1800 users' club
+
+
+https://archive.org/details/TietokoneidenHistoriaaKoettuna/page/n17?q=telmac+1800
+
+what is a cosmac? //also mentions telmac 1800
+https://archive.org/details/dr_dobbs_journal_vol_04_201803/page/n269?q=%22telmac+1800%22
