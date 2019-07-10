@@ -21,6 +21,8 @@ look through eti magazines
 Read E/A articles related to dream 6800
 Reverse engineer random number creation of common interpreters
 
+Make separate directory and files for documenting interpreters and included programs
+
 Look for variants of the cosmac VIP chip8 interpreter
 was telmac 1800 font really the same as cosmac? Or was it like what is seen in chip48. The author mentions having a telmac. Variant?
 

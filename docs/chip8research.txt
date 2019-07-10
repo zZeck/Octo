@@ -791,3 +791,36 @@ http://chip8.com for documentation on CHIP-8 as well as providing several CHIP-8
 
 Andreas Gustafsson's site
 http://www.gson.org/
+
+chip-16 by tronix and others
+http://www.pouet.net/prod.php?which=60814
+https://www.youtube.com/watch?v=vgf1AjEsWv0
+https://github.com/ShendoXT/chip16-software
+https://www.ngemu.com/threads/chip16-official-thread-development-suggestions.145620/
+https://groups.google.com/forum/#!topic/chip16/fzoXr-Ue3o8
+https://www.roitgrund.me/chip16/
+https://github.com/deniszh/pychip16
+https://github.com/chip16/chip16
+https://web.archive.org/web/20130428124124/http://www.doc.ic.ac.uk/~tk2010/chip16/
+https://web.archive.org/web/20130428124124/http://www.doc.ic.ac.uk/~tk2010/chip16/chip16-program-pack-03-14-2012.zip //dead
+https://www.ngemu.com/threads/chip16-official-thread-development-suggestions.145620/page-42#post-2706441 live link to latest pack
+
+
+Andrew Modla's github account
+https://github.com/ajavamind
+
+
+scaevolus disassemblies of 157 chip8  binaries
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post433650166
+
+Internet Janitor links to VIP manual and RCA 1802 assembly primer
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post434092814
+
+bugs in super chip games?
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=3#post437972721
+
+scaevolus confirmed original chip 8 interpreter behavior
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=3#post437975062
+
+cosmac vip chip 8 interpreter disassembly
+http://laurencescotford.co.uk/wp-content/uploads/2013/08/CHIP-8-Interpreter-Disassembly.pdf

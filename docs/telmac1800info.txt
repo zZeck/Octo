@@ -1,0 +1,6 @@
+telmac1800.rom
+chip8 font used starts at offset 130
+130-134 0x0
+139-13D 0x1
+122-126 0x2
+12A-12E 0x3

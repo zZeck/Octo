@@ -581,7 +581,7 @@ http://www.nic.funet.fi/pub/amiga/fish/501-600/ff537/ open the CHIP8.lha with 7z
 Dream Mon included compressed dream memory roms. After decompression:
 Name                 MD5                              SHA1
 ----                 ---                              ----
-15puzzleamiga.ch8    90FB686CF5271276BBBFB891DEFA7D7D FB18B140142CD98592830182DE6C59E0553D1DB6 //possibly overdumped. original 15Puzzle.c8
+15puzzleamiga.ch8    90FB686CF5271276BBBFB891DEFA7D7D FB18B140142CD98592830182DE6C59E0553D1DB6 //possibly overdumped. original 15Puzzle2.c8
 amigaExampleA2.ch8   1EFDD718301E4331596C989F5429F188 2F0D076FE7DA399944C422486BD85F7B2463B1C6 //no overdump. Original ExampleA2.c8
 amigaExampleB2.ch8   191E6E3F0365A1C00546D4F4BF540080 855FD3740B8346376ECD2540C8FA00566D2C90CB //possibly overdumped. Original ExampleB2.c8
 amigaTankVersion.ch8 C33E8384A747A125FADFBA2515E003E8 959322D57197A97A02EAD85CB05BF860840AB8A8 //same as other tank games, except starts at offset 0x600. Original TankBattle6.c8
@@ -592,20 +592,295 @@ kalidAmiga.ch8       0A044E1AD481A78F4DA08F4C89AA6D3C 22C647969C74BB3E4869C20722
 ftp://ftp.funet.fi/pub/misc/hp48sx/chip/
 see directory for information about content
 
-octo examples
-
-octo chip8 archive
-https://johnearnest.github.io/chip8Archive/
+http://videogames.fi/vgfi/index.php?title=Chesmac
+Chesmac.ch8 293940CF4BD7EF31BFCA50E8819AA8F5 1260C838B83A286AB68A5AEDC491686A7D14407B
 
 mattmikolay programs
 https://github.com/mattmikolay/chip-8
-
-https://www.microbee-mspp.org.au/forum/viewtopic.php?f=31&t=824
-
-https://www.theoldcomputer.com/roms/index.php?folder=Chip-8
+cavern:
+cavern.ch8 CFD0422CD86E6B3E77EBBF1C5404750B 17238BCD1CB8E21142A1D7533F878C833EF19CAA
+chipquarium:
+chipquarium.ch8 814F5977CC3B2CF5D7F7C19B50020AF6 F4392681B1FA38D7AD0A7D7A59CECF247AC1457A
+delaytimer:
+delay_timer_test.ch8 799C99F152DD694592E6E2DDEFF06FF3 BA603BDE1D8596C575E81096FFF3CEA40173D7E3
+heartmonitor:
+heart_monitor.ch8 CD15FF62B5136F8451A043CBC9DF31A3 5551471E152AFCBF61707393CE79CDE360BBC23C
+moresecode:
+morse_demo.ch8 031F47F5EE0AB6C0B9B3A450E84E6CFA 2925C79F35E4CED1923B5EF8BA3E795951E6DE21
+randomnumber:
+random_number_test.ch8 67A5AA1A041DFBB931FBDD3998103266 B7B46AD49871E54302496C95C41BE842E4A4ABDF
 
 chip8 test rom
 https://github.com/Emu-Docs/Emu-Docs/tree/master/Chip-8/test_roms/sctest_12
+https://github.com/Rubenknex/Chip-8/blob/master/sctest.c8
+SCTEST 3FF053FAAF994C051ED9B432F412B551 A558E24022E30DD5206909EECA074949F3FB6F59 //SC Test
+
+https://github.com/AfBu/haxe-chip-8-emulator
+Name         MD5                              SHA1
+----         ---                              ----
+15PUZZLE     AAF7C09C7F5F952D0F0C326F9E01B5C0 EA9AF3C09B0D9E265FCD92BCC5D51A2939FDF27A //15 Puzzle [Roger Ivie]
+ALIEN-S      578B1AEA3D51AFBBB84079B0DD3F2C53 BC5FAF54F04DA3F4DBDE50D3B31CCFC2BF8B9E06 //Alien [Jonas Lindstedt, 1993]
+ANT          EC7856F9DB5917EB6CA14ADF1F8D0DF2 A56C09537DF0F32E2D49FB68CB2BA8216B38F632 //Ant - In Search of Coke [Erin S. Catto]
+AUTO_RACE    5F0667852B375B4FD2AE47AE7F900A8B E6D4A8598999B3D95047BABF67B529D83EAA9554 //Car Race Demo [Erik Bryntse, 1991]
+BLINKY       E1C84E1156174070661C1F6CA0481BA5 D40ABC54374E4343639F993E897E00904DDF85D9 //Blinky [Hans Christian Egeberg, 1991]
+BLITZ        8180B836EEB629BA93583519A5FB7B38 6F6509F38220E057A7E32EBB22DD353C1078E3E7 //Blitz [David Winter]
+BOWLING      B56E0E6E3930011049FCF6CF3384E964 B3FED4ED1EB0ED693C9731DBE53B29A76236C781
+BREAKOUT     1D2A47947D6D46B1CEB41CF38B8CFC7E 193915DCDE1365AE054C4EAA21A35BAA27CD3356
+BRIX         D677C1B9DE941484D718799AEBAFEBF3 F13766C14AEB02AD8D4D103CB5EADD282D20CDDC
+CAR-S        C497BB692EA4B32A4A7B11B1373EF92F 2CD26A9A84ED2BE6AAA6916D49B2E5C503196400
+CHIP8        D8A0B597809DD34F885544D2B0D9DF89 A82CA5C53E1DCEDFAB4F65EFEF02229145771B7D
+CONNECT4     29C5BF2D8F754DFE923923934513FB2D 2D10C07B532F4FA7C07A07324BA26CA39FE484FD
+DEFLECTION   2C95B08AD4C1D6C7C35F937AD6E84822 8E5F19D8AE9F3346779613359610967A5ED95FA8
+EMUTEST      C04CDD3A4E8D96F4A7356E75F6BEDCFC E8477FAD78863714C508C046D2419248C5F89690 //Emutest [Hap, 2006]
+GUESS        0E1E9FCFFA803D75D81BC42F25E4B95B 5260F8931E0E9F41E555B382A14A88368E3ED886
+HIDDEN       D3F623110C962A28B86FC63E64BF33F0 050F07A54371DA79F924DD0227B89D07B4F2AED0
+IBM          2DBACE8066709AC9A264D23281820D32 1BA58656810B67FD131EB9AF3E3987863BF26C90
+INVADERS     4FE20B951DBC801D7F682B88E672626C F100197F0F2F05B4F3C8C31AB9C2C3930D3E9571
+IQ132        1AFE7E83D9B14C341D343EDB6DA252A1 F7A3E2E3272B03631EFA561976F981BAC351A603
+KALEID       847317965A219266A19D47EB29E72096 D6FA9DC9005DC0496F39BA52FEF56F9FD0A5A158
+KEYS         EB7274E785D9BF6228E0E8C589BD922A 0EBC4B92C6059D6193565644FB00108161D03D23
+LOOPZ        CB6192736567E6796B55CD41E66FA93C A2788177B820A28CD27E6D2D180340CB7F4948FB
+LUNAR_LANDER 7FC7A749D62813BD670B69620BCA8F40 72E8F3A10A32BD7FB91322ECAB87249F95E81E57
+MAZE         EA281BB152C94C22B9855A796FF982BD B9272AE1ACDAAA79AB649F6B48B72088CA2B1D74
+MERLIN       51CA9370C219355E4B61BB13C3E4FB37 D979858BB9FFD07B48F52F92A8BCAC0199F3623E
+MISSILE      CCF8DE6E6FE799B56E27B6761251B107 0D0CC129DAD3C45BA672F85FEC71A668232212CC
+NIM          0F37FCE6FE5398AA4280D7E066E59CEE 4031DAE5C7545A1ADC160A661BE36F19FC1D47B2
+PARTICLE     762F91BB5FA02E1CDA5EE23B23017F4F 507E7DC6783565071DFE4B72154AF431D4466958
+PONG         873436FE95DBED9C43C41673E9EDFD4F B232EF880BD6060FB45FA6EFFED7EDF0AE95670E
+PONG2        E66B29E565B741710EB6D48A3C6757AD A60611339661E3AB2D8AF024AD1DA5880A6F8665
+PONG3        DC0CF425BEF93A9ECF09FFF4565E7410 1830EB401BA8789A477DFCF294873A5479EBCFE8
+PONG_1P      D7C0A76147C5F16BB498AA410F1F21F2 607C4F7F4E4DCE9F99D96B3182BFE7E88BB090EE
+PUZZLE       28A67D7F503FE66B999B189848127678 1293DB0CCCCBE7DD3FC5A09A2ABC5D7B175E18E0
+R-ROULETTE   D41FD42DEFD61A507D66231C67ACAC6A 24960090B2AFC9DE2A4CB3EE7DAF6A21456BB49B //Russian Roulette [Carmelo Cortez, 1978]
+ROCKET       BB64919F8EAEF896E41AE94561B05FC8 3D1D029D6E31206D245C0BA881C0D1F003953BAD
+RUSH_HOUR    48A8FEC113093CEEC5E41986278852EA 29A41AB4D0AA3BC0D6A9D2FA71D533FE463344B3
+SCROLL1      969C597D889B851664F109F3850FAC5F 9B7FAAC49C44C1194A3283C2EF89EABFCA76FE38
+SCROLL2      FE7B1055EE1F07807E54B6D2BFD51662 453545DC5E6079E9D9BE9D3775D2615C4B60724F
+SC_TEST      3FF053FAAF994C051ED9B432F412B551 A558E24022E30DD5206909EECA074949F3FB6F59 //SC Test
+SOKOBAN      759219D4512A32E82BFEC34B9366B2DE C7C59B38129FDCEC5BB0775A9A141B6BA936E706 //Sokoban [Hap, 2006]
+SPACE        2D7AB275B39CA46D9C7228B9CEE46B63 ED829190E37815771E7A8C675BA0074996A2DDB0
+SPACE-S      F99D0E82A489B8AFF1C7203D90F740C3 A05844DF3305738E4030512F0063DB2FE4F3BD11
+STARS        42576D87B2FFB7F4BF4A0F0446041534 0085DD8FCE4F7AC2E39BA73CF67CC043F9BA4812 //Stars [Sergey Naydenov, 2010]
+SUBMARINE    F2ED4039D738EB118EDD9B9DE52960E6 89AADF7C28BCD1C11E71AD9BD6EEAF0E7BE474F3
+SUPERTEST    F4EF21C988B5B80EB95C8BFA3B1BFE27 A1EC824285A593CD1CA84DC6C732C61B0FE96330 //SuperChip Test
+SYZYGY       9440BF0CDA416B3ECF568CFAA349D4FC 1BDB4DDAA7049266FA3226851F28855A365CFD12
+S_BMP        629F40E16B832E9B7CB8D51DF64CAAA0 CC8DB4B4CE858B0255ADE64B1B8EA9D7C9D7D7FB //BMP Viewer - Flip-8 logo [Newsdee, 2006]
+TANK         0AC0FD0D309C21A6CAD14BB28217F5E4 18B9D15F4C159E1F0ED58C2D8EC1D89325D3A3B6 //Tank
+TEST01       EDB72B6EFEF2D5C51855D7B411799B86 5EB5C32CCD363781507E70B62722A1A98247DD7F //unknown
+TEST128      9E6973E5D9DD08C04C8CCD76825C18A7 C1B605040E29CCE2A6FC52334FB09B0985340314 //Test128
+TETRIS       AEF4FC8C2A5E8431F5E0736AB281F2EE 5F518084744BF3CB8733F6E5454DFD1634320563
+TICTAC       4E5B1B1730CFA85E68A43E4766814A98 429D455A4BC53167942BF6FD934D72B0F648DCE3
+TRON         0C439070315A7926B79A28202BB7B260 A6A6CB2351C20B8F904DA07C0CE91BD8161E9317
+U-BOAT       5A02E443ECBD44D909A9B743C0D12146 7321E1BBE885A749B2CA875D1F49FB6C01F54F91
+UFO          7E35F93C5A788E7E0027C78E8B76C8FB BDB92475ACFE11BC7814A2F5EADE13FCD09B756A
+VBRIX        9EC0FE6B275220F2C8821889A5A7FCAB DA710F631F8E35534D0B9170BCF892A60F49C43D
+VERS         486BDDC6E25E378838FF3E944DB9A443 ADE839585DDEB0E3633177DF03C1D91589E629EB
+WIPEOFF      41D64F82DC3C457E4F8543E081AE8E85 D666688A8FCE468A7D88B536BC1EF5F35BA12031
+WORM V4      4C0C381AC4942462B41876BB75E8A20A A1C1E0E7B01004BE3EE77C69030E6B536CB316E6
+
+octo examples
+
+octo chip8 archive
+https://github.com/JohnEarnest/chip8Archive
+Name                  MD5                              SHA1
+----                  ---                              ----
+8ceattourny_d1.ch8    4F8A47175943D02577C5E82E39CA2454 3DDF7B76B8F63D0089E00E3B518F78C213B74B1E
+8ceattourny_d2.ch8    23174C01C7EC91D2F57EE9375779F110 82FD0D202A068BEDFB869FC303FDEAE0C814024F
+8ceattourny_d3.ch8    B23D6A79F406F033610E3D249297ACC4 419A0110D41332457C15AE09FFF62CBD7AD197FC
+BadKaiJuJu.ch8        946B9BE24540D4EE313BE6DD2AF02CD2 0F479A10FEC51D159866E5760069CD18BDFD293F
+blackrainbow.ch8      CBDB290312CEFE096074A41EB01A45DC E6AF47843F0ECC3302027A3756DD7B389A15E437
+carbon8.ch8           297D23604E9729BACCCBA9A9ACBD2770 2E0F2268C9A3BE0FBB839F918336F161815BB80A
+caveexplorer.ch8      D53B1B139DCD316350EBAC9795334F2B 400DBD1AA2B79B9B8546BC615BFB735C1BD1D268
+chipwar.ch8           7D2DE5008EB53990201146E6448E3FFB AB5CBF267D74C168E174041B9594AE856CBD671D
+civiliz8n.ch8         75307BF91C1515760A3B641BB38CE508 76A770000B314659AC792E17724B783A464AB67E
+DVN8.ch8              43879499FEA72A81C93270A490B0C6AE 627F01B20CE4D33F6DF1AA88ACB405A3A732BDE0
+eaty.ch8              880C459D52BC8BE27DD175E4D7CF80C8 FCAA793332A83C93F4ED79F5FFBC8403C8B8AEA0
+flightrunner.ch8      44D46D7696D6E4AC149D91D8767C4B92 821751787374CC362F4C58759961F0AA7A2FD410
+fuse.ch8              7CDA6252509237CEBEEDA6601A10F1C1 0CD895DC3D489D0E40656218900A04310E95F560
+gradsim.ch8           26872897689E9A43E60361DD978AC447 9797A7EAF1E80EC19C085C60BB37991420F54678
+jub8-1.ch8            448428F2BEBE133E5F00680349E2EFC6 AB36CED6E34AFFACD57B2874EDE3F95B669A424C
+jub8-2.ch8            1E0ED29BB6E2937826347BFEEC913AB8 12E053D66BE67836DEFF1C07AF93FE1D33A8EEC5
+jub8-3.ch8            8ADA9FC9450BC168BB674DDC520CD82E 9BF96E23963995C6D702AE21C9B8741CBB688F47
+jub8-4.ch8            52AADAA187BBE01F991BC33702F22837 7E8D5A79CABEB9A791524EA7126867A539D825EE
+jub8-5.ch8            72AFFA1B63A5285316B8AC12BF678C2E B274AB30ED7678400DC2283431A45F7D98D9FCED
+jub8-6.ch8            4CE61308EAA5548820CF03707E637657 3FD62AE2BFE2572CEB194F1D3D1BD5A01695B86C
+masquer8.ch8          399EFD49CBC5649EAA369681D608A837 FB48E162C7F2E8853909ACC5534B55FB55030F9F
+mondrian.ch8          A2C47FBFB7858B145DB5CFC73D9D5195 63E787FC3E78E5FB3A394CF1BC654AD9633D8907
+octoachip8story.ch8   B190292D18E3D3C7DEBA5FA440346C5A 39970CCFD3A3F00180D53464D4FD7862193EAF0F
+octojam1title.ch8     5B987CE2A46726FC4B277CA7703E4722 F26993A4AFD5CDA2FEA19935773FD3DB54866623
+octojam2title.ch8     6A3FE134387E9F0E418D02C5EF4A2976 11C68038D64A09BE549A6C1E50724808914D8991
+octojam3title.ch8     D467F10324F47A3474887B2FF6F191CF 493C76B9D9252E1D349D408D341DAFF5267F35FA
+octojam4title.ch8     1CF509AFC935348EA403F989F12C3290 9F55F7ABC8F2BC4B59A01515F1D887A6568A8AB4
+octojam5title.ch8     F478CC5F20270A0475E36248A466543A D6D8EFEF811350E7FBA6197024C4973B360749B8
+octopaint.ch8         D08569C76172422A6A54BB5ABEC49016 33ABB5F1BA7DB3166636911C6CFA81A5CE5B861C
+octopeg.ch8           F2387548477A6D41614154AE5B7C762A 7A4A89870F2AB23C28024DD1C3DD52CF1AF1AD00
+octorancher.ch8       E4AFD71ACE8A3BE6C64456F3D5A43593 8263BAC7D98D94097171F0A5DC6F210F77543080
+outlaw.ch8            360815ADAFC3956160EFC9BA39C7B2A5 A9D3C975A5E733646A04F6E61DEEBCD0AD50F700
+petdog.ch8            5BC50CDA704CC881B9FF9758E439AFAE 3BE683D1AC0B27AE47A09984E420853FFF0B7E0D
+piper.ch8             E49C27D2B6FED946667710861CA674F4 7DA3EBA52A8D8025DDF14EE40D28F151585529A0
+pumpkindressup.ch8    445BA5062F3C42CE4A9D69DF0D4AF228 B2ABB5312F0AD28421C1190A65A73D98D4EBF401
+rockto.ch8            42062055ADC52B1C9A6079C9CAAD22A8 B76FBCA2EC089C7E77F4A2F754DB37854B99DEBC
+RPS.ch8               61F89E82E2C727EAE2E9CBF572384C30 A6F3AC2D89CDC1D7B22013301863BAD6A4FB7318
+sens8tion.ch8         912B846B5A2B6955A785191307CE49E1 58F7CE407AEDF456DC8992342F4A6F9F0647383B
+skyward.ch8           B6521A61F5F4DF20814E9A305BF59968 8EBF74E790E58A8D5A7BEFF598BB32ED7EEEABF7
+slipperyslope.ch8     29EC740D566E33C5BBDD72605E9004E4 D73D48484A8FC60E8650F4228D6963A19A4DE6C3
+sub8.ch8              D8C0669094533621F9279DCFE3C66420 64536D549C986E9EDF25DE9FA89DB60D2ADE85C0
+supersquare.ch8       EAA0B232C9D5511DAD2E332233B1C117 9F7CF6FE0025878C26B317160C57EDD06B3361BA
+sweetcopter.ch8       405A47A6E3C2F81012F151BD07618E0C 531C44E8204D8AB8C078BAD36E34067BADDFCCDB
+t8nks.ch8             198E9A63FCDD84F06CBF07441A6AE5D1 8B2FC2E08830B8A9E604D11C9B319E2CC0A581B3
+tank.ch8              828C3CADD0096CC6473DF61FDA7478C1 3F9EF8DEC999574A188EC3B9615CFF9888283C85
+turnover77.ch8        7742BD86C47F1114F236E0D35A194989 D03F27F85A1CF68465E0853CC0C4ABEE4A94A4E5
+ultimatetictactoe.ch8 3DBFC2C2C625C2EBEA01FC541396F254 12572C9E957CACE53076D1656EA1B12CD0F331AF
+wonkypong.ch8         4238C18BB0CE09D320DFE4A984B01C20 518C1D40F5D768EE49D2B7951D998588EF8238BA
+
+-------
+octo jam 2014
+http://www.awfuljams.com/octojam-i/games
+chiptunnel 
+automata https://johnearnest.github.io/Octo/index.html?gist=1c78768039325e51d82c
+pumpkin dress 
+rockto 
+chip story 
+ghost story 
+hwo 
+snake
+super square 
+breakout 
+turnover 
+tic tac toe 
+rps https://johnearnest.github.io/Octo/index.html?gist=7c1c94abd57f37d064cd rock paper scissors
+
+https://www.youtube.com/watch?v=fxPoscaB8aE Octo-ber Jam 2 Review
+http://www.awfuljams.com/octojam-ii/games
+
+https://www.youtube.com/watch?v=YFMX77TkLbA OctoJam 3 Showcase
+http://www.awfuljams.com/octojam-iii/games
+
+https://www.youtube.com/watch?v=os-j_3lj0E8 OctoJam 4 Full Showcase
+http://www.awfuljams.com/octojam-iv/games
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812
+Homebrew Games and Programs:
+Thom8s Was Alone by Jusion https://johnearnest.github.io/Octo/index.html?gist=e526f976df887806f9d3
+F8Z by Internet Janitor https://johnearnest.github.io/Octo/index.html?gist=4c9fecd91afdb6163964
+Minesweep8r by HottiePippen https://johnearnest.github.io/Octo/index.html?gist=384b836bbe4279fdae2b
+Chip2048 by Lime https://johnearnest.github.io/Octo/index.html?gist=b1fa3c3cd504195823ae
+ChipWar by Internet Janitor https://johnearnest.github.io/Octo/index.html?gist=ac5b0e2e47c6122d400d
+Outlaw by Internet Janitor https://johnearnest.github.io/Octo/index.html?gist=8e2e062aee02ef99b6bf
+Cave Explorer by Internet Janitor https://johnearnest.github.io/Octo/index.html?gist=a1d72c7bbf65520fd20d
+Space Defense by sighnoceros https://johnearnest.github.io/Octo/index.html?gist=6a4a180bb8b94c005410
+Mr. Worm (SuperChip) by Scaevolus https://johnearnest.github.io/Octo/index.html?gist=f3685a75817cde6d5c0d
+Sw8 Copter (SuperChip) by Internet Janitor https://johnearnest.github.io/Octo/index.html?gist=6e934bfd418bd2efeb16
+RPS by System Logoff https://johnearnest.github.io/Octo/index.html?gist=7c1c94abd57f37d064cd
+Turnover '77 (SuperChip) by Dr. Stab https://johnearnest.github.io/Octo/index.html?gist=c8e5aeedd48c01e4c8af //currently broken
+Cellular Automata Viewer by SharpenedSpoonv2 https://johnearnest.github.io/Octo/index.html?gist=1c78768039325e51d82c
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post429750187 scroll effects
+https://johnearnest.github.io/Octo/index.html?gist=c770a15b0b068aaf762e
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post429782852
+https://johnearnest.github.io/Octo/index.html?gist=627c8632c41899595f41 chipenstein
+
+minesweeper 
+https://johnearnest.github.io/Octo/index.html?gist=384b836bbe4279fdae2b
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post429850357
+https://gist.github.com/JamesKohli/0cd2493bfdab7b730a11
+
+chip2048
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post430058581
+
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post430102282
+https://johnearnest.github.io/Octo/index.html?gist=69b4c6b775f8046c1106
+https://johnearnest.github.io/Octo/index.html?gist=d751c7096b2cfb935157
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post431832948 chipwar
+https://johnearnest.github.io/Octo/index.html?gist=1b254e9ee3e44c10604f
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post432098154 overlapped text
+https://johnearnest.github.io/Octo/index.html?gist=fc20634c9f53d6929c87
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post432336074 outlaw
+https://johnearnest.github.io/Octo/index.html?gist=8e2e062aee02ef99b6bf
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812#post432558150 cave Explorer
+https://johnearnest.github.io/Octo/index.html?gist=a1d72c7bbf65520fd20d
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post432751239 link experiment
+https://johnearnest.github.io/Octo/index.html?gist=0c7895a9a51f68ae1700
+
+space defense
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post433178902
+https://johnearnest.github.io/Octo/index.html?gist=6a4a180bb8b94c005410
+
+mr worm
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post433339627
+https://johnearnest.github.io/Octo/index.html?gist=f3685a75817cde6d5c0d
+
+space defense pause edit
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post433483657
+https://johnearnest.github.io/Octo/index.html?gist=d9007f1d214891c5e748
+
+scaevolus experiments
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post433593035
+https://johnearnest.github.io/Octo/index.html?gist=ec34b56c96d3b0a42ea9
+https://johnearnest.github.io/Octo/index.html?gist=7a3190977516d7cbed5c
+https://johnearnest.github.io/Octo/index.html?gist=a9a6f01fe704e84b6a65
+https://johnearnest.github.io/Octo/index.html?gist=4c38be1d63b0ec950f35
+https://johnearnest.github.io/Octo/index.html?gist=73742fc1d3132566b7d4
+https://johnearnest.github.io/Octo/index.html?gist=dcbc659a6947ec930699
+
+octo conversion of flappy bird chip 8 game from http://think-jeckel.de/stuff/js1k_chip8_1/ (dead linke)
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post433812807
+https://johnearnest.github.io/Octo/index.html?gist=35e180cece89ed4d918f
+
+Sw8 Copter
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post434354494
+https://johnearnest.github.io/Octo/index.html?gist=6e934bfd418bd2efeb16
+
+grad school simulator
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=2#post435042022
+https://johnearnest.github.io/Octo/index.html?gist=328ed416559b8cba1d0c
+
+John made art generator
+https://twitter.com/jennschiffer/status/514956858025869312
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=3#post435383411
+http://johnearnest.github.io/Octo/index.html?gist=3ca85e24dc4d983fce8f
+
+testquirks
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=3#post437975062
+
+bugs in old versions of chipwar
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=3#post438493514
+
+octo a chip 8 story visual novel
+https://johnearnest.github.io/Octo/index.html?gist=967a38d5573b2e1d5499
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post438676834
+
+buffis experiments
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post439644315
+https://johnearnest.github.io/Octo/index.html?gist=74f43dac16b313b60a25
+https://johnearnest.github.io/Octo/index.html?gist=005dc11e44cd16fee1b0
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post440305254
+https://johnearnest.github.io/Octo/index.html?gist=425acca04b1f79e47eb4
+
+TomR demo
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post449342394
+https://johnearnest.github.io/Octo/index.html?gist=196954a72f816e8302f7
+
+buffis truck
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450429898
+https://johnearnest.github.io/Octo/index.html?gist=a8a227e707cd138ba258
+
+dr stab mario
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450827402
+https://johnearnest.github.io/Octo/index.html?gist=306e51072134d6793f99
+
+cosmac calc
+https://abitoutofplace.wordpress.com/2015/05/02/cosmaccalc-the-cosmac-vip-s-place-in-spreadsheet-history/
+
+hpcalc chip8. may be a source of author information in the megapack
+https://www.hpcalc.org/hp48/games/chip/
 
 fish n chips interperter site. Source for Emutest, BMP viewer, and Fishie
 http://members.chello.nl/~s.morsink/
@@ -613,15 +888,12 @@ http://members.chello.nl/~s.morsink/
 david winter's site. interpreter download has source for several games. loopz.zip has source for loopz
 http://www.pong-story.com/chip8/
 
-haxe chip8 roms
-https://github.com/AfBu/haxe-chip-8-emulator/tree/master/assets/roms
-
-hpcalc chip8. may be a source of author information in the megapack
-https://www.hpcalc.org/hp48/games/chip/
+https://www.theoldcomputer.com/roms/index.php?folder=Chip-8
 
 documentation links
 http://mattmik.com/retro.html
 
+https://www.microbee-mspp.org.au/forum/viewtopic.php?f=31&t=824
 -------
 Information related to extracting chip8 roms from old sources
 
