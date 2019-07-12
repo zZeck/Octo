@@ -128,6 +128,9 @@ https://groups.google.com/forum/#!searchin/comp.sys.hp48/schip|sort:date/comp.sy
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/H.$20Piper|sort:date/comp.sys.handhelds/vUSV4KIfSfU/62ahmFkWXmgJ goodies disk 3 contents list. Some games have source and binary. Some chip 8 stuff.
 
+ant 1.0 chipper source code
+https://groups.google.com/forum/#!searchin/comp.sources.hp48/This$20is$20the$20source$20for$20Ant$20in$20Chipper$20format.%7Csort:date/comp.sources.hp48/rLeLFV1aYek/Fi4snXWiUugJ
+
 https://www.hpcalc.org/hp48/compilations/horn/ archives of the disks. Some have post archives.
 
 https://groups.google.com/forum/#!searchin/comp.sys.handhelds/chipper$20source|sort:date/comp.sys.handhelds/w0MGERhZ3FY/jM4S6YWCONoJ
