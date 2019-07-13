@@ -20,6 +20,7 @@ Vinegar included roms
 look through eti magazines
 Read E/A articles related to dream 6800
 Reverse engineer random number creation of common interpreters
+document tools useful for chip 8 development
 
 Make separate directory and files for documenting interpreters and included programs
 

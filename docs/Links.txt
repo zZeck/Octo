@@ -876,6 +876,179 @@ dr stab mario
 https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450827402
 https://johnearnest.github.io/Octo/index.html?gist=306e51072134d6793f99
 
+chipify music
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450865008
+https://johnearnest.github.io/Octo/index.html?gist=337e0643a3656dc6c722
+https://johnearnest.github.io/Octo/index.html?gist=7383eb3d38362d2ff1f7
+https://johnearnest.github.io/Octo/index.html?gist=2d521fd4f8d6a417fcb6
+https://johnearnest.github.io/Octo/index.html?gist=8c0f265baef826be1af6
+https://johnearnest.github.io/Octo/index.html?gist=0d14164569750a57cf42
+https://johnearnest.github.io/Octo/index.html?gist=a94a784cd0a42b0d9887
+https://johnearnest.github.io/Octo/index.html?gist=0148e92a54168403c248
+https://johnearnest.github.io/Octo/index.html?gist=0afd96c0496834b8a4ec
+
+buffis
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450905587
+https://johnearnest.github.io/Octo/index.html?gist=21d9b38ddb913e2e2ac8
+
+IJ
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450916831
+https://johnearnest.github.io/Octo/index.html?gist=08674a582a6e77fc6859
+
+music player
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post450974318
+https://johnearnest.github.io/Octo/index.html?gist=d200d276b8a2c3ef5e65
+
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post451014643
+http://ludumdare.com/compo/ludum-dare-33/?action=preview&uid=41319
+http://johnearnest.github.io/Octo/index.html?gist=785aff2653e0bfe316cb
+https://github.com/mattpbooth/LD33/blob/master/BadKaiJuJu.8o
+
+music player Updates
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post451027308
+https://johnearnest.github.io/Octo/index.html?gist=98f62541b3c8177360ba
+
+civiliz8n
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post451071963
+
+music player
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post451483230
+https://johnearnest.github.io/Octo/index.html?gist=5fd018baae22420d208b
+
+buffis
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post451651308
+
+buffis patterns
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post451925575
+https://johnearnest.github.io/Octo/index.html?gist=2b767e2162f73f6e7652
+https://github.com/buffis/misc-samples/blob/master/Octo/patterns.8o
+
+buffis explanation of shooter
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post452433708
+https://johnearnest.github.io/Octo/index.html?gist=de467a09480be597df33
+https://johnearnest.github.io/Octo/index.html?gist=586e37d76decd37fc78f
+https://johnearnest.github.io/Octo/index.html?gist=d315690f033bde3188e4
+https://johnearnest.github.io/Octo/index.html?gist=20c8e5265cedf41265cc
+
+master mind
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post452487921
+https://johnearnest.github.io/Octo/index.html?gist=c4edfbcea14f960c628a
+
+benchmark
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post460954411
+https://johnearnest.github.io/Octo/index.html?gist=08bbd489f8f6c5bc317a2f68a1a3b378
+https://github.com/jdeeny/chipmark77
+
+dr stab face
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=5#post460961407
+https://johnearnest.github.io/Octo/index.html?gist=6a3642baee4a53f8c6b2484eaa0fd3df
+
+multiply
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post461059895
+https://johnearnest.github.io/Octo/index.html?gist=3a3020a531951c5964ebc5741a172596
+https://github.com/jdeeny/chip8-multiply
+
+multiply
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post461094677
+https://johnearnest.github.io/Octo/index.html?gist=ee560a92af35eed00cc74aa5dfca94cd
+
+multiplication
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462458587
+https://johnearnest.github.io/Octo/index.html?gist=56ab7aa02a1633e095d736d324605a34
+
+buffis flappy bird
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462564818
+https://johnearnest.github.io/Octo/index.html?gist=fcd9c1ca2e0365f423b6ad56225377f5
+https://johnearnest.github.io/Octo/index.html?gist=66659f6bf7a8a422043a90f4c3c41cb9
+edit by dr stab
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462591448
+https://johnearnest.github.io/Octo/index.html?gist=ec9f2c2303a1144aafcca587725e06d7
+https://johnearnest.github.io/Octo/index.html?gist=9952e56f1b163bc0ac1b6e739531c76f
+buffis
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462601003
+https://johnearnest.github.io/Octo/index.html?gist=a82d46b6cbad52bbf1eea89d1cae5e66
+https://johnearnest.github.io/Octo/index.html?gist=1bdbe2e0a7d4df8f44ead0b4ea2198bd
+dr stab
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462606152
+https://johnearnest.github.io/Octo/index.html?gist=20292b2d6200aa515ddf43631605c816
+buffis
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462630664
+https://johnearnest.github.io/Octo/index.html?gist=b372df719fecfc82e7f96315078b69a2
+Lime
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462654259
+https://johnearnest.github.io/Octo/index.html?gist=449ca18529419160d9bae705bc7d5538
+https://johnearnest.github.io/Octo/index.html?gist=2536074e89cefada3523bda78a5340c5
+https://johnearnest.github.io/Octo/index.html?gist=3d9790399e1fd973ca4b45ed85f054bb
+dr stab
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462725006
+https://johnearnest.github.io/Octo/index.html?gist=2d130a9fd75da183196e3aadbba3f81c
+
+buffis demo
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=6#post462914540
+https://johnearnest.github.io/Octo/index.html?gist=11487e18e55d56b08af43b60f871a8d0
+
+taqueso font
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post464883421
+https://johnearnest.github.io/Octo/index.html?gist=7d2d9f3301a1e8d13d85b5b10af50e1e
+https://github.com/jdeeny/octofont/tree/master
+
+taqueso random
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post464908140
+https://github.com/jdeeny/octo-lfsr64
+
+buffis random
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post464950955
+https://johnearnest.github.io/Octo/index.html?gist=d63c4305a0e2d079f6a0186bfe15706d
+
+dr stab audio
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465011749
+https://johnearnest.github.io/Octo/index.html?gist=e5626b6bfc50473d98ff8d13824e0419
+
+taqueso
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465547253
+https://johnearnest.github.io/Octo/index.html?gist=a2466cd36cae59f8870bfe2ef9ab2661
+
+buffis binding of cosmac
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465607961
+https://johnearnest.github.io/Octo/index.html?gist=d3d2ecb2f0ac2075f636e7d3ec60e786
+
+IJ pipes
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465787604
+https://johnearnest.github.io/Octo/index.html?gist=405eb32fe11acb8440bd76977617035f
+
+dr stab
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465877508
+https://johnearnest.github.io/Octo/index.html?gist=864826f7382ba01aef51a426df058871
+
+taqueso
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465961530
+https://johnearnest.github.io/Octo/index.html?gist=2481036c7a85b4b9c9b7a7612ca36901
+https://johnearnest.github.io/Octo/index.html?gist=d887bc67c1265186b09f719ddd370564
+
+octo jam
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465975908
+missed deadline, put in IRC
+https://johnearnest.github.io/Octo/index.html?gist=2b4d293fb52c9b635d3b60cdefc5ad00
+
+dr stab macro
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=8#post475333176
+https://johnearnest.github.io/Octo/index.html?gist=3d9cf05648af4aa6f8fa1d0f97d77d71
+
+
+dr stab
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=8#post477030306
+https://johnearnest.github.io/Octo/index.html?gist=6be5db905087c99cca632e40575dc4f8
+
+
+
+----
+systemlogoff text tool
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=7#post465996025
+https://pastebin.com/spRsZP9T
+---
+https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpage=40&pagenumber=4#post451049763
+https://excamera.com/sphinx/article-chip8.html#chip8
+--
 cosmac calc
 https://abitoutofplace.wordpress.com/2015/05/02/cosmaccalc-the-cosmac-vip-s-place-in-spreadsheet-history/
 
