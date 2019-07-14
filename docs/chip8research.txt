@@ -827,3 +827,13 @@ https://forums.somethingawful.com/showthread.php?threadid=3634812&userid=0&perpa
 
 cosmac vip chip 8 interpreter disassembly
 http://laurencescotford.co.uk/wp-content/uploads/2013/08/CHIP-8-Interpreter-Disassembly.pdf
+
+for source comparison:
+remove trailing whitespace //could effect text strings? unlikely
+tabs to 4 spaces //could effect text strings? nothing likely to support actual tab character for indicating tab.
+convert to unix line endings
+ascii encoding
+end with newline?
+Or just hash available file?
+what if source is embedded in another file?
+document and do whatever seems sane
