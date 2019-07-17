@@ -25,72 +25,78 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-	module: {
-		rules: [
-			{
-				include: [path.resolve(__dirname, 'src')],
-				loader: 'ts-loader',
+    module: {
+        rules: [
+            {
+                include: [path.resolve(__dirname, 'src')],
+                loader: 'ts-loader',
 
-				test: /\.tsx?$/,
-			},
-			{
-				test: /\.(scss|css)$/,
+                test: /\.tsx?$/,
+            },
+            {
+                include: [path.resolve(__dirname, 'spec')],
+                loader: 'ts-loader',
 
-				use: [
-					'style-loader',
-					'css-loader',
-          'sass-loader'
-				]
-			},
-			{
-				test: /\.md$/,
-				use: [
-						{
-								loader: "html-loader"
-						},
-						{
-								loader: "markdown-loader",
-								options: {
-										/* your options here */
-								}
-						}
-				]
-		}
-		]
-  },
-  devServer: {
-		contentBase: './assets'
-	},
-	resolve: {
-	  extensions: [ '.tsx', '.ts', '.js' ]
-	},
+                test: /\.ts?$/,
+            },
+            {
+                test: /\.(scss|css)$/,
 
-	output: {
-		chunkFilename: '[name].[chunkhash].js',
-		filename: '[name].[chunkhash].js'
-	},
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /\.md$/,
+                use: [
+                    {
+                        loader: "html-loader"
+                    },
+                    {
+                        loader: "markdown-loader",
+                        options: {
+                            /* your options here */
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    devServer: {
+        contentBase: './assets'
+    },
+    resolve: {
+        extensions: [ '.tsx', '.ts', '.js' ]
+    },
 
-	mode: 'development',
+    output: {
+        chunkFilename: '[name].[chunkhash].js',
+        filename: '[name].[chunkhash].js'
+    },
 
-	optimization: {
-		splitChunks: {
-			cacheGroups: {
-				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
-				}
-			},
+    mode: 'development',
 
-			chunks: 'async',
-			minChunks: 1,
-			minSize: 30000,
-			name: true
-		}
-	},
-	plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      inject: true
-		})
-  ],
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    priority: -10,
+                    test: /[\\/]node_modules[\\/]/
+                }
+            },
+
+            chunks: 'async',
+            minChunks: 1,
+            minSize: 30000,
+            name: true
+        }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            inject: true
+        })
+    ],
 };

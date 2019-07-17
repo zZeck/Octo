@@ -1,0 +1,38 @@
+auto pretty printer
+automated tests
+add temporarily off lint rules back
+
+go over and document webpack and karma config
+
+document project structure
+--------
+Restructure work
+
+separate html connection code from rest of typescript.
+remove html references to javascript functions.
+reduce connections between modules
+make less code run on module load
+
+---------
+Future ideas
+TAS
+    This will depend on reliably connecting realtime to execution time, and to sourcing randomness.
+    TAS file format have enough metadata to work with other interpreters.
+Savestates
+Alternate randomness mechanisms for compatibility with different interpreters
+User supplied randomness for tas?
+Display memory as graphics debugger tool
+Enhancement options. Visual effects for video buffer. "sprite" replacement
+Instruction execution logging
+scripted debugging and logging
+Interpreter aided testing framework for chip8 code
+use hash to map binary to source and symbols
+UI changes
+use checksum to apply compatibility settings
+Debugger and profiler discoverability in UI
+Adjustable execution times for instructions
+Real time to execution steps ratio adjustment
+More options for loading programs from online sources (google drive etc)
+Streaming browser play
+VScode as editor? similar to stackblitz?
+Use test framework to create interactive programming tutorials

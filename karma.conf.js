@@ -12,11 +12,9 @@ module.exports = function(config) {
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jasmine'],
 
-
         // list of files / patterns to load in the browser
-        files: ['spec/compiler.spec.ts', {pattern: 'src/index.html', included: false}
+        files: ['spec/compiler.spec.ts', {pattern: 'src/index.html', included: false}, 'examples/caveexplorer.8o'
         ],
-
 
         // list of files / patterns to exclude
         exclude: [
@@ -73,6 +71,5 @@ module.exports = function(config) {
         // how many browser should be started simultaneous
         concurrency: Infinity
 
-    
     });
 };

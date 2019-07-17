@@ -837,3 +837,7 @@ end with newline?
 Or just hash available file?
 what if source is embedded in another file?
 document and do whatever seems sane
+Really, readers will want to know the hash of the exact file I fed into the assembler
+and the hash of the exact file I got out.
+Document extraction process if not provided stand alone.
+If stand alone, use directly.
