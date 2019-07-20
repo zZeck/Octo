@@ -1,5 +1,10 @@
-import { hexFormat } from './util';
-import { BreakPoints } from './emulator';
+//TODO copied from util to avoid import problems
+function zeroPad (str: string, n: number): string { const d = str.length % n; return (d == 0 ? '' : '00000000'.substr(0, n - d)) + str; }
+function hexFormat (n: number): string { return '0x' + zeroPad(n.toString(16).toUpperCase(), 2); }
+
+export interface BreakPoints {
+    [key: number]: string; // TODO string or number?
+}
 
 /// /////////////////////////////////
 //

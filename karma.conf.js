@@ -13,7 +13,7 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
 
         // list of files / patterns to load in the browser
-        files: ['spec/compiler.spec.ts', {pattern: 'src/index.html', included: false}, 'examples/caveexplorer.8o'
+        files: ['spec/compiler.spec.ts', {pattern: 'src/index.html', included: false}, { pattern: 'examples/caveexplorer.8o', watched: false, included: false }
         ],
 
         // list of files / patterns to exclude

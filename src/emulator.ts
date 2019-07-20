@@ -151,10 +151,6 @@ const bigfont = [
 //
 /// /////////////////////////////////
 
-export interface BreakPoints {
-    [key: number]: string; // TODO string or number?
-}
-
 export interface RomData {
     labels: {[key: string]: number};
     aliases: {[key: string]: number};
