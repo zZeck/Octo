@@ -366,7 +366,7 @@ export class Compiler {
     }
     private jump (addr: number, dest: number): void {
         this.rom[addr - programEntryAddress] = 0x10 | dest >> 8 & 0xF;
-        this.rom[addr - programEntryAddress - 1] = dest & 0xFF;
+        this.rom[addr - (programEntryAddress - 1)] = dest & 0xFF;
     }
 
     private isRegister (name?: string | number): boolean {
