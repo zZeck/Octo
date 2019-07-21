@@ -16,6 +16,7 @@ describe('compiler', (): void => {
         
     });
 
+    //TODO remove redundancy
     it('cave explorer compiles correctly', async (): Promise<void> => {
         const caveExplorer = await (await fetch('/base/examples/caveexplorer.8o')).text();
         const compiler = new Compiler(caveExplorer);

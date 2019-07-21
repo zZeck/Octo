@@ -1,225 +1,492 @@
 /* reusable radio bar widget */
 .radiobar {
-    display: flex;
-    flex-direction: row;
-    border: 1px solid black;
-    border-radius: 5px;
-    background: #AAA;
-    overflow: hidden;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .radiobar>span { flex-grow: 1; text-align: center; padding: 5px; cursor: pointer; }
-  .radiobar>span:not(:last-child) { border-right: 1px solid black; }
-  .radiobar>span:hover { background: #888; }
-  .radiobar>span:active, .radiobar .selected { background: #444; color: white; }
-  
-  /* reusable horizontal bar of buttons */
-  .buttonbar { display: flex; flex-direction: row; margin-top: 10px; }
-  .buttonbar>div, .button {
-    flex-grow: 1;
-    text-align: center;
-    padding: 5px;
-    cursor: pointer;
-    border: 1px solid black;
-    border-radius: 5px;
-    background: #AAA;
-    overflow: hidden;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .buttonbar>div:not(:last-child) { margin-right: 10px; }
-  .buttonbar>div:hover, .button:hover { background: #888; }
-  .buttonbar>div:active, .button:active, .buttonbar .selected, .button.selected { background: #444; color: white; }
-  
-  /* reusable checkbox widget */
-  .checkbox {
-    margin-bottom: 5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .checkbox .check {
-    min-height: 25px;
-    min-width: 25px;
-    display: inline-block;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-right: 10px;
-    background: #AAA;
-  }
-  .checkbox .check:hover { background: #888; }
-  .checkbox .check.selected { background: #444; color: white; }
-  
-  /* main styles */
-  body {
-    background: black;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    color: white;
-    font-size: 13px;
-    font-family: futura;
-    height: 100%;
-  }
-  input {
-    font-size: 13px;
-    font-family: monospace;
-    background:#272822;
-    color:#f8f8f2;
-    padding:5px;
-    border: 1px solid black;
-  }
-  input::selection { background: rgba(73, 72, 62, .99); }
-  input:focus { outline: none; }
-  .invisible { display: none!important; }
-  
-  #header, #status, #output-header, #toolbox .tool-header {
-    height:       30px;
-    line-height:  30px;
-    padding-left: 20px;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  
-  #header { display:flex; flex-direction:row; }
-  #header .spacer { flex-grow:1; background:black!important; cursor:default; }
-  #header img { padding-top: 5px; cursor: pointer; width:54px; height:18px; margin-right: 20px;}
-  #header>div { border-left: 1px solid #222; cursor:pointer; padding: 0px 30px 0px 30px; }
-  #header>div:hover { background: #888; }
-  #header>div:active, #header>.selected { background:#444; }
-  #header .menu { padding: 0; }
-  #header .menu .head { padding: 0px 30px 0px 30px; }
-  
-  .menu ul {
-    visibility: hidden;
-    position: relative;
-    left: 0;
-    top: 0;
-    z-index: 1000;
-    background: black;
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-    border-radius: 0px 0px 5px 5px;
-    overflow: hidden;
-  }
-  .menu:hover { background: #222!important; }
-  .menu:hover > ul,
-  .menu ul:hover { visibility: visible; }
-  .menu li { padding: 0px 30px 0px 30px; }
-  .menu li:hover { background: #888; }
-  .menu li:active, .menu li.selected { background: #444; }
-  #main-examples ul { font-family: monospace; font-size: 10px; line-height: 18px; }
-  
-  #main { flex-grow: 1; display: flex; flex-direction: row; }
-  #main #editor .CodeMirror { flex-grow: 1; }
-  #main #editor .CodeMirror-gutters { padding-right: 10px; }
-  #editor { flex-grow: 1; display: flex; flex-direction: column; width: 100px; }
-  #editor .breakpoints { width: 10px; }
-  #editor .breakpoint  { color: #f92672; margin-left: 5px; }
-  
-  #manual { width:450px; display:flex; flex-direction:column; display:none; }
-  #manual iframe { flex-grow: 1; border: none; }
-  
-  #toolbox { width:450px; display:flex; flex-direction:column; display:none; }
-  #toolbox .tool-header { flex-grow: 0; border-top: 1px solid #222; cursor: pointer; }
-  #toolbox .tool-header:hover { background:#202020; }
-  #toolbox .tool-body { background:gray; color:black; padding:0 10px 0 10px; flex-grow:1; display:none; }
-  #toolbox .tool-body.selected { display:block; }
-  #toolbox h1 { font-size: 13px; padding-top:10px; padding-bottom:5px; margin:0; }
-  #toolbox canvas { border:1px solid black; }
-  #toolbox .CodeMirror { margin-top: 10px; border: 1px solid black; }
-  .preview-container { display:flex; flex-direction:row; justify-content:center; margin-top:10px; }
-  
-  #sprite-palette { margin-top: 10px; display: none; }
-  #sprite-editor .CodeMirror { height: 115px; }
-  #audio-pattern-editor .CodeMirror,
-  #audio-blend-editor   .CodeMirror,
-  #audio-tone-editor    .CodeMirror { height: 40px; }
-  #audio-tone-group { display: flex; flex-direction: row; margin-top: 10px; align-items: center; }
-  #audio-tone-group .pair { margin-right: 15px; }
-  #audio-tone-group .button { margin-left: 10px; }
-  #audio-tone-group input { width:40px; height:30px; margin-left:5px; }
-  #binary-editor        .CodeMirror { height: 100px; }
-  #binary-filename { width: 100%; }
-  
-  #color-table {
-    background: #AAA;
-    border: 1px solid black;
-    width: 100%;
-    border-collapse: collapse;
-  }
-  #color-table input { border: none; width:100px; margin:0px; }
-  #color-table tr { border-bottom: 1px solid black; height: 20px; }
-  #color-table td { color: black; font-size: 13px; padding:0px; }
-  #color-table td:first-child { padding: 0px 5px 0px 10px; }
-  #color-table td:not(:first-child) { width: 100px; }
-  #color-table td:not(:last-child) { border-right: 1px solid black; }
-  
-  #output { display: none; }
-  #collapse-out, #expand-out { float: right; padding: 0px 20px 0px 20px; cursor: pointer; border-left: 1px solid #222; }
-  #collapse-out:hover, #expand-out:hover { background:#222; }
-  #output-header, #status { cursor: pointer; border-top: 1px solid #222; }
-  #output .CodeMirror { height: 100px; }
-  
-  .lightbox {
-    display: none;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background: black;
-    z-index: 100;
-    justify-content: center;
-  }
-  #decompile-cover img { width: 64px; height: 64px; align-self: center; }
-  
-  #run-cover { flex-direction: column; }
-  #run-overlay { position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; }
-  #run-controls { margin: 20px; }
-  #run-controls img { margin-right: 10px; cursor: pointer; }
-  #run-controls img:active { opacity: 0.5; }
-  #debugger { font-family: monospace; margin-left: 20px; text-shadow: black 0 0 5px; }
-  #debugger .debug-context, #debugger .debug-profile { font-family: monospace; color: white; }
-  #debugger .debug-context tr.current { text-decoration: underline; font-weight: bold; }
-  #debugger .debug-context td:first-child { width: 50px; }
-  #debugger .debug-context td:last-child { width: 60%; }
-  #debugger .debug-profile-results { position: fixed; bottom: 20px; }
-  #debugger .debug-profile-full {
-    font-size:10px;
-    font-family:monospace;
-    background:#272822;
-    color:#f8f8f2;
-    padding:5px;
-    border:1px solid white;
-    width: 80%;
-    height: 100px;
-    overflow-y: scroll;
-    margin-top: 10px;
-  }
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  border-radius: 5px;
+  background: #aaa;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.radiobar > span {
+  flex-grow: 1;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+}
+.radiobar > span:not(:last-child) {
+  border-right: 1px solid black;
+}
+.radiobar > span:hover {
+  background: #888;
+}
+.radiobar > span:active,
+.radiobar .selected {
+  background: #444;
+  color: white;
+}
 
-  #run-container, #run-keys { display: flex; flex-direction: row; justify-content: center; }
-  #run-keys { z-index: 2000; }
-  #run-container canvas { border: 1px solid black; }
-  #run-cover .spacer { flex-grow: 1; }
-  #run-keys .keypad { display: flex; flex-direction: column; margin-top: 20px; }
-  #run-keys .key-row { display: flex; flex-direction: row; }
-  #run-keys .key {
-    text-align: center;
-    color: black;
-    background-color: white;
-    border: 1px solid black;
-    -webkit-user-select: none;
-    user-select: none;
-    font-size: 7vh;
-    width: 11vw;
-    height: 10vh;
-  }
-  #run-keys .key:active,
-  #run-keys .key.active { color: white; background-color: black; border: 1px solid white; }
-  
-  #dragon { flex-direction: column; opacity:0.5; }
-  #dragon>div { text-align:center; font-size: 30px; }
+/* reusable horizontal bar of buttons */
+.buttonbar {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+.buttonbar > div,
+.button {
+  flex-grow: 1;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 5px;
+  background: #aaa;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.buttonbar > div:not(:last-child) {
+  margin-right: 10px;
+}
+.buttonbar > div:hover,
+.button:hover {
+  background: #888;
+}
+.buttonbar > div:active,
+.button:active,
+.buttonbar .selected,
+.button.selected {
+  background: #444;
+  color: white;
+}
+
+/* reusable checkbox widget */
+.checkbox {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.checkbox .check {
+  min-height: 25px;
+  min-width: 25px;
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-right: 10px;
+  background: #aaa;
+}
+.checkbox .check:hover {
+  background: #888;
+}
+.checkbox .check.selected {
+  background: #444;
+  color: white;
+}
+
+/* main styles */
+body {
+  background: black;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: white;
+  font-size: 13px;
+  font-family: futura;
+  height: 100%;
+}
+input {
+  font-size: 13px;
+  font-family: monospace;
+  background: #272822;
+  color: #f8f8f2;
+  padding: 5px;
+  border: 1px solid black;
+}
+input::selection {
+  background: rgba(73, 72, 62, 0.99);
+}
+input:focus {
+  outline: none;
+}
+.invisible {
+  display: none !important;
+}
+
+#header,
+#status,
+#output-header,
+#toolbox .tool-header {
+  height: 30px;
+  line-height: 30px;
+  padding-left: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+}
+#header .spacer {
+  flex-grow: 1;
+  background: black !important;
+  cursor: default;
+}
+#header img {
+  padding-top: 5px;
+  cursor: pointer;
+  width: 54px;
+  height: 18px;
+  margin-right: 20px;
+}
+#header > div {
+  border-left: 1px solid #222;
+  cursor: pointer;
+  padding: 0px 30px 0px 30px;
+}
+#header > div:hover {
+  background: #888;
+}
+#header > div:active,
+#header > .selected {
+  background: #444;
+}
+#header .menu {
+  padding: 0;
+}
+#header .menu .head {
+  padding: 0px 30px 0px 30px;
+}
+
+.menu ul {
+  visibility: hidden;
+  position: relative;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  background: black;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  border-radius: 0px 0px 5px 5px;
+  overflow: hidden;
+}
+.menu:hover {
+  background: #222 !important;
+}
+.menu:hover > ul,
+.menu ul:hover {
+  visibility: visible;
+}
+.menu li {
+  padding: 0px 30px 0px 30px;
+}
+.menu li:hover {
+  background: #888;
+}
+.menu li:active,
+.menu li.selected {
+  background: #444;
+}
+#main-examples ul {
+  font-family: monospace;
+  font-size: 10px;
+  line-height: 18px;
+}
+
+#main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+#main #editor .CodeMirror {
+  flex-grow: 1;
+}
+#main #editor .CodeMirror-gutters {
+  padding-right: 10px;
+}
+#editor {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+}
+#editor .breakpoints {
+  width: 10px;
+}
+#editor .breakpoint {
+  color: #f92672;
+  margin-left: 5px;
+}
+
+#manual {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  display: none;
+}
+#manual iframe {
+  flex-grow: 1;
+  border: none;
+}
+
+#toolbox {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  display: none;
+}
+#toolbox .tool-header {
+  flex-grow: 0;
+  border-top: 1px solid #222;
+  cursor: pointer;
+}
+#toolbox .tool-header:hover {
+  background: #202020;
+}
+#toolbox .tool-body {
+  background: gray;
+  color: black;
+  padding: 0 10px 0 10px;
+  flex-grow: 1;
+  display: none;
+}
+#toolbox .tool-body.selected {
+  display: block;
+}
+#toolbox h1 {
+  font-size: 13px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  margin: 0;
+}
+#toolbox canvas {
+  border: 1px solid black;
+}
+#toolbox .CodeMirror {
+  margin-top: 10px;
+  border: 1px solid black;
+}
+.preview-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#sprite-palette {
+  margin-top: 10px;
+  display: none;
+}
+#sprite-editor .CodeMirror {
+  height: 115px;
+}
+#audio-pattern-editor .CodeMirror,
+#audio-blend-editor .CodeMirror,
+#audio-tone-editor .CodeMirror {
+  height: 40px;
+}
+#audio-tone-group {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  align-items: center;
+}
+#audio-tone-group .pair {
+  margin-right: 15px;
+}
+#audio-tone-group .button {
+  margin-left: 10px;
+}
+#audio-tone-group input {
+  width: 40px;
+  height: 30px;
+  margin-left: 5px;
+}
+#binary-editor .CodeMirror {
+  height: 100px;
+}
+#binary-filename {
+  width: 100%;
+}
+
+#color-table {
+  background: #aaa;
+  border: 1px solid black;
+  width: 100%;
+  border-collapse: collapse;
+}
+#color-table input {
+  border: none;
+  width: 100px;
+  margin: 0px;
+}
+#color-table tr {
+  border-bottom: 1px solid black;
+  height: 20px;
+}
+#color-table td {
+  color: black;
+  font-size: 13px;
+  padding: 0px;
+}
+#color-table td:first-child {
+  padding: 0px 5px 0px 10px;
+}
+#color-table td:not(:first-child) {
+  width: 100px;
+}
+#color-table td:not(:last-child) {
+  border-right: 1px solid black;
+}
+
+#output {
+  display: none;
+}
+#collapse-out,
+#expand-out {
+  float: right;
+  padding: 0px 20px 0px 20px;
+  cursor: pointer;
+  border-left: 1px solid #222;
+}
+#collapse-out:hover,
+#expand-out:hover {
+  background: #222;
+}
+#output-header,
+#status {
+  cursor: pointer;
+  border-top: 1px solid #222;
+}
+#output .CodeMirror {
+  height: 100px;
+}
+
+.lightbox {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: black;
+  z-index: 100;
+  justify-content: center;
+}
+#decompile-cover img {
+  width: 64px;
+  height: 64px;
+  align-self: center;
+}
+
+#run-cover {
+  flex-direction: column;
+}
+#run-overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+#run-controls {
+  margin: 20px;
+}
+#run-controls img {
+  margin-right: 10px;
+  cursor: pointer;
+}
+#run-controls img:active {
+  opacity: 0.5;
+}
+#debugger {
+  font-family: monospace;
+  margin-left: 20px;
+  text-shadow: black 0 0 5px;
+}
+#debugger .debug-context,
+#debugger .debug-profile {
+  font-family: monospace;
+  color: white;
+}
+#debugger .debug-context tr.current {
+  text-decoration: underline;
+  font-weight: bold;
+}
+#debugger .debug-context td:first-child {
+  width: 50px;
+}
+#debugger .debug-context td:last-child {
+  width: 60%;
+}
+#debugger .debug-profile-results {
+  position: fixed;
+  bottom: 20px;
+}
+#debugger .debug-profile-full {
+  font-size: 10px;
+  font-family: monospace;
+  background: #272822;
+  color: #f8f8f2;
+  padding: 5px;
+  border: 1px solid white;
+  width: 80%;
+  height: 100px;
+  overflow-y: scroll;
+  margin-top: 10px;
+}
+
+#run-container,
+#run-keys {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#run-keys {
+  z-index: 2000;
+}
+#run-container canvas {
+  border: 1px solid black;
+}
+#run-cover .spacer {
+  flex-grow: 1;
+}
+#run-keys .keypad {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+#run-keys .key-row {
+  display: flex;
+  flex-direction: row;
+}
+#run-keys .key {
+  text-align: center;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  -webkit-user-select: none;
+  user-select: none;
+  font-size: 7vh;
+  width: 11vw;
+  height: 10vh;
+}
+#run-keys .key:active,
+#run-keys .key.active {
+  color: white;
+  background-color: black;
+  border: 1px solid white;
+}
+
+#dragon {
+  flex-direction: column;
+  opacity: 0.5;
+}
+#dragon > div {
+  text-align: center;
+  font-size: 30px;
+}

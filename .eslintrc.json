@@ -7,7 +7,9 @@
         "standard",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/eslint-recommended"
+        "plugin:@typescript-eslint/eslint-recommended",
+        "prettier",
+        "prettier/standard"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -76,10 +78,11 @@
         "no-shadow": "error",
         "no-undef-init": "error",
         "no-var": "error",
+        "@typescript-eslint/indent": "off",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/func-call-spacing": ["error"],
         "@typescript-eslint/member-ordering": "error",
-        "@typescript-eslint/no-extra-parens": ["error"],
+        "@typescript-eslint/no-extra-parens": "off",
         "@typescript-eslint/no-for-in-array": "error",
         "@typescript-eslint/no-this-alias": ["error"],
         "@typescript-eslint/no-useless-constructor": "error",

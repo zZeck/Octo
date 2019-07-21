@@ -1,278 +1,319 @@
 <html>
-<head>
-	<link rel='stylesheet' href='styles/codemirror.min.css'>
-  <link rel='stylesheet' href='styles/monokai.css'>
-  <link rel='stylesheet' href='styles/mainWindow.css'>
-</head>
+  <head>
+    <link rel="stylesheet" href="styles/codemirror.min.css" />
+    <link rel="stylesheet" href="styles/monokai.css" />
+    <link rel="stylesheet" href="styles/mainWindow.css" />
+  </head>
 
-<body>
-  <div id='header'>
-    <!--TODO replace this repo link to point to URL provided to webpack-->
-    <a href='https://github.com/JohnEarnest/Octo'><img src='images/logo.png'/></a>
-    <input type="file" id="maininput" style="display:none">
-    <div class='head' id='main-run'>Run</div>
-    <div class='head' id='main-open'>Open</div>
-    <div class='head' id='main-save'>Share</div>
-    <div class='menu' id='main-examples'>
-      <div class='head'>Examples</div>
-      <ul>
-        <li>loading...</li>
-      <ul>
-    </div>
-    <div class='menu' id='main-speed'>
-      <div class='head'>Speed</div>
-      <ul>
-        <li data-value='7'>7 Cycles/Frame</li>
-        <li data-value='15'>15 Cycles/Frame</li>
-        <li data-value='20'>20 Cycles/Frame</li>
-        <li data-value='30'>30 Cycles/Frame</li>
-        <li data-value='100'>100 Cycles/Frame</li>
-        <li data-value='200'>200 Cycles/Frame</li>
-        <li data-value='500'>500 Cycles/Frame</li>
-        <li data-value='1000'>1000 Cycles/Frame</li>
-        <li data-value='20000'>Ludicrous Speed</li>
-      </ul>
-    </div>
-    <div class='spacer'></div>
-    <div id='show-manual'>Manual</div>
-    <div id='show-toolbox'>Toolbox</div>
-  </div>
-
-  <div id='main'>
-    <div id='editor'></div>
-
-    <div id='manual'>
-      <!--TODO replace this to load html generated from markdown by webpack plugin for loading markdown-->
-      <!--<iframe src="https://johnearnest.github.io/Octo/docs/Manual.html"></iframe>-->
+  <body>
+    <div id="header">
+      <!--TODO replace this repo link to point to URL provided to webpack-->
+      <a href="https://github.com/JohnEarnest/Octo"
+        ><img src="images/logo.png"
+      /></a>
+      <input type="file" id="maininput" style="display:none" />
+      <div class="head" id="main-run">Run</div>
+      <div class="head" id="main-open">Open</div>
+      <div class="head" id="main-save">Share</div>
+      <div class="menu" id="main-examples">
+        <div class="head">Examples</div>
+        <ul>
+          <li>loading...</li>
+        </ul>
+      </div>
+      <div class="menu" id="main-speed">
+        <div class="head">Speed</div>
+        <ul>
+          <li data-value="7">7 Cycles/Frame</li>
+          <li data-value="15">15 Cycles/Frame</li>
+          <li data-value="20">20 Cycles/Frame</li>
+          <li data-value="30">30 Cycles/Frame</li>
+          <li data-value="100">100 Cycles/Frame</li>
+          <li data-value="200">200 Cycles/Frame</li>
+          <li data-value="500">500 Cycles/Frame</li>
+          <li data-value="1000">1000 Cycles/Frame</li>
+          <li data-value="20000">Ludicrous Speed</li>
+        </ul>
+      </div>
+      <div class="spacer"></div>
+      <div id="show-manual">Manual</div>
+      <div id="show-toolbox">Toolbox</div>
     </div>
 
-    <div id='toolbox'>
-      <div data-panel='sprite' class='tool-header'>Sprite Editor</div>
-      <div data-panel='sprite' class='tool-body'>
-        <div class='buttonbar'>
-          <div id='sprite-16'>16x16 Sprite</div>
-          <div id='sprite-color'>Color Sprite</div>
-          <div id='sprite-left'>&lt;&lt;1</div>
-          <div id='sprite-right'>&gt;&gt;1</div>
-          <div id='sprite-up'>&and;</div>
-          <div id='sprite-down'>&or;</div>
-          <div id='sprite-clear'>Clear</div>
-        </div>
-        <div id='sprite-palette'>
-          <span data-value='0'>Background</span>
-          <span data-value='1'>Foreground 1</span>
-          <span data-value='2'>Foreground 2</span>
-          <span data-value='3'>Blended</span>
-        </div>
-        <div class='preview-container'>
-          <canvas id='sprite-draw'></canvas>
-        </div>
-        <div id='sprite-editor'></div>
+    <div id="main">
+      <div id="editor"></div>
+
+      <div id="manual">
+        <!--TODO replace this to load html generated from markdown by webpack plugin for loading markdown-->
+        <!--<iframe src="https://johnearnest.github.io/Octo/docs/Manual.html"></iframe>-->
       </div>
 
-      <div data-panel='audio' class='tool-header'>Audio Editor</div>
-      <div data-panel='audio' class='tool-body'>
-        <h1>Audio Pattern</h1>
-        <div id='audio-error'></div>
-        <div class='preview-container'>
-          <canvas id='audio-pattern-view' width='256' height='32'></canvas>
-        </div>
-        <div id='audio-pattern-editor'></div>
-        <div class='buttonbar'>
-          <div id='audio-play'  >Play</div>
-          <div id='audio-random'>Randomize</div>
-          <div id='audio-clear' >Clear</div>
-          <div id='audio-left'  >&lt;&lt;1</div>
-          <div id='audio-right' >&gt;&gt;1</div>
-          <div id='audio-not'>NOT</div>
-        </div>
-
-        <h1>Blend With Pattern</h1>
-        <div id='audio-blend-editor'></div>
-        <div class='buttonbar'>
-          <div id='audio-and'>AND</div>
-          <div id='audio-or'>OR</div>
-          <div id='audio-xor'>XOR</div>
-          <div id='audio-swap'>Swap With Pattern</div>
+      <div id="toolbox">
+        <div data-panel="sprite" class="tool-header">Sprite Editor</div>
+        <div data-panel="sprite" class="tool-body">
+          <div class="buttonbar">
+            <div id="sprite-16">16x16 Sprite</div>
+            <div id="sprite-color">Color Sprite</div>
+            <div id="sprite-left">&lt;&lt;1</div>
+            <div id="sprite-right">&gt;&gt;1</div>
+            <div id="sprite-up">&and;</div>
+            <div id="sprite-down">&or;</div>
+            <div id="sprite-clear">Clear</div>
+          </div>
+          <div id="sprite-palette">
+            <span data-value="0">Background</span>
+            <span data-value="1">Foreground 1</span>
+            <span data-value="2">Foreground 2</span>
+            <span data-value="3">Blended</span>
+          </div>
+          <div class="preview-container">
+            <canvas id="sprite-draw"></canvas>
+          </div>
+          <div id="sprite-editor"></div>
         </div>
 
-        <h1>Tone Generator</h1>
-        <div class='preview-container'>
-          <canvas id='audio-tone-view' width='256' height='32'></canvas>
-        </div>
-        <div id='audio-tone-editor'></div>
-        <div id='audio-tone-group'>
-          <div class='pair'>Frequency: <input id='audio-freq' value='440'> Hz</div>
-          <div class='pair'>Cutoff: <input id='audio-cutoff' value='128'></div>
-          <div id='audio-toblend' class='button'>To Blend</div>
-          <div id='audio-topat' class='button'>To Pattern</div>
-        </div>
-      </div>
+        <div data-panel="audio" class="tool-header">Audio Editor</div>
+        <div data-panel="audio" class="tool-body">
+          <h1>Audio Pattern</h1>
+          <div id="audio-error"></div>
+          <div class="preview-container">
+            <canvas id="audio-pattern-view" width="256" height="32"></canvas>
+          </div>
+          <div id="audio-pattern-editor"></div>
+          <div class="buttonbar">
+            <div id="audio-play">Play</div>
+            <div id="audio-random">Randomize</div>
+            <div id="audio-clear">Clear</div>
+            <div id="audio-left">&lt;&lt;1</div>
+            <div id="audio-right">&gt;&gt;1</div>
+            <div id="audio-not">NOT</div>
+          </div>
 
-      <div data-panel='binary' class='tool-header'>Binary Tools</div>
-      <div data-panel='binary' class='tool-body'>
-        <h1>Binary Input</h1>
-        <input type="file" id="fileinput" style="display:none">
-        <div id='binary-editor'></div>
-        <div class='buttonbar'>
-          <div id='binary-open'>Open <tt>.ch8</tt>...</div>
-          <div id='binary-decompile'>Decompile</div>
-          <div id='binary-run'>Run</div>
-        </div>
-        <h1>Decompiler Mode</h1>
-        <div id='decompiler-mode'>
-          <span data-value='raw'>Raw</span>
-          <span data-value='static'>Static Analysis</span>
-        </div>
-        <h1>Decompiler Numeric Format</h1>
-        <div id='decompiler-numbers'>
-          <span data-value='bin'>Binary</span>
-          <span data-value='dec'>Decimal</span>
-          <span data-value='hex'>Hexadecimal</span>
-        </div>
-        <h1>File Output</h1>
-        <div>
-          <input id='binary-filename' value='output'>
-        </div>
-        <div class='buttonbar'>
-          <div id='binary-save-8o'>Save <tt>.8o</tt></div>
-          <div id='binary-save-ch8'>Save <tt>.ch8</tt></div>
-          <div id='binary-save-cart'>Save Cartridge</div>
-        </div>
-      </div>
+          <h1>Blend With Pattern</h1>
+          <div id="audio-blend-editor"></div>
+          <div class="buttonbar">
+            <div id="audio-and">AND</div>
+            <div id="audio-or">OR</div>
+            <div id="audio-xor">XOR</div>
+            <div id="audio-swap">Swap With Pattern</div>
+          </div>
 
-      <div data-panel='color' class='tool-header'>Colors</div>
-      <div data-panel='color' class='tool-body'>
-        <h1>Palette</h1>
-        <table id='color-table'>
-          <tr><td>Background  </td><td><input></td><td class='swatch'></td></tr>
-          <tr><td>Foreground 1</td><td><input></td><td class='swatch'></td></tr>
-          <tr><td>Foreground 2</td><td><input></td><td class='swatch'></td></tr>
-          <tr><td>Blended     </td><td><input></td><td class='swatch'></td></tr>
-          <tr><td>Buzzer      </td><td><input></td><td class='swatch'></td></tr>
-          <tr><td>Silence     </td><td><input></td><td class='swatch'></td></tr>
-        </table>
-        <h1>Presets</h1>
-        <div id='palette-presets'>
-          <span data-value='octo'>Octo Classic&#8482;</span>
-          <span data-value='lcd'>LCD</span>
-          <span data-value='hotdog'>Hot Dog</span>
-          <span data-value='gray'>Gray</span>
-          <span data-value='cga0'>CGA 0</span>
-          <span data-value='cga1'>CGA 1</span>
+          <h1>Tone Generator</h1>
+          <div class="preview-container">
+            <canvas id="audio-tone-view" width="256" height="32"></canvas>
+          </div>
+          <div id="audio-tone-editor"></div>
+          <div id="audio-tone-group">
+            <div class="pair">
+              Frequency: <input id="audio-freq" value="440" /> Hz
+            </div>
+            <div class="pair">
+              Cutoff: <input id="audio-cutoff" value="128" />
+            </div>
+            <div id="audio-toblend" class="button">To Blend</div>
+            <div id="audio-topat" class="button">To Pattern</div>
+          </div>
         </div>
-      </div>
 
-      <div data-panel='options' class='tool-header'>Options</div>
-      <div data-panel='options' class='tool-body'>
-        <h1>Compatibility</h1>
-        <div id='compat-shift'>
-          <span><tt>&lt;&lt;=</tt> and <tt>&gt;&gt;=</tt> modify <tt>vx</tt> in place and ignore <tt>vy</tt>.</span>
+        <div data-panel="binary" class="tool-header">Binary Tools</div>
+        <div data-panel="binary" class="tool-body">
+          <h1>Binary Input</h1>
+          <input type="file" id="fileinput" style="display:none" />
+          <div id="binary-editor"></div>
+          <div class="buttonbar">
+            <div id="binary-open">Open <tt>.ch8</tt>...</div>
+            <div id="binary-decompile">Decompile</div>
+            <div id="binary-run">Run</div>
+          </div>
+          <h1>Decompiler Mode</h1>
+          <div id="decompiler-mode">
+            <span data-value="raw">Raw</span>
+            <span data-value="static">Static Analysis</span>
+          </div>
+          <h1>Decompiler Numeric Format</h1>
+          <div id="decompiler-numbers">
+            <span data-value="bin">Binary</span>
+            <span data-value="dec">Decimal</span>
+            <span data-value="hex">Hexadecimal</span>
+          </div>
+          <h1>File Output</h1>
+          <div>
+            <input id="binary-filename" value="output" />
+          </div>
+          <div class="buttonbar">
+            <div id="binary-save-8o">Save <tt>.8o</tt></div>
+            <div id="binary-save-ch8">Save <tt>.ch8</tt></div>
+            <div id="binary-save-cart">Save Cartridge</div>
+          </div>
         </div>
-        <div id='compat-load'>
-          <span><tt>load</tt> and <tt>store</tt> operations leave <tt>i</tt> unchanged.</span>
-        </div>
-        <div id='compat-vf'>
-          <span>arithmetic results write to <tt>vf</tt> after status flag.</span>
-        </div>
-        <div id='compat-clip'>
-          <span>clip sprites at screen edges instead of wrapping.</span>
-        </div>
-        <div id='compat-jump0'>
-          <span>4 high bits of target address determines the offset register of <tt>jump0</tt> instead of <tt>v0</tt>.</span>
-        </div>
-        <div id='compat-vblank'>
-          <span>vblank after drawing sprites.</span>
-        </div>
-        <h1>Maximum ROM Size (bytes)</h1>
-        <div id='max-size'>
-          <span data-value='3215'>3216 (VIP)</span>
-          <span data-value='3583'>3583 (SCHIP)</span>
-          <span data-value='3584'>3584</span>
-          <span data-value='65024'>65024</span>
-        </div>
-        <h1>Compatibility Profile</h1>
-        <div id='compatibility-profile'>
-          <span data-value='chip8'>VIP</span>
-          <span data-value='schip'>SCHIP</span>
-          <span data-value='octo'>Octo</span>
-          <span data-value='xo'>XO-Chip</span>
-        </div>
-        <h1>Screen Rotation</h1>
-        <div id='screen-rotation'>
-          <span data-value='0'>0&deg;</span>
-          <span data-value='90'>90&deg;</span>
-          <span data-value='180'>180&deg;</span>
-          <span data-value='270'>270&deg;</span>
-        </div>
-      </div>
 
-    </div>
-  </div>
+        <div data-panel="color" class="tool-header">Colors</div>
+        <div data-panel="color" class="tool-body">
+          <h1>Palette</h1>
+          <table id="color-table">
+            <tr>
+              <td>Background</td>
+              <td><input /></td>
+              <td class="swatch"></td>
+            </tr>
+            <tr>
+              <td>Foreground 1</td>
+              <td><input /></td>
+              <td class="swatch"></td>
+            </tr>
+            <tr>
+              <td>Foreground 2</td>
+              <td><input /></td>
+              <td class="swatch"></td>
+            </tr>
+            <tr>
+              <td>Blended</td>
+              <td><input /></td>
+              <td class="swatch"></td>
+            </tr>
+            <tr>
+              <td>Buzzer</td>
+              <td><input /></td>
+              <td class="swatch"></td>
+            </tr>
+            <tr>
+              <td>Silence</td>
+              <td><input /></td>
+              <td class="swatch"></td>
+            </tr>
+          </table>
 
-  <div id='output'>
-    <div id='output-header'>
-      <span>Compiled Program<span>
-      <span id='collapse-out' title='Hide compiler output'>&or;</span>
-    </div>
-  </div>
-
-  <div id='status'>
-    <span id='status-text'></span>
-    <span id='expand-out' title='Show compiler output'>&and;</span>
-  </div>
-
-  <div class='lightbox' id='decompile-cover'>
-    <img src='images/load.gif'/>
-  </div>
-
-  <div class='lightbox' id='run-cover'>
-    <div id='run-overlay'>
-      <div id='run-controls'>
-        <img src='images/close.png'    title='close'         id='run-close'   >
-        <img src='images/keypad.png'   title='toggle keypad' id='run-keypad'  >
-        <img src='images/record.png'   title='record gif'    id='run-record'  >
-        <img src='images/continue.png' title='continue'      id='run-continue'>
-      </div>
-      <div id='debugger'></div>
-    </div>
-    <div class='spacer'></div>
-    <div id='run-container'>
-      <canvas id='target' width='640' height='320'></canvas>
-    </div>
-    <div id='run-keys' class='invisible'>
-      <div class='keypad'>
-        <div class='key-row'>
-          <div class='key' id='0x1'>1</div>
-          <div class='key' id='0x2'>2</div>
-          <div class='key' id='0x3'>3</div>
-          <div class='key' id='0xC'>C</div>
+          <h1>Presets</h1>
+          <div id="palette-presets">
+            <span data-value="octo">Octo Classic&#8482;</span>
+            <span data-value="lcd">LCD</span>
+            <span data-value="hotdog">Hot Dog</span>
+            <span data-value="gray">Gray</span>
+            <span data-value="cga0">CGA 0</span>
+            <span data-value="cga1">CGA 1</span>
+          </div>
         </div>
-        <div class='key-row'>
-          <div class='key' id='0x4'>4</div>
-          <div class='key' id='0x5'>5</div>
-          <div class='key' id='0x6'>6</div>
-          <div class='key' id='0xD'>D</div>
-        </div>
-        <div class='key-row'>
-          <div class='key' id='0x7'>7</div>
-          <div class='key' id='0x8'>8</div>
-          <div class='key' id='0x9'>9</div>
-          <div class='key' id='0xE'>E</div>
-        </div>
-        <div class='key-row'>
-          <div class='key' id='0xA'>A</div>
-          <div class='key' id='0x0'>0</div>
-          <div class='key' id='0xB'>B</div>
-          <div class='key' id='0xF'>F</div>
+
+        <div data-panel="options" class="tool-header">Options</div>
+        <div data-panel="options" class="tool-body">
+          <h1>Compatibility</h1>
+          <div id="compat-shift">
+            <span
+              ><tt>&lt;&lt;=</tt> and <tt>&gt;&gt;=</tt> modify <tt>vx</tt> in
+              place and ignore <tt>vy</tt>.</span
+            >
+          </div>
+          <div id="compat-load">
+            <span
+              ><tt>load</tt> and <tt>store</tt> operations leave
+              <tt>i</tt> unchanged.</span
+            >
+          </div>
+          <div id="compat-vf">
+            <span
+              >arithmetic results write to <tt>vf</tt> after status flag.</span
+            >
+          </div>
+          <div id="compat-clip">
+            <span>clip sprites at screen edges instead of wrapping.</span>
+          </div>
+          <div id="compat-jump0">
+            <span
+              >4 high bits of target address determines the offset register of
+              <tt>jump0</tt> instead of <tt>v0</tt>.</span
+            >
+          </div>
+          <div id="compat-vblank">
+            <span>vblank after drawing sprites.</span>
+          </div>
+          <h1>Maximum ROM Size (bytes)</h1>
+          <div id="max-size">
+            <span data-value="3215">3216 (VIP)</span>
+            <span data-value="3583">3583 (SCHIP)</span>
+            <span data-value="3584">3584</span>
+            <span data-value="65024">65024</span>
+          </div>
+          <h1>Compatibility Profile</h1>
+          <div id="compatibility-profile">
+            <span data-value="chip8">VIP</span>
+            <span data-value="schip">SCHIP</span>
+            <span data-value="octo">Octo</span>
+            <span data-value="xo">XO-Chip</span>
+          </div>
+          <h1>Screen Rotation</h1>
+          <div id="screen-rotation">
+            <span data-value="0">0&deg;</span>
+            <span data-value="90">90&deg;</span>
+            <span data-value="180">180&deg;</span>
+            <span data-value="270">270&deg;</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class='spacer'></div>
-  </div>
 
-  <div class='lightbox' id='dragon'>
-    <div>Drop cartridges on the window to load and run them.</div>
-  </div>
-</body>
+    <div id="output">
+      <div id="output-header">
+        <span>Compiled Program</span>
+        <span id="collapse-out" title="Hide compiler output">&or;</span>
+      </div>
+    </div>
+
+    <div id="status">
+      <span id="status-text"></span>
+      <span id="expand-out" title="Show compiler output">&and;</span>
+    </div>
+
+    <div class="lightbox" id="decompile-cover">
+      <img src="images/load.gif" />
+    </div>
+
+    <div class="lightbox" id="run-cover">
+      <div id="run-overlay">
+        <div id="run-controls">
+          <img src="images/close.png" title="close" id="run-close" />
+          <img src="images/keypad.png" title="toggle keypad" id="run-keypad" />
+          <img src="images/record.png" title="record gif" id="run-record" />
+          <img src="images/continue.png" title="continue" id="run-continue" />
+        </div>
+        <div id="debugger"></div>
+      </div>
+      <div class="spacer"></div>
+      <div id="run-container">
+        <canvas id="target" width="640" height="320"></canvas>
+      </div>
+      <div id="run-keys" class="invisible">
+        <div class="keypad">
+          <div class="key-row">
+            <div class="key" id="0x1">1</div>
+            <div class="key" id="0x2">2</div>
+            <div class="key" id="0x3">3</div>
+            <div class="key" id="0xC">C</div>
+          </div>
+          <div class="key-row">
+            <div class="key" id="0x4">4</div>
+            <div class="key" id="0x5">5</div>
+            <div class="key" id="0x6">6</div>
+            <div class="key" id="0xD">D</div>
+          </div>
+          <div class="key-row">
+            <div class="key" id="0x7">7</div>
+            <div class="key" id="0x8">8</div>
+            <div class="key" id="0x9">9</div>
+            <div class="key" id="0xE">E</div>
+          </div>
+          <div class="key-row">
+            <div class="key" id="0xA">A</div>
+            <div class="key" id="0x0">0</div>
+            <div class="key" id="0xB">B</div>
+            <div class="key" id="0xF">F</div>
+          </div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+
+    <div class="lightbox" id="dragon">
+      <div>Drop cartridges on the window to load and run them.</div>
+    </div>
+  </body>
 </html>
