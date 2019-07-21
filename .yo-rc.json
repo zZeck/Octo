@@ -15,14 +15,10 @@
           "module": {
             "rules": [
               {
-                "include": [
-                  "path.resolve(__dirname, 'src')"
-                ],
+                "include": ["path.resolve(__dirname, 'src')"],
                 "loader": "'babel-loader'",
                 "options": {
-                  "plugins": [
-                    "'syntax-dynamic-import'"
-                  ],
+                  "plugins": ["'syntax-dynamic-import'"],
                   "presets": [
                     [
                       "'@babel/preset-env'",
@@ -55,9 +51,7 @@
             "filename": "'[name].[chunkhash].js'"
           },
           "mode": "'development'",
-          "plugins": [
-            "new UglifyJSPlugin()"
-          ],
+          "plugins": ["new UglifyJSPlugin()"],
           "optimization": {
             "splitChunks": {
               "cacheGroups": {
