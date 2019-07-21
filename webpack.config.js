@@ -31,21 +31,21 @@ module.exports = {
         include: [path.resolve(__dirname, "src")],
         loader: "ts-loader",
 
-        test: /\.tsx?$/
+        test: /\.tsx?$/u
       },
       {
         include: [path.resolve(__dirname, "spec")],
         loader: "ts-loader",
 
-        test: /\.ts?$/
+        test: /\.ts?$/u
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.(scss|css)$/u,
 
         use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
-        test: /\.md$/,
+        test: /\.md$/u,
         use: [
           {
             loader: "html-loader"
@@ -79,7 +79,7 @@ module.exports = {
       cacheGroups: {
         vendors: {
           priority: -10,
-          test: /[\\/]node_modules[\\/]/
+          test: /[\\/]node_modules[\\/]/u
         }
       },
 
