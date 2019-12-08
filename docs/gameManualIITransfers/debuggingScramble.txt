@@ -1,0 +1,17 @@
+C glitches on win
+don't see mistake in copy.
+
+const board = [
+  3,9,1,15,
+  14,11,4,6,
+  13,10,12,
+  2,7,8,5
+];
+
+const inversionTotal = board.reduce((inversions, currentPiece, index)=> {
+  inversions += board.slice(index).filter(piece => currentPiece > piece).length;
+  
+  return inversions;
+}, 0);
+
+console.log(inversionTotal);

@@ -54,7 +54,7 @@ Tank battle is the $600 offset start version of tank it seems.
 This is the one bundled with the amiga interpreter.
 Someone converted it to a $200 entry game at some point. Tank.ch8.
 
-
+using eti 660
 https://archive.org/stream/ETIA1981/ETI%201981-11%20November#page/n113/mode/2up/search/chip8
 Memory Inspect and Modify command started by pressing 0
 to change memory at address, press 0 followed by 4 digits
