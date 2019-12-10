@@ -5,7 +5,7 @@ soccer (not chip8) -
 scramble (mixed) - winning seems bugged. Corrupts the C. pressing 0 shows corrupt "QUITER" text. after that, cycling empty board
 knockout (chip-8x) - done
 craps - should test if following rules
-blackjack II -
+blackjack II - stakes and bet messed up. 
 video animation -
 swordfighters (not chip8) -
 roundup (not chip8) - 
@@ -14,3 +14,28 @@ x-ray -
 voice memory (not chip8) -
 galaxy patrol -
 speech synthesizer
+
+
+
+craps: press 1 to reduce bet
+f to roll
+
+first roll win:
+7 works 3 & 4, 5 & 2
+11 works 5 & 6
+
+craps first roll:
+2 works 
+3 works
+12 works
+
+point
+4 works 3 & 1
+5 works 3 & 2
+6 works 3 & 3
+8 works 6 & 2, 3 & 5
+9 works 6 & 3
+10 works 5 & 5
+
+lose
+7 - works 4 & 3, 5 & 2
