@@ -5,7 +5,7 @@ soccer (not chip8) -
 scramble (mixed) - winning seems bugged. Corrupts the C. pressing 0 shows corrupt "QUITER" text. after that, cycling empty board
 knockout (chip-8x) - done
 craps - should test if following rules
-blackjack II - stakes and bet messed up. 
+blackjack II - second pass. Still issues
 video animation -
 swordfighters (not chip8) -
 roundup (not chip8) - 
