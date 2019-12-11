@@ -4,9 +4,9 @@ dogfight - done
 soccer (not chip8) - 
 scramble (mixed) - winning seems bugged. Corrupts the C. pressing 0 shows corrupt "QUITER" text. after that, cycling empty board
 knockout (chip-8x) - done
-craps - should test if following rules
-blackjack II - done
-video animation -
+craps (mixed) - should test if following rules
+blackjack II (mixed) - done
+video animation (mixed) - done
 swordfighters (not chip8) -
 roundup (not chip8) - 
 backgammon -
